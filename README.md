@@ -52,7 +52,7 @@ Your Web application should use the following technologies, frameworks and devel
   * Use SignalR communication somewhere in your application.
   * Write unit tests for your logic, controllers, actions, helpers, etc.
   * Implement error handling and data validation to avoid crashes when invalid data is entered (both client-side and server-side).
-  * Handle correctly the special HTML characters and tags like <br /> and <script> (escape special characters).
+  * Handle correctly the special HTML characters and tags (escape special characters).
   * Use Ninject (or any other dependency injection container).
   * Use AutoМapper.
   * Prevent from security vulnerabilities like SQL Injection, XSS, XSRF, parameter tampering, etc.
