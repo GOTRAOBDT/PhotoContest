@@ -4,7 +4,7 @@
 
 This teamwork project assignment is designed to develop skills for creating dynamic data-driven Web applications using ASP.NET MVC and deployment in а cloud environment like Azure and AppHarbor.
 
-###Project Description
+##Project Description
 Design and implement a photo contest site.
 
 The application should allow users to create and participate in contests for images. Each user can be both an organizer and a participant in different contests. Organizers should have a variety of options for how to carry out the contest.
@@ -59,13 +59,13 @@ Your Web application should use the following technologies, frameworks and devel
   * Host the application in a cloud environment, e.g. in AppHarbor or Azure.
   * Obligatorily use a file storage cloud API, e.g. Dropbox, Google Drive or other for storing the files.
 
-###Public Part
+##Public Part
 The public part of your application should be visible without authentication. All users can see the active contests and the past contests, ordered by date (from the soonest to the earliest).
 
 #####Design suggestion: 
 All users can see all the active contests on the home page. Upon clicking a contest, a user can go to the contest details page (also public) and vote for the winners (in case the voting strategy for the contest permits). There can also be a "Past Contests" page where everyone can see the ended / dismissed contests without their winners.
 
-###Private Part (User Part)
+##Private Part (User Part)
 Registered users should be able to login. This can happen with a local account, and via Facebook and Google. You may also link the application to other external login providers.
 
 Registered users can:
@@ -84,7 +84,7 @@ Once a user is logged in, display a menu (or some links) to the user’s contest
 
 On the home page, the registered users can also see the active contests, but now they should have the option to participate in one. If an active contest is closed and the user is not invited, they should not be able to participate in it.
 
-###Administration Part
+##Administration Part
 An administrator should have access to all contests, as if he / she is the contest creator. He / She can also manage other users’ profiles (excluding their own profile, and excluding usernames). The admins can also delete pictures from contests if they think they are inappropriate.
 
 A user can be an administrator and still be able to create and take part in contests (i. e., admins have all rights that non-admins have, plus some more). An administrator cannot edit votes for pictures.
@@ -94,7 +94,7 @@ Reuse the logic (and code, if possible) for the user’s contests section. This 
 
 For the users, you may display them in a grid (optionally, with the ability to search by username) and allow editing their personal details.
 
-###Additional Requirements
+##Additional Requirements
   * Follow the best practices for OO design and high-quality code for the Web application:
       * Use data encapsulation.
       * Use exception handling properly.
@@ -108,7 +108,7 @@ For the users, you may display them in a grid (optionally, with the ability to s
   * Use a source control system by choice, e.g. Git, SVN, GitHub, CodePlex.
       * Submit a link to your public source code repository.
 
-###Public Project Defense
+##Public Project Defense
 Each team will have to deliver a public defense of its work in front of the other students, trainers and assistants. Teams will have only 15 minutes for the following:
 
   * Demonstrate how the application works (very shortly).
@@ -120,7 +120,7 @@ Please be strict in timing! On the 15th minute you will be interrupted! It is go
 
 Be well prepared for presenting maximum of your work for minimum time. Bring your own laptop. Test it preliminary with the multimedia projector. Open the project assets beforehand to save time.
 
-###Assessment Criteria
+##Assessment Criteria
   * Functionality – 0…20
   * Implementing controllers correctly (controllers should do only their work) – 0...5
   * Implementing views correctly (using display and editor templates) – 0…5
@@ -137,5 +137,5 @@ Be well prepared for presenting maximum of your work for minimum time. Bring you
 
 * If not all team members have contributed to the project, this does not affect the teamwork points.
 
-###Give Feedback about Your Teammates
+##Give Feedback about Your Teammates
 You will be invited to provide feedback about all your teammates, their attitude to this project, their technical skills, their team working skills, their contribution to the project, etc. The feedback is important part of the project evaluation so take it seriously and be honest.
