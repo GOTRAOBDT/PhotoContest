@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{393CA47A-503C-44D1-A361-63C63B873A17}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{E6E15620-F22C-4D0B-ACF0-5F9B0F7F04C1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FE0639BD-85B5-4497-AD05-652412F08A90}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External Libraries", "External Libraries", "{635BEFB3-3595-4E7A-9B4F-BBAC3EDBEF9C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Console", "Console", "{9A92B52F-D915-4AF6-B7F3-F47EF1F80698}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoContest.Models", "PhotoContest.Models\PhotoContest.Models.csproj", "{3EB58277-934D-4779-A9BD-2ABF83C348C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoContest.Data", "PhotoContest.Data\PhotoContest.Data.csproj", "{2E641500-4F33-4D31-8DCF-412F9955DC3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoContest.Console", "PhotoContest.Console\PhotoContest.Console.csproj", "{56A3DD93-79C1-4CF7-9402-CA316544C655}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3EB58277-934D-4779-A9BD-2ABF83C348C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EB58277-934D-4779-A9BD-2ABF83C348C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EB58277-934D-4779-A9BD-2ABF83C348C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EB58277-934D-4779-A9BD-2ABF83C348C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E641500-4F33-4D31-8DCF-412F9955DC3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E641500-4F33-4D31-8DCF-412F9955DC3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E641500-4F33-4D31-8DCF-412F9955DC3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E641500-4F33-4D31-8DCF-412F9955DC3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56A3DD93-79C1-4CF7-9402-CA316544C655}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56A3DD93-79C1-4CF7-9402-CA316544C655}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56A3DD93-79C1-4CF7-9402-CA316544C655}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56A3DD93-79C1-4CF7-9402-CA316544C655}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3EB58277-934D-4779-A9BD-2ABF83C348C6} = {393CA47A-503C-44D1-A361-63C63B873A17}
+		{2E641500-4F33-4D31-8DCF-412F9955DC3D} = {393CA47A-503C-44D1-A361-63C63B873A17}
+		{56A3DD93-79C1-4CF7-9402-CA316544C655} = {9A92B52F-D915-4AF6-B7F3-F47EF1F80698}
+	EndGlobalSection
+EndGlobal
