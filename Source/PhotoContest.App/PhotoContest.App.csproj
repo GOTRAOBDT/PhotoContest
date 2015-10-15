@@ -236,6 +236,16 @@
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PhotoContest.Data\PhotoContest.Data.csproj">
+      <Project>{2e641500-4f33-4d31-8dcf-412f9955dc3d}</Project>
+      <Name>PhotoContest.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PhotoContest.Models\PhotoContest.Models.csproj">
+      <Project>{3eb58277-934d-4779-a9bd-2abf83c348c6}</Project>
+      <Name>PhotoContest.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
