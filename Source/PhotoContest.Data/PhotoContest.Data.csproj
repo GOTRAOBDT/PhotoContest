@@ -56,9 +56,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contracts\IRepository.cs" />
+    <Compile Include="Contracts\IPhotoContestContext.cs" />
+    <Compile Include="Contracts\IPhotoContestData.cs" />
+    <Compile Include="GenericRepository.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="PhotoContestContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PhotoContextData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

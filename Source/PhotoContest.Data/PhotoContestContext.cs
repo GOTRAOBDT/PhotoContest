@@ -1,16 +1,12 @@
 namespace PhotoContest.Data
 {
-    using System;
     using System.Data.Entity;
     using System.Data.Entity.ModelConfiguration.Conventions;
-    using System.Linq;
-
-    using Microsoft.AspNet.Identity;
+    
     using Microsoft.AspNet.Identity.EntityFramework;
 
-    using PhotoContest.Data.Migrations;
-    using PhotoContest.Models;
-    using PhotoContest.Models.Enumerations;
+    using Migrations;
+    using Models;
 
     public class PhotoContestContext : IdentityDbContext<ApplicationUser>
     {
