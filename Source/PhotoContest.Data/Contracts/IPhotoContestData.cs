@@ -14,7 +14,7 @@
 
         IRepository<Vote> Votes { get; }
 
-        IRepository<VotingCommittee> VotingCommittees { get; }
+        IRepository<VotingCommittee> Committees { get; }
 
         int SaveChanges();
     }

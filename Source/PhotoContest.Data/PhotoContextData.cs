@@ -42,7 +42,7 @@
             get { return this.GetRepository<Vote>(); }
         }
 
-        public IRepository<VotingCommittee> VotingCommittees
+        public IRepository<VotingCommittee> Committees
         {
             get { return this.GetRepository<VotingCommittee>(); }
         }

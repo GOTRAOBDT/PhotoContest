@@ -12,6 +12,8 @@ using PhotoContest.App.Models;
 
 namespace PhotoContest.App.Controllers
 {
+    using PhotoContest.Models;
+
     [Authorize]
     public class AccountController : Controller
     {

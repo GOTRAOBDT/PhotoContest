@@ -6,8 +6,6 @@
 
     public interface IPhotoContestContext
     {
-        IDbSet<ApplicationUser> Users { get; set; }
-
         IDbSet<Contest> Contests { get; set; }
 
         IDbSet<Picture> Pictures { get; set; }
@@ -16,7 +14,7 @@
 
         IDbSet<Vote> Votes { get; set; }
 
-        IDbSet<VotingCommittee> VotingCommittees { get; set; }
+        IDbSet<VotingCommittee> Commettees { get; set; }
 
         int SaveChanges();
     }

@@ -1,16 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-
-namespace PhotoContest.App.Controllers
+﻿namespace PhotoContest.App.Controllers
 {
-    public class HomeController : Controller
+    using System.Web.Mvc;
+    using Data.Contracts;
+
+    public class HomeController : BaseController
     {
+        public HomeController(IPhotoContestData data)
+            : base(data)
+        {
+        }
+
         public ActionResult Index()
         {
-            return View();
+            return this.View();
         }
     }
 }

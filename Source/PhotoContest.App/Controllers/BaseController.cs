@@ -1,24 +1,24 @@
 ﻿namespace PhotoContest.App.Controllers
 {
     using System.Web.Mvc;
-    //using PhotoContest.Data.UnitOfWork;
+
+    using Data.Contracts;
 
     public class BaseController : Controller
     {
-        //private IPhotoContestData data;
+        private IPhotoContestData data;
 
-        //public BaseController(IPhotoContestData data)
-        //{
-        //    this.data = data;
-        //}
+        public BaseController(IPhotoContestData data)
+        {
+            this.data = data;
+        }
 
-        //protected IPhotoContestData Data
-        //{
-        //    get
-        //    {
-        //        return this.data;
-        //    }
-
-        //}
+        protected IPhotoContestData Data
+        {
+            get
+            {
+                return this.data;
+            }
+        }
     }
 }

@@ -2,13 +2,15 @@ namespace PhotoContest.Data
 {
     using System.Data.Entity;
     using System.Data.Entity.ModelConfiguration.Conventions;
-    
-    using Microsoft.AspNet.Identity.EntityFramework;
 
+    using Contracts;
+
+    using Microsoft.AspNet.Identity.EntityFramework;
     using Migrations;
+    
     using Models;
 
-    public class PhotoContestContext : IdentityDbContext<ApplicationUser>
+    public class PhotoContestContext : IdentityDbContext<ApplicationUser>, IPhotoContestContext
     {
         public PhotoContestContext()
             : base("name=PhotoContestContext")
@@ -25,6 +27,11 @@ namespace PhotoContest.Data
         public virtual IDbSet<Vote> Votes { get; set; }
 
         public virtual IDbSet<VotingCommittee> Commettees { get; set; }
+
+        public static PhotoContestContext Create()
+        {
+            return new PhotoContestContext();
+        }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
