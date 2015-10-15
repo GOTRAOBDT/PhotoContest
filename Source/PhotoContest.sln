@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{393CA47A-503C-44D1-A361-63C63B873A17}"
 EndProject
@@ -18,6 +18,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoContest.Data", "PhotoContest.Data\PhotoContest.Data.csproj", "{2E641500-4F33-4D31-8DCF-412F9955DC3D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoContest.Console", "PhotoContest.Console\PhotoContest.Console.csproj", "{56A3DD93-79C1-4CF7-9402-CA316544C655}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoContest.App", "PhotoContest.App\PhotoContest.App.csproj", "{354A0A47-78C3-4F36-A8A6-6355661B8C7E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{400AB9A9-DC31-4F8E-AF76-6EC2CB680CC2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +41,10 @@ Global
 		{56A3DD93-79C1-4CF7-9402-CA316544C655}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56A3DD93-79C1-4CF7-9402-CA316544C655}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56A3DD93-79C1-4CF7-9402-CA316544C655}.Release|Any CPU.Build.0 = Release|Any CPU
+		{354A0A47-78C3-4F36-A8A6-6355661B8C7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{354A0A47-78C3-4F36-A8A6-6355661B8C7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{354A0A47-78C3-4F36-A8A6-6355661B8C7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{354A0A47-78C3-4F36-A8A6-6355661B8C7E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -45,5 +53,6 @@ Global
 		{3EB58277-934D-4779-A9BD-2ABF83C348C6} = {393CA47A-503C-44D1-A361-63C63B873A17}
 		{2E641500-4F33-4D31-8DCF-412F9955DC3D} = {393CA47A-503C-44D1-A361-63C63B873A17}
 		{56A3DD93-79C1-4CF7-9402-CA316544C655} = {9A92B52F-D915-4AF6-B7F3-F47EF1F80698}
+		{354A0A47-78C3-4F36-A8A6-6355661B8C7E} = {400AB9A9-DC31-4F8E-AF76-6EC2CB680CC2}
 	EndGlobalSection
 EndGlobal
