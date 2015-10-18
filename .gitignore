@@ -194,3 +194,6 @@ FakesAssemblies/
 
 # Visual Studio 6 workspace options file
 *.opt
+
+/Source/PhotoContest.Data/App.config
+/Source/PhotoContest.App/Web.config
