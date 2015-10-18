@@ -1,0 +1,29 @@
+AccountController:
+account/register - GET and POST
+account/login - GET and POST
+account/logout - POST
+account/changepassword - GET and POST
+
+HomeController:
+home/index - GET
+
+MeController:
+me/index - GET
+me/contests - GET
+me/pictures - GET and POST (for picture upload)
+me/profile - GET and POST
+
+ContestsController:
+contests/create - GET and POST
+contests/{contestId} - GET
+contests/{contestId}/manage - GET and POST
+contests/{contestId}/jury - GET and POST
+contests/{contestId}/candidates - GET and POST
+contests/{contestId}/participants - GET and POST
+contests/{contestId}/gallery/{pictureId} - GET and POST (for voting)
+
+
+PicturesController:
+pictures/{pictureId} - GET and POST (for voting)
+
+
