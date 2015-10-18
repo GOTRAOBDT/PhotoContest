@@ -82,36 +82,36 @@
 
         public static void AddSomeUsers()
         {
-            var user1 = new ApplicationUser()
+            var user1 = new User()
             {
                 UserName = "straho",
                 Name = "Strahil1",
                 Gender = UserGender.Male,
-                Age = 40
+                BirthDate = 40
             };
 
-            var user2 = new ApplicationUser()
+            var user2 = new User()
             {
                 UserName = "anatoli",
                 Name = "Anatoli",
                 Gender = UserGender.Male,
-                Age = 21
+                BirthDate = 21
             };
 
-            var user3 = new ApplicationUser()
+            var user3 = new User()
             {
                 UserName = "asya",
                 Name = "Asya",
                 Gender = UserGender.Female,
-                Age = 18
+                BirthDate = 18
             };
 
-            var user4 = new ApplicationUser()
+            var user4 = new User()
             {
                 UserName = "barish",
                 Name = "Barish",
                 Gender = UserGender.Male,
-                Age = 21
+                BirthDate = 21
             };
 
             dbContext.Users.Add(user1);

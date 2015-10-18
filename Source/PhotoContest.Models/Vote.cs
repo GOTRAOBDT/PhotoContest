@@ -8,7 +8,7 @@
         public int Id { get; set; }
 
         [Required]
-        public virtual ApplicationUser Voter { get; set; }
+        public virtual User Voter { get; set; }
 
         [Required]
         public virtual Contest Contest { get; set; }

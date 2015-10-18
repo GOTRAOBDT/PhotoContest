@@ -4,7 +4,7 @@
 
     public interface IPhotoContestData
     {
-        IRepository<ApplicationUser> Users { get; }
+        IRepository<User> Users { get; }
 
         IRepository<Contest> Contests { get; }
 

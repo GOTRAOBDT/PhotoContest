@@ -15,9 +15,9 @@
 
         [Key]
         public int Id { get; set; }
-
+        
         [Required]
-        public virtual ApplicationUser Author { get; set; }
+        public virtual User Author { get; set; }
 
         [Required]
         public string PictureData { get; set; }

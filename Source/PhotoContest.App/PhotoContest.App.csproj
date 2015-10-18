@@ -209,9 +209,14 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Account\EditProfileBindingModel.cs" />
+    <Compile Include="Models\Account\BasicUserInfoViewModel.cs" />
     <Compile Include="Models\Contest\CreateContestBindingModel.cs" />
+    <Compile Include="Models\Contest\DetailsContestViewModel.cs" />
     <Compile Include="Models\Contest\EditContestBindingModel.cs" />
+    <Compile Include="Models\Contest\SummaryContestViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Pictures\DetailsPictureViewModel.cs" />
+    <Compile Include="Models\Pictures\SummaryPictureViewModel.cs" />
     <Compile Include="Models\Pictures\UploadPictureBindingModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />

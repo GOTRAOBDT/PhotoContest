@@ -5,20 +5,20 @@
 
     public class VotingCommittee
     {
-        private ICollection<ApplicationUser> members;
+        private ICollection<User> members;
 
         public VotingCommittee()
         {
-            this.members = new HashSet<ApplicationUser>();
+            this.members = new HashSet<User>();
         }
 
         [Key]
         public int Id { get; set; }
 
         [Required]
-        public Contest Contest { get; set; }
+        public virtual Contest Contest { get; set; }
 
-        public virtual ICollection<ApplicationUser> Members
+        public virtual ICollection<User> Members
         {
             get
             {

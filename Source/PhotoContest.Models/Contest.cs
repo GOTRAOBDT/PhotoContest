@@ -4,15 +4,15 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    using PhotoContest.Models.Enumerations;
+    using Enumerations;
 
     public class Contest
     {
         private ICollection<Prize> prizes;
         private ICollection<Picture> pictures;
 
-        private ICollection<ApplicationUser> invitees;
-        private ICollection<ApplicationUser> participants;
+        private ICollection<User> invitees;
+        private ICollection<User> participants;
 
         private ICollection<Vote> votes;
 
@@ -20,8 +20,8 @@
         {
             this.prizes = new HashSet<Prize>();
             this.pictures = new HashSet<Picture>();
-            this.participants = new HashSet<ApplicationUser>();
-            this.invitees = new HashSet<ApplicationUser>();
+            this.participants = new HashSet<User>();
+            this.invitees = new HashSet<User>();
             this.votes = new HashSet<Vote>();
         }
 
@@ -43,7 +43,7 @@
         public DateTime EndDate { get; set; }
 
         [Required]
-        public virtual ApplicationUser Owner { get; set; }
+        public virtual User Owner { get; set; }
 
         [Required]
         public ContestStatus Status { get; set; }
@@ -56,6 +56,9 @@
 
         [Required]
         public DeadlineType DeadlineType { get; set; }
+
+        [Required]
+        public string Thumbnail { get; set; }
 
         public virtual ICollection<Prize> Prizes
         {
@@ -83,19 +86,20 @@
             }
         }
 
-        public virtual ICollection<ApplicationUser> Invitees
+        public virtual ICollection<User> Invitees
         {
             get
             {
                 return this.invitees;
             }
+
             set
             {
                 this.invitees = value;
             }
         }
 
-        public ICollection<ApplicationUser> Participants
+        public ICollection<User> Participants
         {
             get
             {

@@ -10,7 +10,7 @@ namespace PhotoContest.Data
     
     using Models;
 
-    public class PhotoContestContext : IdentityDbContext<ApplicationUser>, IPhotoContestContext
+    public class PhotoContestContext : IdentityDbContext<User>, IPhotoContestContext
     {
         public PhotoContestContext()
             : base("name=PhotoContestContext")
@@ -37,17 +37,17 @@ namespace PhotoContest.Data
         {
             modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
 
-            modelBuilder.Entity<ApplicationUser>()
+            modelBuilder.Entity<User>()
                 .HasMany(u => u.Pictures)
                 .WithRequired(p => p.Author)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<ApplicationUser>()
+            modelBuilder.Entity<User>()
                 .HasMany(u => u.MyContests)
                 .WithRequired(c => c.Owner)
                 .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<ApplicationUser>()
+            modelBuilder.Entity<User>()
                 .HasMany(u => u.InvitedContests)
                 .WithMany(c => c.Invitees)
                 .Map(m =>
@@ -57,7 +57,7 @@ namespace PhotoContest.Data
                     m.ToTable("ContestsInvitees");
                 });
 
-            modelBuilder.Entity<ApplicationUser>()
+            modelBuilder.Entity<User>()
                 .HasMany(u => u.ParticipationContests)
                 .WithMany(c => c.Participants)
                 .Map(m =>
@@ -67,7 +67,7 @@ namespace PhotoContest.Data
                     m.ToTable("ContestsParticipants");
                 });
 
-            modelBuilder.Entity<ApplicationUser>()
+            modelBuilder.Entity<User>()
                 .HasMany(u => u.Votes)
                 .WithRequired(v => v.Voter)
                 .WillCascadeOnDelete(false);

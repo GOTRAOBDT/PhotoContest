@@ -12,6 +12,7 @@
         }
 
         // GET: Pictures/{pictureId}
+        // Returned model type: DetailsPictureViewModel
         public ActionResult Index(int id)
         {
             return View();

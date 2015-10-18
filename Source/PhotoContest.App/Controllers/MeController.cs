@@ -13,24 +13,18 @@
         public MeController(IPhotoContestData data)
             : base(data)
         {
-            
         }
 
-        // GET: Me/{sortBy}
+        // GET: Me/Contests
+        // Returned model type: SummaryContestViewModel
         [HttpGet]
-        public ActionResult Index(string sortBy)
-        {
-            return View();
-        }
-
-        // GET: Me/Contest
-        [HttpGet]
-        public ActionResult Contest()
+        public ActionResult Contests()
         {
             return View();
         }
 
         // GET: Me/Pictures
+        // Returned model type: SummaryPictureViewModel
         [HttpGet]
         public ActionResult Pictures()
         {
@@ -46,14 +40,14 @@
 
         // GET: Me/Profile
         [HttpGet]
-        public ActionResult Profile()
+        public ActionResult EditProfile()
         {
             return View();
         }
 
-        // POST: Me/Profile
-        [HttpPost]
-        public ActionResult Profile(EditProfileBindingModel model)
+        // PUT: Me/Profile
+        [HttpPut]
+        public ActionResult EditProfile(EditProfileBindingModel model)
         {
             return View();
         }

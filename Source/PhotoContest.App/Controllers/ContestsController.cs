@@ -29,6 +29,7 @@
         }
 
         // GET: Contests/{contestId}
+        // Returned model type: DetailsContestViewModel
         [HttpGet]
         [AllowAnonymous]
         public ActionResult GetContestById(int? contestId)
@@ -51,6 +52,7 @@
         }
 
         // GET: Contests/{contestId}/Jury
+        // Returned model type: BasicUserInfoViewModel
         [HttpGet]
         public ActionResult Jury(int contestId)
         {
@@ -72,6 +74,7 @@
         }
 
         // GET: Contests/{contestId}/Candidates
+        // Returned model type: BasicUserInfoViewModel
         [HttpGet]
         public ActionResult Candidates(int contestId)
         {
@@ -107,6 +110,7 @@
         }
 
         // GET: Contests/{contestId}/Gallery/{pictureId}
+        // Returned model type: DetailsPictureViewModel
         [HttpGet]
         public ActionResult Gallery(int contestId, int pictureId)
         {

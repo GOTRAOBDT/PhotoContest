@@ -11,6 +11,7 @@
         }
 
         // GET: Index/{sortBy}
+        // Returned model type: SummaryContestViewModel
         [HttpGet]
         public ActionResult Index(string sortBy)
         {
