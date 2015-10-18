@@ -10,7 +10,9 @@
         {
         }
 
-        public ActionResult Index()
+        // GET: Index/{sortBy}
+        [HttpGet]
+        public ActionResult Index(string sortBy)
         {
             return this.View();
         }
