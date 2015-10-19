@@ -71,6 +71,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Mocks\PhotoContestDataMock.cs" />
+    <Compile Include="Mocks\GenericRepositoryMock.cs" />
+    <Compile Include="Mocks\GenericUserStoreMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTests\MockContainer.cs" />
   </ItemGroup>
