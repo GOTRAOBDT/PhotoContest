@@ -35,6 +35,8 @@ namespace PhotoContest.Data
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
 
             modelBuilder.Entity<User>()
@@ -97,17 +99,15 @@ namespace PhotoContest.Data
                 .WithRequired(cm => cm.Contest)
                 .WillCascadeOnDelete(false);
 
-            //modelBuilder.Entity<VotingCommittee>()
-            //    .HasMany(vc => vc.Members)
-            //    .WithMany(m => m.Commettees)
-            //    .Map(m =>
-            //    {
-            //        m.MapLeftKey("ContestId");
-            //        m.MapRightKey("MemberId");
-            //        m.ToTable("VotingCommettees");
-            //    });
-
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<VotingCommittee>()
+                .HasMany(vc => vc.Members)
+                .WithMany(m => m.Commettees)
+                .Map(m =>
+                {
+                    m.MapLeftKey("ContestId");
+                    m.MapRightKey("MemberId");
+                    m.ToTable("VotingCommettees");
+                });
         }
     }
 }
