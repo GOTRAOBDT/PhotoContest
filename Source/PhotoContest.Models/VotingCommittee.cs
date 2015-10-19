@@ -16,6 +16,8 @@
         public int Id { get; set; }
 
         [Required]
+        public int ContestId { get; set; }
+        
         public virtual Contest Contest { get; set; }
 
         public virtual ICollection<User> Members

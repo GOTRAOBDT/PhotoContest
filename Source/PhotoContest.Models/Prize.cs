@@ -16,6 +16,8 @@
         public string Description { get; set; }
 
         [Required]
+        public int ContestId { get; set; }
+        
         public virtual Contest Contest { get; set; }
     }
 }

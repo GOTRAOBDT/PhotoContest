@@ -43,6 +43,8 @@
         public DateTime EndDate { get; set; }
 
         [Required]
+        public string OwnerId { get; set; }
+        
         public virtual User Owner { get; set; }
 
         [Required]
