@@ -77,6 +77,7 @@
                 {
                     Id = 1,
                     AuthorId = "3",
+                    Author = new User { Id = "3", Name = "Maria Georgieva", UserName  = "maria", Email = "maria@abv.bg", Gender = UserGender.Female },
                     PictureData = "http://www.picture.com/1",
                     PostedOn = DateTime.Now.AddDays(-30)
                 },
@@ -84,6 +85,7 @@
                 {
                     Id = 2,
                     AuthorId = "1",
+                    Author = new User { Id = "1", Name = "Peter Petrov", UserName  = "peter", Email = "peter@abv.bg", Gender = UserGender.Male },
                     PictureData = "http://www.picture.com/2",
                     PostedOn = DateTime.Now.AddDays(-20)
                 },
@@ -91,6 +93,7 @@
                 {
                     Id = 3,
                     AuthorId = "2",
+                    Author = new User { Id = "2", Name = "Ivan Ivanov", UserName  = "ivan", Email = "ivan@abv.bg", Gender = UserGender.Male },
                     PictureData = "http://www.picture.com/3",
                     PostedOn = DateTime.Now.AddDays(-10)
                 }
@@ -135,6 +138,7 @@
                     StartDate = DateTime.Now.AddDays(-30),
                     EndDate = DateTime.Now,
                     OwnerId = "2",
+                    Owner = new User { Id = "2", Name = "Ivan Ivanov", UserName  = "ivan", Email = "ivan@abv.bg", Gender = UserGender.Male },
                     Status = ContestStatus.Active,
                     VotingType = VotingType.Open,
                     ParticipationType = ParticipationType.Open,
@@ -149,6 +153,7 @@
                     StartDate = DateTime.Now.AddMonths(-1),
                     EndDate = DateTime.Now,
                     OwnerId = "1",
+                    Owner = new User { Id = "1", Name = "Peter Petrov", UserName  = "peter", Email = "peter@abv.bg", Gender = UserGender.Male },
                     Status = ContestStatus.Finished,
                     VotingType = VotingType.Closed,
                     ParticipationType = ParticipationType.Open,
@@ -163,6 +168,7 @@
                     StartDate = DateTime.Now.AddMonths(-2),
                     EndDate = DateTime.Now,
                     OwnerId = "3",
+                    Owner = new User { Id = "3", Name = "Maria Georgieva", UserName  = "maria", Email = "maria@abv.bg", Gender = UserGender.Female },
                     Status = ContestStatus.Inactive,
                     VotingType = VotingType.Open,
                     ParticipationType = ParticipationType.Open,
