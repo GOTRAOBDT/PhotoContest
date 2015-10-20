@@ -1,0 +1,9 @@
+Transfer these issues to github issues;
+
+1. Login;
+2. Logout;
+3. Register;
+4. Research for Drobox, One Drive, ect. storages;
+5. Choose pagination package;
+6. Assign issues per each person;
+7. Reseach for CRON jobs.
