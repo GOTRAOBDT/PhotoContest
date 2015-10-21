@@ -1,4 +1,6 @@
-﻿namespace PhotoContest.Tests.UnitTests
+﻿using PhotoContest.Models;
+
+namespace PhotoContest.Tests.UnitTests
 {
     using System;
     using System.Collections.Generic;
@@ -22,24 +24,27 @@
     public class HomeControllerTests
     {
         private MockContainer mock;
+        private IQueryable<Contest> fakeContests;
+        private Mock<IPhotoContestData> mockContext;
+        private HomeController homeController;
 
         [TestInitialize]
         public void InitTest()
         {
             this.mock = new MockContainer();
             this.mock.PrepareMocks();
+
+            this.fakeContests = this.mock.ContestsRepositoryMock.Object.All();
+            this.mockContext = new Mock<IPhotoContestData>();
+            mockContext.Setup(c => c.Contests.All())
+                .Returns(fakeContests);
+
+            this.homeController = new HomeController(mockContext.Object);
         }
 
         [TestMethod]
         public void HomeIndexShouldReturnViewResultAndIEnumerableOfSummuryContestViewModel()
         {
-            var fakeContests = this.mock.ContestsRepositoryMock.Object.All();
-            var mockContext = new Mock<IPhotoContestData>();
-            mockContext.Setup(c => c.Contests.All())
-                .Returns(fakeContests);
-
-            var homeController = new HomeController(mockContext.Object);
-
             var result = homeController.Index(null, null);
             Assert.IsInstanceOfType(result, typeof(ViewResult));
 
@@ -50,13 +55,6 @@
         [TestMethod]
         public void HomeIndexWithNoSortByAndFilterByOptionsShouldReturnByDefaultActiveEntitiesOrderdByPicturesCountAndThenByVotesCount()
         {
-            var fakeContests = this.mock.ContestsRepositoryMock.Object.All();
-            var mockContext = new Mock<IPhotoContestData>();
-            mockContext.Setup(c => c.Contests.All())
-                .Returns(fakeContests);
-
-            var homeController = new HomeController(mockContext.Object);
-
             var result = homeController.Index(null, null);
             var viewResult = result as ViewResult;
             var actualModelList = viewResult.Model as List<SummaryContestViewModel>;
@@ -77,13 +75,6 @@
         [TestMethod]
         public void HomeIndexWithNoSortByAndFilterByComingSoonOptionsShouldReturnCorectEntities()
         {
-            var fakeContests = this.mock.ContestsRepositoryMock.Object.All();
-            var mockContext = new Mock<IPhotoContestData>();
-            mockContext.Setup(c => c.Contests.All())
-                .Returns(fakeContests);
-
-            var homeController = new HomeController(mockContext.Object);
-
             var result = homeController.Index(null, "coming-soon");
             var viewResult = result as ViewResult;
             var actualModelList = viewResult.Model as List<SummaryContestViewModel>;
@@ -104,13 +95,6 @@
         [TestMethod]
         public void HomeIndexWithNoSortByAndFilterByFinishedOptionsShouldReturnCorectEntities()
         {
-            var fakeContests = this.mock.ContestsRepositoryMock.Object.All();
-            var mockContext = new Mock<IPhotoContestData>();
-            mockContext.Setup(c => c.Contests.All())
-                .Returns(fakeContests);
-
-            var homeController = new HomeController(mockContext.Object);
-
             var result = homeController.Index(null, "finished");
             var viewResult = result as ViewResult;
             var actualModelList = viewResult.Model as List<SummaryContestViewModel>;
@@ -131,13 +115,6 @@
         [TestMethod]
         public void HomeIndexWithNoSortByAndFilterByInvalidCriterionOptionsShouldReturnActiveEntitiesByDefault()
         {
-            var fakeContests = this.mock.ContestsRepositoryMock.Object.All();
-            var mockContext = new Mock<IPhotoContestData>();
-            mockContext.Setup(c => c.Contests.All())
-                .Returns(fakeContests);
-
-            var homeController = new HomeController(mockContext.Object);
-
             var result = homeController.Index(null, "invalidFilter");
             var viewResult = result as ViewResult;
             var actualModelList = viewResult.Model as List<SummaryContestViewModel>;
@@ -159,13 +136,6 @@
         [TestMethod]
         public void HomeIndexWithSortByNewestAndNoFilterByOptionsShouldReturnActiveEntitiesOrderedByNewestOpened()
         {
-            var fakeContests = this.mock.ContestsRepositoryMock.Object.All();
-            var mockContext = new Mock<IPhotoContestData>();
-            mockContext.Setup(c => c.Contests.All())
-                .Returns(fakeContests);
-
-            var homeController = new HomeController(mockContext.Object);
-
             var result = homeController.Index("newest", null);
             var viewResult = result as ViewResult;
             var actualModelList = viewResult.Model as List<SummaryContestViewModel>;
@@ -185,13 +155,6 @@
         [TestMethod]
         public void HomeIndexWithSortByInvalidSortCriterionAndNoFilterByOptionsShouldReturnByDefaultActiveEntitiesOrderedByPicturesCountAndThenByVotesCount()
         {
-            var fakeContests = this.mock.ContestsRepositoryMock.Object.All();
-            var mockContext = new Mock<IPhotoContestData>();
-            mockContext.Setup(c => c.Contests.All())
-                .Returns(fakeContests);
-
-            var homeController = new HomeController(mockContext.Object);
-
             var result = homeController.Index("invalidSort", null);
             var viewResult = result as ViewResult;
             var actualModelList = viewResult.Model as List<SummaryContestViewModel>;
@@ -212,13 +175,6 @@
         [TestMethod]
         public void HomeIndexWithSortByNewestAndFilterByFinishedOptionsShouldReturnCorrectEntities()
         {
-            var fakeContests = this.mock.ContestsRepositoryMock.Object.All();
-            var mockContext = new Mock<IPhotoContestData>();
-            mockContext.Setup(c => c.Contests.All())
-                .Returns(fakeContests);
-
-            var homeController = new HomeController(mockContext.Object);
-
             var result = homeController.Index("newest", "finished");
             var viewResult = result as ViewResult;
             var actualModelList = viewResult.Model as List<SummaryContestViewModel>;
