@@ -1,13 +1,15 @@
 ﻿namespace PhotoContest.App.Controllers
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
+    using System.Data.Entity;
     using System.Linq;
     using System.Web.Mvc;
     using Data.Contracts;
 
-    using PhotoContest.App.Models.Contest;
+    using Models.Contest;
+
+    using PhotoContest.App.Common;
     using PhotoContest.Models.Enumerations;
 
     public class HomeController : BaseController
@@ -17,30 +19,145 @@
         {
         }
 
-        // GET: Index/{sortBy}
+        // GET: Index{?sortBy=popularity&filterBy=active}
         // Returned model type: SummaryContestViewModel
         [HttpGet]
-        public ActionResult Index(string sortBy)
+        public ActionResult Index(string sortBy, string filterBy)
         {
-            var model = this.Data.Contests.All()
-                .Select(c => new SummaryContestViewModel
-                {
-                    Id = c.Id,
-                    IsOwner = false,
-                    ParticipantsCount = c.Participants.Count,
-                    PicturesCount = c.Pictures.Count,
-                    VotesCount = c.Votes.Count,
-                    DeadlineType = c.DeadlineType.ToString(),
-                    ParticipationType = c.ParticipationType.ToString(),
-                    StartDate = c.StartDate,
-                    Title = c.Title,
-                    VotingType = c.VotingType.ToString(),
-                    Status = c.Status.ToString(),
-                    Owner = c.Owner.UserName,
-                    EndDate = c.EndDate
-                }).ToList();
+            var contests = new List<SummaryContestViewModel>();
+            if (sortBy == null && filterBy == null)
+            {
+                contests = this.Data.Contests.All()
+                    .Where(c => c.Status == ContestStatus.Active)
+                    .OrderByDescending(c => c.Pictures.Count)
+                    .ThenByDescending(c => c.Votes.Count)
+                    .Select(SummaryContestViewModel.Create)
+                    .ToList();
+            }
 
-            return this.View(model);
+            if (sortBy == null && filterBy != null)
+            {
+                switch (filterBy)
+                {
+                    case "finished":
+                        contests = this.Data.Contests.All()
+                            .Where(c => c.Status == ContestStatus.Finished)
+                            .OrderByDescending(c => c.Pictures.Count)
+                            .ThenByDescending(c => c.Votes.Count)
+                            .Select(SummaryContestViewModel.Create)
+                            .ToList();
+                        break;
+                    case "coming-soon":
+                        contests = this.Data.Contests.All()
+                            .Where(c => c.Status == ContestStatus.Inactive)
+                            .OrderByDescending(c => c.Pictures.Count)
+                            .ThenByDescending(c => c.Votes.Count)
+                            .Select(SummaryContestViewModel.Create)
+                            .ToList();
+                        break;
+                    default:
+                        contests = this.Data.Contests.All()
+                            .Where(c => c.Status == ContestStatus.Active)
+                            .OrderByDescending(c => c.Pictures.Count)
+                            .ThenByDescending(c => c.Votes.Count)
+                            .Select(SummaryContestViewModel.Create)
+                            .ToList();
+                        break;
+                }
+            }
+
+            if (sortBy != null && filterBy == null)
+            {
+                switch (sortBy)
+                {
+                    case "newest":
+                        contests = this.Data.Contests.All()
+                            .Where(c => c.Status == ContestStatus.Active)
+                            .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
+                            .Select(SummaryContestViewModel.Create)
+                            .ToList();
+                        break;
+                    default:
+                        contests = this.Data.Contests.All()
+                            .Where(c => c.Status == ContestStatus.Active)
+                            .OrderByDescending(c => c.Pictures.Count)
+                            .ThenByDescending(c => c.Votes.Count)
+                            .Select(SummaryContestViewModel.Create)
+                            .ToList();
+                        break;
+                }
+            }
+
+            if (sortBy != null && filterBy != null)
+            {
+                if (filterBy == "active")
+                {
+                    switch (sortBy)
+                    {
+                        case "newest":
+                            contests = this.Data.Contests.All()
+                                .Where(c => c.Status == ContestStatus.Active)
+                                .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
+                                .Select(SummaryContestViewModel.Create)
+                                .ToList();
+                            break;
+                        default:
+                            contests = this.Data.Contests.All()
+                                .Where(c => c.Status == ContestStatus.Active)
+                                .OrderByDescending(c => c.Pictures.Count)
+                                .ThenByDescending(c => c.Votes.Count)
+                                .Select(SummaryContestViewModel.Create)
+                                .ToList();
+                            break;
+                    }
+                }
+
+                if (filterBy == "finished")
+                {
+                    switch (sortBy)
+                    {
+                        case "newest":
+                            contests = this.Data.Contests.All()
+                                .Where(c => c.Status == ContestStatus.Finished)
+                                .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
+                                .Select(SummaryContestViewModel.Create)
+                                .ToList();
+                            break;
+                        default:
+                            contests = this.Data.Contests.All()
+                                .Where(c => c.Status == ContestStatus.Finished)
+                                .OrderByDescending(c => c.Pictures.Count)
+                                .ThenByDescending(c => c.Votes.Count)
+                                .Select(SummaryContestViewModel.Create)
+                                .ToList();
+                            break;
+                    }
+                }
+
+                if (filterBy == "coming-soon")
+                {
+                    switch (sortBy)
+                    {
+                        case "newest":
+                            contests = this.Data.Contests.All()
+                                .Where(c => c.Status == ContestStatus.Inactive)
+                                .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
+                                .Select(SummaryContestViewModel.Create)
+                                .ToList();
+                            break;
+                        default:
+                            contests = this.Data.Contests.All()
+                                .Where(c => c.Status == ContestStatus.Inactive)
+                                .OrderByDescending(c => c.Pictures.Count)
+                                .ThenByDescending(c => c.Votes.Count)
+                                .Select(SummaryContestViewModel.Create)
+                                .ToList();
+                            break;
+                    }
+                }
+            }
+
+            return this.View(contests);
         }
     }
 }

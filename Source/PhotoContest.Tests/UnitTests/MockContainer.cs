@@ -135,8 +135,8 @@
                     Id = 1,
                     Title = "Nature",
                     Description = "Photos of nature",
-                    StartDate = DateTime.Now.AddDays(-30),
-                    EndDate = DateTime.Now,
+                    StartDate = DateTime.Now.AddDays(-31),
+                    EndDate = DateTime.Now.AddDays(15),
                     OwnerId = "2",
                     Owner = new User { Id = "2", Name = "Ivan Ivanov", UserName  = "ivan", Email = "ivan@abv.bg", Gender = UserGender.Male },
                     Status = ContestStatus.Active,
@@ -151,7 +151,7 @@
                     Title = "Portrets",
                     Description = "Portrets photos",
                     StartDate = DateTime.Now.AddMonths(-1),
-                    EndDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(-5),
                     OwnerId = "1",
                     Owner = new User { Id = "1", Name = "Peter Petrov", UserName  = "peter", Email = "peter@abv.bg", Gender = UserGender.Male },
                     Status = ContestStatus.Finished,
@@ -166,7 +166,7 @@
                     Title = "Street",
                     Description = "Street photography",
                     StartDate = DateTime.Now.AddMonths(-2),
-                    EndDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(5),
                     OwnerId = "3",
                     Owner = new User { Id = "3", Name = "Maria Georgieva", UserName  = "maria", Email = "maria@abv.bg", Gender = UserGender.Female },
                     Status = ContestStatus.Inactive,
@@ -174,6 +174,21 @@
                     ParticipationType = ParticipationType.Open,
                     DeadlineType = DeadlineType.EndDate,
                     Thumbnail = "www.thumbnail.com/2"
+                },
+                new Contest
+                {
+                    Id = 4,
+                    Title = "Portrets at sunset",
+                    Description = "Portrets at sunset photos",
+                    StartDate = DateTime.Now.AddDays(-1),
+                    EndDate = DateTime.Now.AddDays(55),
+                    OwnerId = "1",
+                    Owner = new User { Id = "1", Name = "Peter Petrov", UserName  = "peter", Email = "peter@abv.bg", Gender = UserGender.Male },
+                    Status = ContestStatus.Active,
+                    VotingType = VotingType.Closed,
+                    ParticipationType = ParticipationType.Open,
+                    DeadlineType = DeadlineType.EndDate,
+                    Thumbnail = "www.thumbnail.com/4"
                 },
             };
 
