@@ -1,35 +1,15 @@
 ﻿namespace PhotoContest.App.Models.Contest
 {
     using System;
-    using System.Linq.Expressions;
+
+    using AutoMapper;
+
+    using Bookmarks.Common.Mappings;
 
     using PhotoContest.Models;
 
-    public class SummaryContestViewModel
+    public class SummaryContestViewModel : IMapFrom<Contest>, IHaveCustomMappings
     {
-        public static Expression<Func<Contest, SummaryContestViewModel>> Create
-        {
-            get
-            {
-                return c => new SummaryContestViewModel
-                {
-                    Id = c.Id,
-                    Title = c.Title,
-                    StartDate = c.StartDate,
-                    EndDate = c.EndDate,
-                    Thumbnail = c.Thumbnail,
-                    Owner = c.Owner.UserName,
-                    Status = c.Status.ToString(),
-                    VotingType = c.VotingType.ToString(),
-                    ParticipationType = c.ParticipationType.ToString(),
-                    DeadlineType = c.DeadlineType.ToString(),
-                    PicturesCount = c.Pictures.Count,
-                    ParticipantsCount = c.Participants.Count,
-                    VotesCount = c.Votes.Count
-                };
-            }
-        }
-
         public int Id { get; set; }
 
         public string Title { get; set; }
@@ -57,5 +37,18 @@
         public int ParticipantsCount { get; set; }
 
         public int VotesCount { get; set; }
+
+        public void CreateMappings(IConfiguration configuration)
+        {
+            configuration.CreateMap<Contest, SummaryContestViewModel>()
+                .ForMember(c => c.Owner, cnf => cnf.MapFrom(m => m.Owner.UserName))
+                .ForMember(c => c.Status, cnf => cnf.MapFrom(m => m.Status.ToString()))
+                .ForMember(c => c.VotingType, cnf => cnf.MapFrom(m => m.VotingType.ToString()))
+                .ForMember(c => c.ParticipationType, cnf => cnf.MapFrom(m => m.ParticipationType.ToString()))
+                .ForMember(c => c.DeadlineType, cnf => cnf.MapFrom(m => m.DeadlineType.ToString()))
+                .ForMember(c => c.ParticipantsCount, cnf => cnf.MapFrom(m => m.Pictures.Count))
+                .ForMember(c => c.ParticipantsCount, cnf => cnf.MapFrom(m => m.Participants.Count))
+                .ForMember(c => c.VotesCount, cnf => cnf.MapFrom(m => m.Votes.Count));
+        }
     }
 }

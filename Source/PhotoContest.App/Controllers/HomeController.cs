@@ -5,11 +5,15 @@
     using System.Linq;
     using System.Web.Mvc;
 
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
+
     using Common;
     using Data.Contracts;
 
     using Models.Contest;
-    
+
+    using PhotoContest.Models;
     using PhotoContest.Models.Enumerations;
 
     public class HomeController : BaseController
@@ -17,6 +21,7 @@
         public HomeController(IPhotoContestData data)
             : base(data)
         {
+            Mapper.CreateMap<Contest, SummaryContestViewModel>();
         }
 
         // GET: Index{?sortBy=popularity&filterBy=active}
@@ -31,7 +36,7 @@
                     .Where(c => c.Status == ContestStatus.Active)
                     .OrderByDescending(c => c.Pictures.Count)
                     .ThenByDescending(c => c.Votes.Count)
-                    .Select(SummaryContestViewModel.Create)
+                    .ProjectTo<SummaryContestViewModel>()
                     .ToList();
             }
 
@@ -44,7 +49,7 @@
                             .Where(c => c.Status == ContestStatus.Finished)
                             .OrderByDescending(c => c.Pictures.Count)
                             .ThenByDescending(c => c.Votes.Count)
-                            .Select(SummaryContestViewModel.Create)
+                            .ProjectTo<SummaryContestViewModel>()
                             .ToList();
                         break;
                     case "coming-soon":
@@ -52,7 +57,7 @@
                             .Where(c => c.Status == ContestStatus.Inactive)
                             .OrderByDescending(c => c.Pictures.Count)
                             .ThenByDescending(c => c.Votes.Count)
-                            .Select(SummaryContestViewModel.Create)
+                            .ProjectTo<SummaryContestViewModel>()
                             .ToList();
                         break;
                     default:
@@ -60,7 +65,7 @@
                             .Where(c => c.Status == ContestStatus.Active)
                             .OrderByDescending(c => c.Pictures.Count)
                             .ThenByDescending(c => c.Votes.Count)
-                            .Select(SummaryContestViewModel.Create)
+                            .ProjectTo<SummaryContestViewModel>()
                             .ToList();
                         break;
                 }
@@ -74,7 +79,7 @@
                         contests = this.Data.Contests.All()
                             .Where(c => c.Status == ContestStatus.Active)
                             .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
-                            .Select(SummaryContestViewModel.Create)
+                            .ProjectTo<SummaryContestViewModel>()
                             .ToList();
                         break;
                     default:
@@ -82,7 +87,7 @@
                             .Where(c => c.Status == ContestStatus.Active)
                             .OrderByDescending(c => c.Pictures.Count)
                             .ThenByDescending(c => c.Votes.Count)
-                            .Select(SummaryContestViewModel.Create)
+                            .ProjectTo<SummaryContestViewModel>()
                             .ToList();
                         break;
                 }
@@ -98,7 +103,7 @@
                             contests = this.Data.Contests.All()
                                 .Where(c => c.Status == ContestStatus.Active)
                                 .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
-                                .Select(SummaryContestViewModel.Create)
+                                .ProjectTo<SummaryContestViewModel>()
                                 .ToList();
                             break;
                         default:
@@ -106,7 +111,7 @@
                                 .Where(c => c.Status == ContestStatus.Active)
                                 .OrderByDescending(c => c.Pictures.Count)
                                 .ThenByDescending(c => c.Votes.Count)
-                                .Select(SummaryContestViewModel.Create)
+                                .ProjectTo<SummaryContestViewModel>()
                                 .ToList();
                             break;
                     }
@@ -120,7 +125,7 @@
                             contests = this.Data.Contests.All()
                                 .Where(c => c.Status == ContestStatus.Finished)
                                 .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
-                                .Select(SummaryContestViewModel.Create)
+                                .ProjectTo<SummaryContestViewModel>()
                                 .ToList();
                             break;
                         default:
@@ -128,7 +133,7 @@
                                 .Where(c => c.Status == ContestStatus.Finished)
                                 .OrderByDescending(c => c.Pictures.Count)
                                 .ThenByDescending(c => c.Votes.Count)
-                                .Select(SummaryContestViewModel.Create)
+                                .ProjectTo<SummaryContestViewModel>()
                                 .ToList();
                             break;
                     }
@@ -142,7 +147,7 @@
                             contests = this.Data.Contests.All()
                                 .Where(c => c.Status == ContestStatus.Inactive)
                                 .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
-                                .Select(SummaryContestViewModel.Create)
+                                .ProjectTo<SummaryContestViewModel>()
                                 .ToList();
                             break;
                         default:
@@ -150,7 +155,7 @@
                                 .Where(c => c.Status == ContestStatus.Inactive)
                                 .OrderByDescending(c => c.Pictures.Count)
                                 .ThenByDescending(c => c.Votes.Count)
-                                .Select(SummaryContestViewModel.Create)
+                                .ProjectTo<SummaryContestViewModel>()
                                 .ToList();
                             break;
                     }
