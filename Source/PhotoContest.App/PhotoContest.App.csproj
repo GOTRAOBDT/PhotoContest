@@ -204,6 +204,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MeController.cs" />
+    <Compile Include="Controllers\NotificationsController.cs" />
     <Compile Include="Controllers\PicturesController.cs" />
     <Compile Include="GlimpseSecurityPolicy.cs" />
     <Compile Include="Global.asax.cs">
@@ -296,6 +297,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Me\" />
+    <Folder Include="Views\Notifications\" />
     <Folder Include="Views\Pictures\" />
     <Folder Include="Views\Shared\EditorTemplates\" />
   </ItemGroup>
