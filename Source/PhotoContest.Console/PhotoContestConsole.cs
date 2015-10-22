@@ -87,7 +87,7 @@
                 UserName = "straho",
                 Name = "Strahil1",
                 Gender = UserGender.Male,
-                BirthDate = 40
+                BirthDate = new DateTime(2000,10,10)
             };
 
             var user2 = new User()
@@ -95,7 +95,7 @@
                 UserName = "anatoli",
                 Name = "Anatoli",
                 Gender = UserGender.Male,
-                BirthDate = 21
+                BirthDate = new DateTime(2000, 10, 10)
             };
 
             var user3 = new User()
@@ -103,7 +103,7 @@
                 UserName = "asya",
                 Name = "Asya",
                 Gender = UserGender.Female,
-                BirthDate = 18
+                BirthDate = new DateTime(2000, 10, 10)
             };
 
             var user4 = new User()
@@ -111,7 +111,7 @@
                 UserName = "barish",
                 Name = "Barish",
                 Gender = UserGender.Male,
-                BirthDate = 21
+                BirthDate = new DateTime(2000, 10, 10)
             };
 
             dbContext.Users.Add(user1);

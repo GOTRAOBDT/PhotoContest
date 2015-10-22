@@ -1,4 +1,6 @@
-﻿namespace PhotoContest.App.Controllers
+﻿using PhotoContest.App.Models.Account;
+
+namespace PhotoContest.App.Controllers
 {
     using System.Web.Mvc;
 
@@ -35,14 +37,14 @@
         [AllowAnonymous]
         public ActionResult GetContestById(int? contestId)
         {
-            return View();
+            return View(new DetailsContestViewModel());
         }
 
         // GET: Contests/{contestId}/Manage
         [HttpGet]
         public ActionResult Manage(int contestId)
         {
-            return View();
+            return View(new EditContestBindingModel());
         }
 
         // POST: Contests/{contestId}/Manage
@@ -57,7 +59,7 @@
         [HttpGet]
         public ActionResult Jury(int contestId)
         {
-            return View();
+            return View(new BasicUserInfoViewModel());
         }
 
         // GET: Contests/{contestId}/Jury/AddJuryMember
