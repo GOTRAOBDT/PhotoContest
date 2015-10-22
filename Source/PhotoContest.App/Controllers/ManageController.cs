@@ -28,7 +28,6 @@
         public ManageController(IPhotoContestData data)
             : base(data)
         {
-            
         }
 
         public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
@@ -85,8 +84,7 @@
 
             var editProfileModel = this.Data.Users.All()
                 .Where(u => u.Id == userId)
-                .Project()
-                .To<EditProfileBindingModel>()
+                .ProjectTo<EditProfileBindingModel>()
                 .FirstOrDefault();
 
             //var model = new IndexViewModel
