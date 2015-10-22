@@ -217,6 +217,7 @@
     <Compile Include="Models\Contest\EditContestBindingModel.cs" />
     <Compile Include="Models\Contest\SummaryContestViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Notification\NotificationViewModel.cs" />
     <Compile Include="Models\Pictures\DetailsPictureViewModel.cs" />
     <Compile Include="Models\Pictures\SummaryPictureViewModel.cs" />
     <Compile Include="Models\Pictures\UploadPictureBindingModel.cs" />
