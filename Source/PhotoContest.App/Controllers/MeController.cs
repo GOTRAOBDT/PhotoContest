@@ -4,6 +4,8 @@
 
     using Data.Contracts;
 
+    using Microsoft.AspNet.Identity;
+
     using Models.Account;
     using Models.Pictures;
 
@@ -15,6 +17,14 @@
         {
         }
 
+        // GET: Index{?sortBy=popularity&filterBy=active}
+        // Returned model type: SummaryContestViewModel
+        [HttpGet]
+        public ActionResult Index(string sortBy, string filterBy)
+        {
+            return this.View();
+        }
+
         // GET: Me/Contests
         // Returned model type: SummaryContestViewModel
         [HttpGet]
@@ -22,7 +32,7 @@
         {
             return View();
         }
-
+        
         // GET: Me/Pictures
         // Returned model type: SummaryPictureViewModel
         [HttpGet]
@@ -31,9 +41,17 @@
             return View();
         }
 
-        // Post: Me/Pictures
+        // GET: Me/UploadPicture
+        // Returned model type: SummaryPictureViewModel
+        [HttpGet]
+        public ActionResult UploadPicture()
+        {
+            return View();
+        }
+
+        // Post: Me/UploadPicture
         [HttpPost]
-        public ActionResult Pictures(UploadPictureBindingModel model)
+        public ActionResult UploadPicture(UploadPictureBindingModel model)
         {
             return View();
         }
