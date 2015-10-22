@@ -1,5 +1,6 @@
 ﻿namespace PhotoContest.Models
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Security.Claims;
@@ -45,7 +46,7 @@
 
         public string ProfilePicture { get; set; }
 
-        public int? BirthDate { get; set; }
+        public DateTime BirthDate { get; set; }
 
         public virtual ICollection<Picture> Pictures
         {

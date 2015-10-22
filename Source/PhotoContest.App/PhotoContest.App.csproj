@@ -213,6 +213,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Account\EditProfileBindingModel.cs" />
     <Compile Include="Models\Account\BasicUserInfoViewModel.cs" />
+    <Compile Include="Models\Account\UserRegistrationModel.cs" />
     <Compile Include="Models\Contest\CreateContestBindingModel.cs" />
     <Compile Include="Models\Contest\DetailsContestViewModel.cs" />
     <Compile Include="Models\Contest\EditContestBindingModel.cs" />
