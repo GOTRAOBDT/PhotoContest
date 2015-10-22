@@ -46,7 +46,7 @@
 
         public string ProfilePicture { get; set; }
 
-        public DateTime BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
 
         public virtual ICollection<Picture> Pictures
         {
