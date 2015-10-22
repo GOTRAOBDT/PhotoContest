@@ -302,6 +302,7 @@
     <Content Include="Views\Contests\GetContestById.cshtml" />
     <Content Include="Views\Contests\Manage.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\LoginViewModel.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\EditProfileBindingModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

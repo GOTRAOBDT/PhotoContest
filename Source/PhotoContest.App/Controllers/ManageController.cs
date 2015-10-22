@@ -1,26 +1,38 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
-using PhotoContest.App.Models;
-
-namespace PhotoContest.App.Controllers
+﻿namespace PhotoContest.App.Controllers
 {
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using System.Web;
+    using System.Web.Mvc;
+
+    using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.Identity.Owin;
+    using Microsoft.Owin.Security;
+
+    using AutoMapper.QueryableExtensions;
+
+    using PhotoContest.Models;
+    using PhotoContest.Data;
+    using PhotoContest.App.Models;
+    using PhotoContest.App.Models.Account;
+    using Data.Contracts;
+    using Models.Contest;
+
     [Authorize]
-    public class ManageController : Controller
+    public class ManageController : BaseController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
-        public ManageController()
+        public ManageController(IPhotoContestData data)
+            : base(data)
         {
+            
         }
 
         public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+            : base(new PhotoContextData(new PhotoContestContext()))
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -64,15 +76,28 @@ namespace PhotoContest.App.Controllers
                 : "";
 
             var userId = User.Identity.GetUserId();
-            var model = new IndexViewModel
+            var user = this.Data.Users.Find(userId);
+
+            if (user == null)
             {
-                HasPassword = HasPassword(),
-                PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
-                TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
-                Logins = await UserManager.GetLoginsAsync(userId),
-                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
-            };
-            return View(model);
+                return this.HttpNotFound();
+            }
+
+            var editProfileModel = this.Data.Users.All()
+                .Where(u => u.Id == userId)
+                .Project()
+                .To<EditProfileBindingModel>()
+                .FirstOrDefault();
+
+            //var model = new IndexViewModel
+            //{
+            //    HasPassword = HasPassword(),
+            //    PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
+            //    TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
+            //    Logins = await UserManager.GetLoginsAsync(userId),
+            //    BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
+            //};
+            return View(editProfileModel);
         }
 
         //
@@ -295,6 +320,33 @@ namespace PhotoContest.App.Controllers
                 CurrentLogins = userLogins,
                 OtherLogins = otherLogins
             });
+        }
+
+        [HttpPost]
+        public ActionResult EditProfile(EditProfileBindingModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var userId = User.Identity.GetUserId();
+            var user = this.Data.Users.Find(userId);
+
+            if (user == null)
+            {
+                RedirectToAction("Index", "Home");
+            }
+
+            user.Name = model.Name;
+            if (model.BirthDate != null)
+            {
+                user.BirthDate = model.BirthDate;
+            }
+            user.Gender = model.Gender;
+            this.Data.SaveChanges();
+
+            return RedirectToAction("Index", "Home");
         }
 
         //

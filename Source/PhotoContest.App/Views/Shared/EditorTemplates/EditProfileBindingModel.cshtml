@@ -1,0 +1,64 @@
+﻿@model PhotoContest.App.Models.Account.EditProfileBindingModel
+
+@using PhotoContest.Models.Enumerations
+
+@Html.AntiForgeryToken()
+
+<div class="form-group">
+    @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+    </div>
+    @Html.ValidationMessage("Name")
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+    </div>
+    @Html.ValidationMessage("Email")
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.BirthDate, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.BirthDate, new { @class = "form-control", @type = "date" })
+    </div>
+    @Html.ValidationMessage("BirthDate")
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.Gender, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+        @if (@Model.Gender == (UserGender)0)
+        {
+            @Html.RadioButtonFor(m => m.Gender, 0, new { @checked = "" }) @:Other
+        }
+        else
+        {
+            @Html.RadioButtonFor(m => m.Gender, 0) @:Other
+        }
+
+        @if (@Model.Gender == (UserGender)1)
+        {
+            @Html.RadioButtonFor(m => m.Gender, 1, new { @checked = "" }) @:Male
+        }
+        else
+        {
+            @Html.RadioButtonFor(m => m.Gender, 1) @:Male
+        }
+
+        @if (@Model.Gender == (UserGender)2)
+        {
+            @Html.RadioButtonFor(m => m.Gender, 2, new { @checked = "" }) @:Female
+        }
+        else
+        {
+            @Html.RadioButtonFor(m => m.Gender, 2) @:Female
+        }
+    </div>
+    @Html.ValidationMessage("Gender")
+
+
+</div>
