@@ -4,8 +4,9 @@
 
     using Data.Contracts;
 
+    using PhotoContest.Models;
     using Models.Contest;
-    
+
     [Authorize]
     public class ContestsController : BaseController
     {
@@ -25,7 +26,7 @@
         [HttpPost]
         public ActionResult Create(CreateContestBindingModel model)
         {
-            return View();
+            return View(model);
         }
 
         // GET: Contests/{contestId}
