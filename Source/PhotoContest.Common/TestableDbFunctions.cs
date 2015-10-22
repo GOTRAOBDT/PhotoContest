@@ -1,4 +1,4 @@
-﻿namespace PhotoContest.App.Common
+﻿namespace PhotoContest.Common
 {
     using System;
 

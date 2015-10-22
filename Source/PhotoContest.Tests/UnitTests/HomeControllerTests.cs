@@ -5,10 +5,10 @@
     using System.Linq;
     using System.Web.Mvc;
 
-    using App.Common;
     using App.Controllers;
     using App.Models.Contest;
 
+    using Common;
     using Data.Contracts;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;

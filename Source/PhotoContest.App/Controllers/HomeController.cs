@@ -2,14 +2,14 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Data.Entity;
     using System.Linq;
     using System.Web.Mvc;
+
+    using Common;
     using Data.Contracts;
 
     using Models.Contest;
-
-    using PhotoContest.App.Common;
+    
     using PhotoContest.Models.Enumerations;
 
     public class HomeController : BaseController

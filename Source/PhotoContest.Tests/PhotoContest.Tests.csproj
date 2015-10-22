@@ -118,6 +118,10 @@
       <Project>{354a0a47-78c3-4f36-a8a6-6355661b8c7e}</Project>
       <Name>PhotoContest.App</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PhotoContest.Common\PhotoContest.Common.csproj">
+      <Project>{0ae9edf8-a4ca-4042-87a5-59d1de7033cf}</Project>
+      <Name>PhotoContest.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PhotoContest.Data\PhotoContest.Data.csproj">
       <Project>{2e641500-4f33-4d31-8dcf-412f9955dc3d}</Project>
       <Name>PhotoContest.Data</Name>
