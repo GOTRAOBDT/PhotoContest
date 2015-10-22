@@ -20,6 +20,8 @@
         private ICollection<Contest> participationContests;
         private ICollection<Vote> votes;
 
+        private ICollection<Notification> notifications;
+
         private ICollection<VotingCommittee> commettees;
 
         public User()
@@ -30,6 +32,7 @@
             this.participationContests = new HashSet<Contest>();
             this.votes = new HashSet<Vote>();
             this.commettees = new HashSet<VotingCommittee>();
+            this.notifications = new HashSet<Notification>();
         }
 
         [Required]
@@ -119,6 +122,19 @@
             set
             {
                 this.commettees = value;
+            }
+        }
+
+        public virtual ICollection<Notification> Notifications
+        {
+            get
+            {
+                return this.notifications;
+            }
+
+            set
+            {
+                this.notifications = value;
             }
         }
 

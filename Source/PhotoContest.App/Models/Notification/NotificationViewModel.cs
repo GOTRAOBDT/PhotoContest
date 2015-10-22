@@ -2,6 +2,9 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
+    using System.Linq.Expressions;
+
+    using PhotoContest.Models;
 
     public class NotificationViewModel
     {
@@ -16,5 +19,19 @@
 
         [Required]
         public DateTime CreatedOn { get; set; }
+
+        public static Expression<Func<Notification, NotificationViewModel>> Create
+        {
+            get
+            {
+                return n => new NotificationViewModel()
+                {
+                    RecipientUsername = n.Recipient.UserName,
+                    Content = n.Content,
+                    IsRead = n.IsRead,
+                    CreatedOn = n.CreatedOn
+                };
+            }
+        }
     }
 }

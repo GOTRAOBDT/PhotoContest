@@ -6,7 +6,10 @@
     using System.Web;
     using System.Web.Mvc;
 
+    using Microsoft.AspNet.Identity;
+
     using Data.Contracts;
+    using Models.Notification;
 
     public class NotificationsController : BaseController
     {
@@ -17,7 +20,16 @@
 
         public ActionResult Index()
         {
-            return View();
+            var userId = this.User.Identity.GetUserId();
+            var user = this.Data.Users.Find(userId);
+
+            var notifications = user.Notifications
+                .AsQueryable()
+                .OrderByDescending(n => n.CreatedOn)
+                .Select(NotificationViewModel.Create)
+                .ToList();
+
+            return View(notifications);
         }
     }
 }
