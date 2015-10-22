@@ -112,6 +112,7 @@
     <Compile Include="UnitTests\ContestControllerTests.cs" />
     <Compile Include="UnitTests\HomeControllerTests.cs" />
     <Compile Include="UnitTests\MockContainer.cs" />
+    <Compile Include="UnitTests\PictureControllerTests.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
