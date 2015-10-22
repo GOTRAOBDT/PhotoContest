@@ -102,7 +102,7 @@ namespace PhotoContest.Data
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Contest>()
-                .HasOptional(c => c.Commettee)
+                .HasOptional(c => c.Jury)
                 .WithRequired(cm => cm.Contest)
                 .WillCascadeOnDelete(false);
 

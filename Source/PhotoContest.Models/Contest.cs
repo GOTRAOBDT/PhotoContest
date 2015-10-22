@@ -130,6 +130,6 @@ namespace PhotoContest.Models
             }
         }
 
-        public virtual VotingCommittee Commettee { get; set; }
+        public virtual VotingCommittee Jury { get; set; }
     }
 }
