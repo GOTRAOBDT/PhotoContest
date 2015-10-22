@@ -28,6 +28,8 @@ namespace PhotoContest.Data
 
         public virtual IDbSet<VotingCommittee> Commettees { get; set; }
 
+        public virtual IDbSet<Notification> Notifications { get; set; }
+
         public static PhotoContestContext Create()
         {
             return new PhotoContestContext();
