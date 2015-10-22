@@ -41,9 +41,16 @@
         // Returned model type: DetailsContestViewModel
         [HttpGet]
         [AllowAnonymous]
-        public ActionResult GetContestById(int? contestId)
+        public ActionResult GetContestById(int contestId)
         {
-            return View(new DetailsContestViewModel());
+            var contest = Mapper.Map<DetailsContestViewModel>(this.Data.Contests.Find(contestId));
+
+            if (contest == null)
+            {
+                return this.HttpNotFound();
+            }
+
+            return View(contest);
         }
 
         // GET: Contests/{contestId}/Manage
@@ -72,7 +79,14 @@
         [HttpGet]
         public ActionResult Jury(int contestId)
         {
-            return View(new BasicUserInfoViewModel());
+            var juryMembers = this.Data.Contests.All()
+                .Where(c => c.Id == contestId).Select(c => c.Jury).ProjectTo<BasicUserInfoViewModel>();
+            if (juryMembers == null)
+            {
+                return this.HttpNotFound();
+            }
+
+            return View(juryMembers);
         }
 
         // GET: Contests/{contestId}/Jury/AddJuryMember
