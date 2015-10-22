@@ -1,13 +1,14 @@
-﻿using PhotoContest.App.Models.Account;
-
-namespace PhotoContest.App.Controllers
+﻿namespace PhotoContest.App.Controllers
 {
     using System.Web.Mvc;
-
+    using System.Linq;
+    using AutoMapper.QueryableExtensions;
+    using Microsoft.AspNet.Identity;
     using Data.Contracts;
-
+    using PhotoContest.App.Models.Account;
     using PhotoContest.Models;
     using Models.Contest;
+    using AutoMapper;
 
     [Authorize]
     public class ContestsController : BaseController
@@ -28,7 +29,12 @@ namespace PhotoContest.App.Controllers
         [HttpPost]
         public ActionResult Create(CreateContestBindingModel model)
         {
-            return View(model);
+            var loggedUserId = this.User.Identity.GetUserId();
+            var contest = Mapper.Map<Contest>(model);
+            this.Data.Contests.Add(contest);
+            this.Data.SaveChanges();
+
+            return RedirectToAction("Contests", "Me");
         }
 
         // GET: Contests/{contestId}
@@ -44,13 +50,20 @@ namespace PhotoContest.App.Controllers
         [HttpGet]
         public ActionResult Manage(int contestId)
         {
-            return View(new EditContestBindingModel());
+            var contest = this.Data.Contests.All()
+                .Where(c => c.Id == contestId).ProjectTo<EditContestBindingModel>().FirstOrDefault();
+
+            return View(contest);
         }
 
         // POST: Contests/{contestId}/Manage
         [HttpPost]
         public ActionResult Manage(int contestId, EditContestBindingModel model)
         {
+            if (model == null)
+            {
+                return this.HttpNotFound();
+            }
             return View();
         }
 

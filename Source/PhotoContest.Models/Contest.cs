@@ -1,9 +1,12 @@
-﻿namespace PhotoContest.Models
+﻿using System.Data.Entity.Infrastructure.Design;
+using System.Net.Mime;
+
+namespace PhotoContest.Models
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-
+    
     using Enumerations;
 
     public class Contest

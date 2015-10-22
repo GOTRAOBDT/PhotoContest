@@ -63,7 +63,7 @@ namespace PhotoContest.Tests.UnitTests
                 DeadlineType = DeadlineType.EndDate.ToString(),
                 EndDate = DateTime.MaxValue,
                 Description = "Krasivi zalezi",
-                Owner = this.mock.UsersRepositoryMock.Object.All().First(),
+                OwnerId = this.mock.UsersRepositoryMock.Object.All().First().Id,
                 ParticipationType = ParticipationType.Open.ToString(),
                 Prizes = new HashSet<Prize>()
                 {
