@@ -50,14 +50,6 @@
             this.meController = new MeController(this.mockContext.Object);
         }
 
-        //[TestMethod]
-        //public void CallingSomeActionUnauthorizedShouldReturnNotAuthorized()
-        //{
-        //    this.LoginMock(true);
-        //    var result = this.meController.Contests();
-        //    Assert.IsInstanceOfType(result, typeof(HttpUnauthorizedResult));
-        //}
-
         [TestMethod]
         public void CallingContestsActionShouldReturnViewResultAndIEnumerableOfSummaryContestViewModel()
         {
@@ -115,6 +107,26 @@
             {
                 Assert.AreEqual(fakePicturesList[i].Id, actualModelList[i].Id);
             }
+        }
+
+        [TestMethod]
+        public void CallingUploadPictureActionWithoutModelShouldReturnViewResultWithoutModel()
+        {
+            var result = this.meController.UploadPicture();
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+
+            var viewResult = result as ViewResult;
+            Assert.IsNull(viewResult.Model);
+        }
+
+        [TestMethod]
+        public void CallingEditProfileActionWithoutModelShouldReturnViewResultWithoutModel()
+        {
+            var result = this.meController.EditProfile();
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+
+            var viewResult = result as ViewResult;
+            Assert.IsNull(viewResult.Model);
         }
 
         private void LoginMock(bool isAuthenticated)
