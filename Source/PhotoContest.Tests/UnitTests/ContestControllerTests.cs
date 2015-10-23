@@ -60,11 +60,10 @@ namespace PhotoContest.Tests.UnitTests
         {
             var contest = new CreateContestBindingModel
             {
-                DeadlineType = DeadlineType.EndDate.ToString(),
+                DeadlineType = DeadlineType.EndDate,
                 EndDate = DateTime.MaxValue,
                 Description = "Krasivi zalezi",
-                OwnerId = this.mock.UsersRepositoryMock.Object.All().First().Id,
-                ParticipationType = ParticipationType.Open.ToString(),
+                ParticipationType = ParticipationType.Open,
                 Prizes = new HashSet<Prize>()
                 {
                     new Prize()
@@ -76,7 +75,7 @@ namespace PhotoContest.Tests.UnitTests
                 },
                 StartDate = DateTime.Today,
                 Title = "Fast",
-                VotingType = VotingType.Open.ToString(),
+                VotingType = VotingType.Open,
                 Thumbnail = "helloworld.png"
             };
 
