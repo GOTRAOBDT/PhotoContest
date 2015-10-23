@@ -29,16 +29,16 @@ namespace PhotoContest.App.Models.Contest
         public virtual User Owner { get; set; }
 
         [Required]
-        public string VotingType { get; set; }
+        public VotingType VotingType { get; set; }
 
         [Required]
-        public string Status { get; set; }
+        public ContestStatus Status { get; set; }
 
         [Required]
-        public string ParticipationType { get; set; }
+        public ParticipationType ParticipationType { get; set; }
 
         [Required]
-        public string DeadlineType { get; set; }
+        public DeadlineType DeadlineType { get; set; }
 
         [Required]
         public string Thumbnail { get; set; }
@@ -47,15 +47,7 @@ namespace PhotoContest.App.Models.Contest
 
         public void CreateMappings(IConfiguration configuration)
         {
-            configuration.CreateMap<Contest, EditContestBindingModel>()
-                .ForMember(c => c.VotingType, cnf =>
-                                cnf.MapFrom(m => m.VotingType.ToString()))
-                .ForMember(c => c.DeadlineType, cnf =>
-                                cnf.MapFrom(m => m.DeadlineType.ToString()))
-                .ForMember(c => c.ParticipationType, cnf =>
-                                cnf.MapFrom(m => m.ParticipationType.ToString()))
-                .ForMember(c => c.Status, cnf =>
-                                cnf.MapFrom(m => m.Status.ToString()));
+            
         }
     }
 }

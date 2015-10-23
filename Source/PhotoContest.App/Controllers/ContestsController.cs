@@ -1,4 +1,6 @@
-﻿namespace PhotoContest.App.Controllers
+﻿using PhotoContest.Models.Enumerations;
+
+namespace PhotoContest.App.Controllers
 {
     using System.Web.Mvc;
     using System.Linq;
@@ -27,10 +29,13 @@
 
         // POST: Contests/Create
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(CreateContestBindingModel model)
         {
             var loggedUserId = this.User.Identity.GetUserId();
             var contest = Mapper.Map<Contest>(model);
+            contest.OwnerId = this.User.Identity.GetUserId();
+            contest.Status = ContestStatus.Active;
             this.Data.Contests.Add(contest);
             this.Data.SaveChanges();
 
@@ -41,30 +46,49 @@
         // Returned model type: DetailsContestViewModel
         [HttpGet]
         [AllowAnonymous]
-        public ActionResult GetContestById(int? contestId)
+        public ActionResult GetContestById(int contestId)
         {
-            return View(new DetailsContestViewModel());
+            var contest = Mapper.Map<DetailsContestViewModel>(this.Data.Contests.Find(contestId));
+
+            if (contest == null)
+            {
+                return this.HttpNotFound();
+            }
+
+            return View(contest);
         }
 
         // GET: Contests/{contestId}/Manage
         [HttpGet]
-        public ActionResult Manage(int contestId)
+        [ActionName("Manage")]
+        public ActionResult Manage(int id)
         {
             var contest = this.Data.Contests.All()
-                .Where(c => c.Id == contestId).ProjectTo<EditContestBindingModel>().FirstOrDefault();
+                .Where(c => c.Id == id).ProjectTo<EditContestBindingModel>().FirstOrDefault();
 
             return View(contest);
         }
 
         // POST: Contests/{contestId}/Manage
         [HttpPost]
-        public ActionResult Manage(int contestId, EditContestBindingModel model)
+        [ActionName("Manage")]
+        public ActionResult Manage(int id, EditContestBindingModel model)
         {
             if (model == null)
             {
                 return this.HttpNotFound();
             }
-            return View();
+
+            var contest = this.Data.Contests.Find(id);
+            contest.VotingType = model.VotingType;
+            contest.DeadlineType = model.DeadlineType;
+            contest.Title = model.Title;
+            contest.Description = model.Description;
+            contest.EndDate = model.EndDate;
+            contest.StartDate = model.StartDate;
+            contest.Thumbnail = model.Thumbnail;
+            this.Data.SaveChanges();
+            return RedirectToAction("contests", "Me");
         }
 
         // GET: Contests/{contestId}/Jury
@@ -72,7 +96,14 @@
         [HttpGet]
         public ActionResult Jury(int contestId)
         {
-            return View(new BasicUserInfoViewModel());
+            var juryMembers = this.Data.Contests.All()
+                .Where(c => c.Id == contestId).Select(c => c.Jury).ProjectTo<BasicUserInfoViewModel>();
+            if (juryMembers == null)
+            {
+                return this.HttpNotFound();
+            }
+
+            return View(juryMembers);
         }
 
         // GET: Contests/{contestId}/Jury/AddJuryMember

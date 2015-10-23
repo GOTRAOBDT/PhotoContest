@@ -1,7 +1,4 @@
-﻿using System.Data.Entity.Infrastructure.Design;
-using System.Net.Mime;
-
-namespace PhotoContest.Models
+﻿namespace PhotoContest.Models
 {
     using System;
     using System.Collections.Generic;
@@ -130,6 +127,6 @@ namespace PhotoContest.Models
             }
         }
 
-        public virtual VotingCommittee Commettee { get; set; }
+        public virtual VotingCommittee Jury { get; set; }
     }
 }
