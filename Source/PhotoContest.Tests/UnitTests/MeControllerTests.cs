@@ -51,6 +51,16 @@
         }
 
         [TestMethod]
+        public void CallingIndexActionShouldReturnViewResultAndIEnumerableOfSummuryContestViewModel()
+        {
+            var result = this.meController.Index(null, null);
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+
+            var viewResult = result as ViewResult;
+            Assert.IsInstanceOfType(viewResult.Model, typeof(IEnumerable<SummaryContestViewModel>));
+        }
+
+        [TestMethod]
         public void CallingIndexActionWithNoSortByAndFilterByOptionsShouldReturnByDefaultActiveEntitiesOrderdByPicturesCountAndThenByVotesCount()
         {
             this.LoginMock(true);
@@ -259,15 +269,15 @@
             Assert.IsNull(viewResult.Model);
         }
 
-        [TestMethod]
-        public void CallingUploadPictureActionWithCorrectUploadPictureBindingModelShouldShouldAddPicture()
-        {
-            var result = this.meController.UploadPicture();
-            Assert.IsInstanceOfType(result, typeof(ViewResult));
+        //[TestMethod]
+        //public void CallingUploadPictureActionWithCorrectUploadPictureBindingModelShouldShouldAddPicture()
+        //{
+        //    var result = this.meController.UploadPicture();
+        //    Assert.IsInstanceOfType(result, typeof(ViewResult));
 
-            var viewResult = result as ViewResult;
-            Assert.IsNull(viewResult.Model);
-        }
+        //    var viewResult = result as ViewResult;
+        //    Assert.IsNull(viewResult.Model);
+        //}
 
         [TestMethod]
         public void CallingEditProfileActionWithoutModelShouldReturnViewResultWithoutModel()
