@@ -314,6 +314,30 @@
             Assert.AreEqual(editProfileBindingModel.Name, fakeUser.BirthDate);
         }
 
+        [TestMethod]
+        public void CallingEditProfileActionWithInCorrectModelShouldNotMakeChangesToDatabase()
+        {
+            this.LoginMock(true);
+            var editProfileBindingModel = new EditProfileBindingModel
+            {
+                Name = null,
+                Email = "edited@mail.com",
+                BirthDate = DateTime.Now
+            };
+
+            this.meController.ModelState.AddModelError("Name", "Current value: " + editProfileBindingModel.Name);
+            var result = this.meController.EditProfile(editProfileBindingModel);
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+
+            var viewResult = result as ViewResult;
+            Assert.IsInstanceOfType(viewResult.Model, typeof(EditProfileBindingModel));
+
+            var fakeUser = this.fakeUsers.FirstOrDefault();
+            Assert.AreNotEqual(editProfileBindingModel.Name, fakeUser.Name);
+            Assert.AreNotEqual(editProfileBindingModel.Name, fakeUser.Email);
+            Assert.AreNotEqual(editProfileBindingModel.Name, fakeUser.BirthDate);
+        }
+
         //TODO Add more tests
 
         private void LoginMock(bool isAuthenticated)
