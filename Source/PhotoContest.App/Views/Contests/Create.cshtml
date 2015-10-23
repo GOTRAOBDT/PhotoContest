@@ -3,5 +3,53 @@
     ViewBag.Title = "Create";
 }
 
-<h2>Create</h2>
+@using (Html.BeginForm("Create", "Contests", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Create a new contest.</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+
+    @Html.LabelFor(m => m.Title)
+    @Html.EditorFor(m => m.Title) 
+    <br/>
+
+    @Html.LabelFor(m => m.Description)
+    @Html.TextAreaFor(m => m.Description)
+    <br/>
+
+
+    @Html.LabelFor(m => m.DeadlineType)
+    @Html.EnumDropDownListFor(m => m.DeadlineType)
+    <br/>
+
+
+    @Html.LabelFor(m => m.VotingType)
+    @Html.EnumDropDownListFor(m => m.VotingType)
+    <br/>
+
+
+    @Html.LabelFor(m => m.ParticipationType)
+    @Html.EnumDropDownListFor(m => m.ParticipationType)
+    <br/>
+
+    @Html.LabelFor(m => m.StartDate)
+    @Html.EditorFor(m => m.StartDate, new { @type = "date" }) 
+    <br />
+
+    @Html.LabelFor(m => m.EndDate)
+    @Html.EditorFor(m => m.EndDate, new {@type = "date"})
+    <br/>
+
+    @Html.LabelFor(m => m.Thumbnail)
+    @Html.EditorFor(m => m.Thumbnail);
+
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Create" />
+        </div>
+    </div>
+}
 

@@ -1,4 +1,6 @@
-﻿namespace PhotoContest.App.Controllers
+﻿using PhotoContest.Models.Enumerations;
+
+namespace PhotoContest.App.Controllers
 {
     using System.Web.Mvc;
     using System.Linq;
@@ -27,10 +29,13 @@
 
         // POST: Contests/Create
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(CreateContestBindingModel model)
         {
             var loggedUserId = this.User.Identity.GetUserId();
             var contest = Mapper.Map<Contest>(model);
+            contest.OwnerId = this.User.Identity.GetUserId();
+            contest.Status = ContestStatus.Active;
             this.Data.Contests.Add(contest);
             this.Data.SaveChanges();
 

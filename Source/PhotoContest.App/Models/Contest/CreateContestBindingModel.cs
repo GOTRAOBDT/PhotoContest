@@ -22,22 +22,27 @@ namespace PhotoContest.App.Models.Contest
         public string Description { get; set; }
 
         [Required]
+        [Display(Name = "Start Date")]
+        [DataType(DataType.Date)]
+
         public DateTime StartDate { get; set; }
 
         [Required]
+        [Display(Name = "End Date")]
+        [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }
 
         [Required]
-        public string OwnerId { get; set; }
+        [Display(Name = "Voting Type")]
+        public VotingType VotingType { get; set; }
 
         [Required]
-        public string VotingType { get; set; }
+        [Display(Name = "Participation Type")]
+        public ParticipationType ParticipationType { get; set; }
 
         [Required]
-        public string ParticipationType { get; set; }
-
-        [Required]
-        public string DeadlineType { get; set; }
+        [Display(Name = "Deadline Type")]
+        public DeadlineType DeadlineType { get; set; }
 
         [Required]
         public string Thumbnail { get; set; }
@@ -46,13 +51,6 @@ namespace PhotoContest.App.Models.Contest
 
         public void CreateMappings(IConfiguration configuration)
         {
-            configuration.CreateMap<CreateContestBindingModel, Contest>()
-                .ForMember(c => c.VotingType, cnf => 
-                                cnf.MapFrom(m => (VotingType)Enum.Parse(typeof(VotingType), m.VotingType)))
-                .ForMember(c => c.DeadlineType, cnf => 
-                                cnf.MapFrom(m => (DeadlineType)Enum.Parse(typeof(DeadlineType), m.DeadlineType)))
-                .ForMember(c => c.Status, cnf =>
-                                cnf.MapFrom(m => (ParticipationType)Enum.Parse(typeof(ParticipationType), m.ParticipationType)));
         }
     }
 }
