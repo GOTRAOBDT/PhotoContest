@@ -4,8 +4,6 @@
 
     using Data.Contracts;
 
-    using Microsoft.AspNet.Identity;
-
     using Models.Account;
     using Models.Pictures;
 
@@ -42,7 +40,6 @@
         }
 
         // GET: Me/UploadPicture
-        // Returned model type: SummaryPictureViewModel
         [HttpGet]
         public ActionResult UploadPicture()
         {
@@ -67,7 +64,7 @@
         [HttpPut]
         public ActionResult EditProfile(EditProfileBindingModel model)
         {
-            return View();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

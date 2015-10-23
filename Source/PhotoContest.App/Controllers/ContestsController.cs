@@ -60,6 +60,7 @@ namespace PhotoContest.App.Controllers
 
         // GET: Contests/{contestId}/Manage
         [HttpGet]
+        [ActionName("Manage")]
         public ActionResult Manage(int id)
         {
             var contest = this.Data.Contests.All()
@@ -70,6 +71,7 @@ namespace PhotoContest.App.Controllers
 
         // POST: Contests/{contestId}/Manage
         [HttpPost]
+        [ActionName("Manage")]
         public ActionResult Manage(int id, EditContestBindingModel model)
         {
             if (model == null)
@@ -80,6 +82,7 @@ namespace PhotoContest.App.Controllers
             var contest = this.Data.Contests.Find(id);
             contest.VotingType = model.VotingType;
             contest.DeadlineType = model.DeadlineType;
+            contest.Title = model.Title;
             contest.Description = model.Description;
             contest.EndDate = model.EndDate;
             contest.StartDate = model.StartDate;
