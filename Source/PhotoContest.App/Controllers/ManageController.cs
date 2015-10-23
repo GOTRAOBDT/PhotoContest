@@ -325,7 +325,7 @@
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return RedirectToAction("Index");
             }
 
             var userId = User.Identity.GetUserId();
@@ -342,6 +342,7 @@
                 user.BirthDate = model.BirthDate;
             }
             user.Gender = model.Gender;
+            user.ProfilePicture = model.ProfilePicture;
             this.Data.SaveChanges();
 
             return RedirectToAction("Index", "Home");

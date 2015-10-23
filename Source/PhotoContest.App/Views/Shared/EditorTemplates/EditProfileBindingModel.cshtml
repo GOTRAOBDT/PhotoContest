@@ -13,6 +13,21 @@
 </div>
 
 <div class="form-group">
+    @Html.LabelFor(m => m.ProfilePicture, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+        <img class="img-thumbnail profile-picture-preview" id="profileImagePreview" alt="Select profile photo." src="@Model.ProfilePicture">
+        @Html.ValidationMessage("ProfilePicture")
+        <br />
+        <p class="label label-info">Allowed format: .jpg, Limit: 128kb</p>
+        <br /><br />
+        <input type="text" style="display:none;" name="ProfilePicture" id="profileImageContainer"/>
+        <input type="file" id="profileImageSelector" style="display:none;" />
+        <button class="btn btn-default" onclick="getProfileImage(); return false;">Choose</button>
+
+    </div>
+</div>
+
+<div class="form-group">
     @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
     <div class="col-md-10">
         @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
@@ -23,7 +38,7 @@
 <div class="form-group">
     @Html.LabelFor(m => m.BirthDate, new { @class = "col-md-2 control-label" })
     <div class="col-md-10">
-        @Html.TextBoxFor(m => m.BirthDate, new { @class = "form-control", @type = "date" })
+        <input type="date"  name="BirthDate" value="@Model.BirthDate" class="form-control"/>
     </div>
     @Html.ValidationMessage("BirthDate")
 </div>
@@ -59,6 +74,28 @@
         }
     </div>
     @Html.ValidationMessage("Gender")
-
-
 </div>
+
+<script>
+    function getProfileImage () {
+        $('#profileImageSelector').click()
+            .on('change', function () {
+                var file = this.files[0];
+                if (file.type.match(/image\/.*/)) {
+                    var reader = new FileReader();
+                    reader.onload = function () {
+                        $('#profileImagePreview')
+                            .text(file.name)
+                            .attr('src', reader.result)
+                            .show();
+                        $('#profileImageContainer')
+                            .attr('value', reader.result);
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                }
+            });
+    };
+</script>
+
+
