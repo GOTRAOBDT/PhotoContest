@@ -64,7 +64,7 @@
         [HttpPut]
         public ActionResult EditProfile(EditProfileBindingModel model)
         {
-            return View();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

@@ -17,6 +17,7 @@
 
     using Moq;
 
+    using PhotoContest.App.Models.Account;
     using PhotoContest.App.Models.Pictures;
     using PhotoContest.Common;
     using PhotoContest.Models.Enumerations;
@@ -280,13 +281,37 @@
         //}
 
         [TestMethod]
-        public void CallingEditProfileActionWithoutModelShouldReturnViewResultWithoutModel()
+        public void CallingEditProfileActionWithoutModelShouldReturnViewResultWithEditProfileBindingModel()
         {
             var result = this.meController.EditProfile();
             Assert.IsInstanceOfType(result, typeof(ViewResult));
 
             var viewResult = result as ViewResult;
-            Assert.IsNull(viewResult.Model);
+            Assert.IsInstanceOfType(viewResult.Model, typeof(EditProfileBindingModel));
+        }
+
+        [TestMethod]
+        public void CallingEditProfileActionWithCorrectModelShouldSuccesfullyEditUserProfileAndRedirectsToHomeIndex()
+        {
+            this.LoginMock(true);
+            var editProfileBindingModel = new EditProfileBindingModel
+            {
+                Name = "Edited Name",
+                Email = "edited@mail.com",
+                BirthDate = DateTime.Now
+            };
+            var result = this.meController.EditProfile(editProfileBindingModel);
+
+            Assert.IsInstanceOfType(result, typeof(RedirectToRouteResult));
+
+            var routeResult = result as RedirectToRouteResult;
+            Assert.AreEqual(routeResult.RouteValues["controller"], "Home");
+            Assert.AreEqual(routeResult.RouteValues["action"], "Index");
+
+            var fakeUser = this.fakeUsers.FirstOrDefault();
+            Assert.AreEqual(editProfileBindingModel.Name, fakeUser.Name);
+            Assert.AreEqual(editProfileBindingModel.Name, fakeUser.Email);
+            Assert.AreEqual(editProfileBindingModel.Name, fakeUser.BirthDate);
         }
 
         //TODO Add more tests
