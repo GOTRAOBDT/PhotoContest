@@ -60,23 +60,32 @@ namespace PhotoContest.App.Controllers
 
         // GET: Contests/{contestId}/Manage
         [HttpGet]
-        public ActionResult Manage(int contestId)
+        public ActionResult Manage(int id)
         {
             var contest = this.Data.Contests.All()
-                .Where(c => c.Id == contestId).ProjectTo<EditContestBindingModel>().FirstOrDefault();
+                .Where(c => c.Id == id).ProjectTo<EditContestBindingModel>().FirstOrDefault();
 
             return View(contest);
         }
 
         // POST: Contests/{contestId}/Manage
         [HttpPost]
-        public ActionResult Manage(int contestId, EditContestBindingModel model)
+        public ActionResult Manage(int id, EditContestBindingModel model)
         {
             if (model == null)
             {
                 return this.HttpNotFound();
             }
-            return View();
+
+            var contest = this.Data.Contests.Find(id);
+            contest.VotingType = model.VotingType;
+            contest.DeadlineType = model.DeadlineType;
+            contest.Description = model.Description;
+            contest.EndDate = model.EndDate;
+            contest.StartDate = model.StartDate;
+            contest.Thumbnail = model.Thumbnail;
+            this.Data.SaveChanges();
+            return RedirectToAction("contests", "Me");
         }
 
         // GET: Contests/{contestId}/Jury

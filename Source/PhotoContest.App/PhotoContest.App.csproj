@@ -304,10 +304,10 @@
     <Content Include="Views\Shared\EditorTemplates\LoginViewModel.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\EditProfileBindingModel.cshtml" />
     <Content Include="Views\Contests\Jury.cshtml" />
+    <Content Include="Views\Me\contests.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Me\" />
     <Folder Include="Views\Notifications\" />
     <Folder Include="Views\Pictures\" />
   </ItemGroup>
