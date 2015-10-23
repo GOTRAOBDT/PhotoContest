@@ -1,7 +1,6 @@
 ﻿namespace PhotoContest.App.Controllers
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -12,6 +11,8 @@
     using Data.Contracts;
 
     using Models.Contest;
+
+    using PagedList;
 
     using PhotoContest.Models;
     using PhotoContest.Models.Enumerations;
@@ -27,9 +28,9 @@
         // GET: Index{?sortBy=popularity&filterBy=active}
         // Returned model type: SummaryContestViewModel
         [HttpGet]
-        public ActionResult Index(string sortBy, string filterBy)
+        public ActionResult Index(int? page, string sortBy, string filterBy)
         {
-            var contests = new List<SummaryContestViewModel>();
+            IPagedList<SummaryContestViewModel> contests = null;
             if (sortBy == null && filterBy == null)
             {
                 contests = this.Data.Contests.All()
@@ -37,7 +38,7 @@
                     .OrderByDescending(c => c.Pictures.Count)
                     .ThenByDescending(c => c.Votes.Count)
                     .ProjectTo<SummaryContestViewModel>()
-                    .ToList();
+                    .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
             }
 
             if (sortBy == null && filterBy != null)
@@ -50,7 +51,7 @@
                             .OrderByDescending(c => c.Pictures.Count)
                             .ThenByDescending(c => c.Votes.Count)
                             .ProjectTo<SummaryContestViewModel>()
-                            .ToList();
+                            .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
                         break;
                     case "coming-soon":
                         contests = this.Data.Contests.All()
@@ -58,7 +59,7 @@
                             .OrderByDescending(c => c.Pictures.Count)
                             .ThenByDescending(c => c.Votes.Count)
                             .ProjectTo<SummaryContestViewModel>()
-                            .ToList();
+                            .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
                         break;
                     default:
                         contests = this.Data.Contests.All()
@@ -66,7 +67,7 @@
                             .OrderByDescending(c => c.Pictures.Count)
                             .ThenByDescending(c => c.Votes.Count)
                             .ProjectTo<SummaryContestViewModel>()
-                            .ToList();
+                            .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
                         break;
                 }
             }
@@ -80,7 +81,7 @@
                             .Where(c => c.Status == ContestStatus.Active)
                             .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
                             .ProjectTo<SummaryContestViewModel>()
-                            .ToList();
+                            .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
                         break;
                     default:
                         contests = this.Data.Contests.All()
@@ -88,7 +89,7 @@
                             .OrderByDescending(c => c.Pictures.Count)
                             .ThenByDescending(c => c.Votes.Count)
                             .ProjectTo<SummaryContestViewModel>()
-                            .ToList();
+                            .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
                         break;
                 }
             }
@@ -104,7 +105,7 @@
                                 .Where(c => c.Status == ContestStatus.Active)
                                 .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
                                 .ProjectTo<SummaryContestViewModel>()
-                                .ToList();
+                                .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
                             break;
                         default:
                             contests = this.Data.Contests.All()
@@ -112,7 +113,7 @@
                                 .OrderByDescending(c => c.Pictures.Count)
                                 .ThenByDescending(c => c.Votes.Count)
                                 .ProjectTo<SummaryContestViewModel>()
-                                .ToList();
+                                .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
                             break;
                     }
                 }
@@ -126,7 +127,7 @@
                                 .Where(c => c.Status == ContestStatus.Finished)
                                 .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
                                 .ProjectTo<SummaryContestViewModel>()
-                                .ToList();
+                                .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
                             break;
                         default:
                             contests = this.Data.Contests.All()
@@ -134,7 +135,7 @@
                                 .OrderByDescending(c => c.Pictures.Count)
                                 .ThenByDescending(c => c.Votes.Count)
                                 .ProjectTo<SummaryContestViewModel>()
-                                .ToList();
+                                .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
                             break;
                     }
                 }
@@ -148,7 +149,7 @@
                                 .Where(c => c.Status == ContestStatus.Inactive)
                                 .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
                                 .ProjectTo<SummaryContestViewModel>()
-                                .ToList();
+                                .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
                             break;
                         default:
                             contests = this.Data.Contests.All()
@@ -156,7 +157,7 @@
                                 .OrderByDescending(c => c.Pictures.Count)
                                 .ThenByDescending(c => c.Votes.Count)
                                 .ProjectTo<SummaryContestViewModel>()
-                                .ToList();
+                                .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
                             break;
                     }
                 }
