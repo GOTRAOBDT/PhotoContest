@@ -26,7 +26,7 @@ namespace PhotoContest.Data
 
         public virtual IDbSet<Vote> Votes { get; set; }
 
-        public virtual IDbSet<VotingCommittee> Commettees { get; set; }
+        public virtual IDbSet<VotingCommittee> VotingCommittees { get; set; }
 
         public virtual IDbSet<Notification> Notifications { get; set; }
 
@@ -113,7 +113,7 @@ namespace PhotoContest.Data
                 {
                     m.MapLeftKey("ContestId");
                     m.MapRightKey("MemberId");
-                    m.ToTable("VotingCommettees");
+                    m.ToTable("VotingCommitteesUsers");
                 });
         }
     }

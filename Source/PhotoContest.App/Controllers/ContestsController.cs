@@ -36,7 +36,12 @@ namespace PhotoContest.App.Controllers
             var contest = Mapper.Map<Contest>(model);
             contest.OwnerId = this.User.Identity.GetUserId();
             contest.Status = ContestStatus.Active;
+
             this.Data.Contests.Add(contest);
+            this.Data.SaveChanges();
+
+            contest.Jury = new VotingCommittee();
+            contest.Jury.ContestId = contest.Id;
             this.Data.SaveChanges();
 
             return RedirectToAction("Contests", "Me");
@@ -46,9 +51,9 @@ namespace PhotoContest.App.Controllers
         // Returned model type: DetailsContestViewModel
         [HttpGet]
         [AllowAnonymous]
-        public ActionResult GetContestById(int contestId)
+        public ActionResult GetContestById(int id)
         {
-            var contest = Mapper.Map<DetailsContestViewModel>(this.Data.Contests.Find(contestId));
+            var contest = Mapper.Map<DetailsContestViewModel>(this.Data.Contests.Find(id));
 
             if (contest == null)
             {
@@ -60,7 +65,6 @@ namespace PhotoContest.App.Controllers
 
         // GET: Contests/{contestId}/Manage
         [HttpGet]
-        [ActionName("Manage")]
         public ActionResult Manage(int id)
         {
             var contest = this.Data.Contests.All()
@@ -71,7 +75,6 @@ namespace PhotoContest.App.Controllers
 
         // POST: Contests/{contestId}/Manage
         [HttpPost]
-        [ActionName("Manage")]
         public ActionResult Manage(int id, EditContestBindingModel model)
         {
             if (model == null)
@@ -94,10 +97,10 @@ namespace PhotoContest.App.Controllers
         // GET: Contests/{contestId}/Jury
         // Returned model type: BasicUserInfoViewModel
         [HttpGet]
-        public ActionResult Jury(int contestId)
+        public ActionResult Jury(int id)
         {
             var juryMembers = this.Data.Contests.All()
-                .Where(c => c.Id == contestId).Select(c => c.Jury).ProjectTo<BasicUserInfoViewModel>();
+                .Where(c => c.Id == id).Select(c => c.Jury).ProjectTo<BasicUserInfoViewModel>();
             if (juryMembers == null)
             {
                 return this.HttpNotFound();
@@ -108,16 +111,39 @@ namespace PhotoContest.App.Controllers
 
         // GET: Contests/{contestId}/Jury/AddJuryMember
         [HttpGet]
-        public ActionResult AddJuryMember(int contestId)
+        public ActionResult AddJuryMember(int id)
         {
-            return View();
+            var contest = this.Data.Contests.Find(id);
+            if (contest == null)
+            {
+                return this.HttpNotFound();
+            }
+
+            var loggedUserId = this.User.Identity.GetUserId();
+            if (loggedUserId != contest.OwnerId)
+            {
+                return this.RedirectToAction("Contests", "Me");
+            }
+
+            return View(contest);
         }
 
         // POST: Contests/{contestId}/Jury/AddJuryMember/{username}
         [HttpPost]
-        public ActionResult AddJuryMember(int contestId, string username)
+        public ActionResult AddJuryMember(int id, string username, Contest model)
         {
-            return View();
+            var user = this.Data.Users.All().FirstOrDefault(u => u.UserName == username);
+
+            if (user == null)
+            {
+                return this.HttpNotFound();
+            }
+
+            var contest = this.Data.Contests.Find(id);
+            contest.Jury.Members.Add(user);
+            this.Data.SaveChanges();
+
+            return this.RedirectToAction("Contests", "Me");
         }
 
         // GET: Contests/{contestId}/Candidates

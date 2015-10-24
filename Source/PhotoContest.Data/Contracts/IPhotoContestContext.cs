@@ -14,7 +14,7 @@
 
         IDbSet<Vote> Votes { get; set; }
 
-        IDbSet<VotingCommittee> Commettees { get; set; }
+        IDbSet<VotingCommittee> VotingCommittees { get; set; }
 
         int SaveChanges();
     }

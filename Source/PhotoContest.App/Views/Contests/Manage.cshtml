@@ -6,7 +6,7 @@
 @using (Html.BeginForm("Manage", "Contests", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
-    <h4>Create a new contest.</h4>
+    <h4>Edit contest.</h4>
     <hr />
     @Html.ValidationSummary("", new { @class = "text-danger" })
 

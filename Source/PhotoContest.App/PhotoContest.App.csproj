@@ -315,6 +315,7 @@
     <Content Include="Views\Shared\EditorTemplates\EditProfileBindingModel.cshtml" />
     <Content Include="Views\Contests\Jury.cshtml" />
     <Content Include="Views\Me\contests.cshtml" />
+    <Content Include="Views\Contests\AddJuryMember.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

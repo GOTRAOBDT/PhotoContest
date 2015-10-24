@@ -10,9 +10,9 @@
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
-                "Contests",
-                "Contests/{id}/{action}",
-                new { controller = "Contests", action = "Manage" },
+                "Manage",
+                "{controller}/{id}/{action}",
+                new { controller = "Home", action = "Index", id = UrlParameter.Optional },
                 new { id = @"\d+" }
             );
 
