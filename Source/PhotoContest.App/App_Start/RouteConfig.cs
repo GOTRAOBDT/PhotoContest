@@ -10,15 +10,16 @@
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                "Contests",
+                "Contests/{id}/{action}",
+                new { controller = "Contests", action = "Manage" },
+                new { id = @"\d+" }
+            );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional });
-
-            //routes.MapRoute(
-            //    name: "Manage",
-            //    url: "{controller}/{id}/{action}",
-            //    defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
-            //);
 
             routes.MapRoute(
                 name: "ContestPagesSortedByFilteredBy",
