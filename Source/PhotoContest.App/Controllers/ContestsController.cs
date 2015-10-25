@@ -154,7 +154,7 @@ namespace PhotoContest.App.Controllers
 
             if (contest.Jury.Members.Any(u => u.Id == user.Id))
             {
-                return this.HttpNotFound(); // the user have been already added;
+                return this.HttpNotFound(); // TODO already added!
             }
 
             contest.Jury.Members.Add(user);
@@ -166,9 +166,37 @@ namespace PhotoContest.App.Controllers
         // GET: Contests/{contestId}/Candidates
         // Returned model type: BasicUserInfoViewModel
         [HttpGet]
-        public ActionResult Candidates(int contestId)
+        public ActionResult Candidates(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return this.HttpNotFound();
+            }
+
+            Mapper.CreateMap<User, BasicUserInfoViewModel>();
+
+            var contest = this.Data.Contests.All().FirstOrDefault(c => c.Id == id);
+
+            if (contest == null)
+            {
+                return this.HttpNotFound();
+            }
+
+            if (contest.OwnerId != this.User.Identity.GetUserId())
+            {
+                return this.HttpNotFound(); // TODO unauthorized!
+            }
+
+            var candidates = contest.Candidates;
+
+            var candidatesView = Mapper.Map<IEnumerable<User>, IEnumerable<BasicUserInfoViewModel>>(candidates);
+
+            if (candidatesView == null)
+            {
+                return this.HttpNotFound();
+            }
+
+            return View(candidatesView);
         }
 
         // POST: Contests/{contestId}/Candidates/ApproveCandidate/{username}

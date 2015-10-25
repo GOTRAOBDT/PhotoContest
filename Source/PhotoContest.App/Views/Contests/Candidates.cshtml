@@ -1,0 +1,12 @@
+﻿@model IEnumerable<PhotoContest.App.Models.Account.BasicUserInfoViewModel>
+@{
+    ViewBag.Title = "Candidates";
+}
+
+@foreach (var m in Model)
+{
+    <h2>@m.UserName</h2>
+    <img src=@m.ProfilePicture alt="" />
+}
+
+
