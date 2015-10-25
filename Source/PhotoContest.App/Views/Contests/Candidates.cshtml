@@ -5,8 +5,16 @@
 
 @foreach (var m in Model)
 {
-    <h2>@m.UserName</h2>
-    <img src=@m.ProfilePicture alt="" />
+    using (Html.BeginForm("ManageCandidate", "Contests", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
+     {
+         <h2>@m.UserName</h2>
+         <img src=@m.ProfilePicture alt=""/>
+         @Html.ActionLink("Approve", "ManageCandidate",
+            new {username = m.UserName, operation = "approve"}, new { @class = "btn btn-success" })
+         @Html.ActionLink("Refect", "ManageCandidate",
+            new { username = m.UserName, operation = "reject" }, new { @class = "btn btn-danger"})
+
+    }
 }
 
 

@@ -199,18 +199,62 @@ namespace PhotoContest.App.Controllers
             return View(candidatesView);
         }
 
-        // POST: Contests/{contestId}/Candidates/ApproveCandidate/{username}
-        [HttpPost]
-        public ActionResult ApproveCandidate(int contestId, string username)
+        public ActionResult ManageCandidate(string operation, int id, string username)
         {
-            return View();
+            if (operation == "approve")
+            {
+                return RedirectToAction("ApproveCandidate" , new {id, username});
+            }
+
+            return RedirectToAction("RejectCandidate", new { id, username });
+
+        }
+
+        // POST: Contests/{contestId}/Candidates/ApproveCandidate/{username}
+        public ActionResult ApproveCandidate(int id, string username)
+        {
+            var user = this.Data.Users.All().FirstOrDefault(u => u.UserName == username);
+
+            if (user == null)
+            {
+                return this.HttpNotFound();
+            }
+
+            var contest = this.Data.Contests.Find(id);
+
+            if (contest == null)
+            {
+                return this.HttpNotFound();
+            }
+
+            contest.Participants.Add(user);
+            contest.Candidates.Remove(user);
+            this.Data.SaveChanges();
+
+            return RedirectToAction("Contests", "Me");
         }
 
         // POST: Contests/{contestId}/Candidates/RejectCandidate/{username}
-        [HttpPost]
-        public ActionResult RejectCandidate(int contestId, string username)
+        public ActionResult RejectCandidate(int id, string username)
         {
-            return View();
+            var user = this.Data.Users.All().FirstOrDefault(u => u.UserName == username);
+
+            if (user == null)
+            {
+                return this.HttpNotFound();
+            }
+
+            var contest = this.Data.Contests.Find(id);
+
+            if (contest == null)
+            {
+                return this.HttpNotFound();
+            }
+
+            contest.Candidates.Remove(user);
+            this.Data.SaveChanges();
+
+            return RedirectToAction("Contests", "Me");
         }
 
         // GET: Contests/{contestId}/Participants
