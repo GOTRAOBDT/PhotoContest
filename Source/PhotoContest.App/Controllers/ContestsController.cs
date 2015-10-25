@@ -120,7 +120,7 @@ namespace PhotoContest.App.Controllers
             return View(juryMembersView);
         }
 
-        // GET: Contests/{contestId}/Jury/AddJuryMember
+        // GET: Contests/{contestId}/AddJuryMember
         [HttpGet]
         public ActionResult AddJuryMember(int id)
         {
@@ -139,7 +139,7 @@ namespace PhotoContest.App.Controllers
             return View(contest);
         }
 
-        // POST: Contests/{contestId}/Jury/AddJuryMember/{username}
+        // POST: Contests/{contestId}/AddJuryMember/{username}
         [HttpPost]
         public ActionResult AddJuryMember(int id, string username, Contest model)
         {

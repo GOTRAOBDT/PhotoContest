@@ -19,6 +19,7 @@
 
         private ICollection<Contest> invitedContests;
         private ICollection<Contest> participationContests;
+        private ICollection<Contest> candidatedContests;
         private ICollection<Vote> votes;
 
         private ICollection<Notification> notifications;
@@ -30,6 +31,7 @@
             this.pictures = new HashSet<Picture>();
             this.myContests = new HashSet<Contest>();
             this.invitedContests = new HashSet<Contest>();
+            this.candidatedContests = new HashSet<Contest>();
             this.participationContests = new HashSet<Contest>();
             this.votes = new HashSet<Vote>();
             this.commettees = new HashSet<VotingCommittee>();
@@ -86,6 +88,12 @@
                 this.invitedContests = value;
             }
         }
+
+        public virtual ICollection<Contest> CandidatedContests
+        {
+            get { return this.candidatedContests; }
+            set { this.candidatedContests = value; }
+        } 
 
         public virtual ICollection<Contest> ParticipationContests
         {

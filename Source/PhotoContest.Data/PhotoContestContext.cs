@@ -97,6 +97,16 @@ namespace PhotoContest.Data
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<Contest>()
+                .HasMany(c => c.Candidates)
+                .WithMany(u => u.CandidatedContests)
+                .Map(m =>
+                {
+                    m.MapLeftKey("ContestId");
+                    m.MapRightKey("CandidateId");
+                    m.ToTable("ContestsCandidates");
+                });
+
+            modelBuilder.Entity<Contest>()
                 .HasMany(c => c.Votes)
                 .WithRequired(v => v.Contest)
                 .WillCascadeOnDelete(false);

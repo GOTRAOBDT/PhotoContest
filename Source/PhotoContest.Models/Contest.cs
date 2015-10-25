@@ -13,6 +13,7 @@
 
         private ICollection<User> invitees;
         private ICollection<User> participants;
+        private ICollection<User> candidates;
 
         private ICollection<Vote> votes;
 
@@ -23,6 +24,7 @@
             this.participants = new HashSet<User>();
             this.invitees = new HashSet<User>();
             this.votes = new HashSet<Vote>();
+            this.candidates = new HashSet<User>();
         }
 
         [Key]
@@ -125,6 +127,12 @@
             {
                 this.votes = value;
             }
+        }
+
+        public virtual ICollection<User> Candidates
+        {
+            get { return this.candidates; }
+            set { this.candidates = value; }
         }
 
         public virtual VotingCommittee Jury { get; set; }
