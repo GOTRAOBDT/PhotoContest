@@ -214,6 +214,7 @@ namespace PhotoContest.App.Controllers
         public ActionResult ApproveCandidate(int id, string username)
         {
             var user = this.Data.Users.All().FirstOrDefault(u => u.UserName == username);
+            var loggedUserId = this.User.Identity.GetUserId();
 
             if (user == null)
             {
@@ -225,6 +226,11 @@ namespace PhotoContest.App.Controllers
             if (contest == null)
             {
                 return this.HttpNotFound();
+            }
+
+            if (contest.OwnerId != loggedUserId)
+            {
+                return this.HttpNotFound(); // TODO unauthorized;
             }
 
             contest.Participants.Add(user);
@@ -238,7 +244,7 @@ namespace PhotoContest.App.Controllers
         public ActionResult RejectCandidate(int id, string username)
         {
             var user = this.Data.Users.All().FirstOrDefault(u => u.UserName == username);
-
+            var loggedUserId = this.User.Identity.GetUserId();
             if (user == null)
             {
                 return this.HttpNotFound();
@@ -251,15 +257,18 @@ namespace PhotoContest.App.Controllers
                 return this.HttpNotFound();
             }
 
+            if (contest.OwnerId != loggedUserId)
+            {
+                return this.HttpNotFound(); // TODO unauthorized;
+            }
             contest.Candidates.Remove(user);
             this.Data.SaveChanges();
-
             return RedirectToAction("Contests", "Me");
         }
 
         // GET: Contests/{contestId}/Participants
         [HttpGet]
-        public ActionResult Participants(int contestId)
+        public ActionResult Participants(int id)
         {
             return View();
         }
