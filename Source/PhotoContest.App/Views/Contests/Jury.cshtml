@@ -3,5 +3,8 @@
     ViewBag.Title = "Jury";
 }
 
-@Html.DisplayForModel(Model);
-
+@foreach (var m in Model)
+{
+    <h2>@m.UserName</h2>
+    <img src=@m.ProfilePicture alt=""/>
+}

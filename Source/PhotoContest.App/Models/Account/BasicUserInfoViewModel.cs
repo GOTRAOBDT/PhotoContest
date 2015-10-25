@@ -1,11 +1,20 @@
 ﻿namespace PhotoContest.App.Models.Account
 {
-    public class BasicUserInfoViewModel
+    using AutoMapper;
+
+    using Bookmarks.Common.Mappings;
+    using PhotoContest.Models;
+
+    public class BasicUserInfoViewModel : IMapTo<User>, IHaveCustomMappings
     {
         public string Id { get; set; }
 
-        public string Username { get; set; }
+        public string UserName { get; set; }
 
         public string ProfilePicture { get; set; }
+
+        public void CreateMappings(IConfiguration configuration)
+        {
+        }
     }
 }

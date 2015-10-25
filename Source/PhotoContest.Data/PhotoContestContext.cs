@@ -111,7 +111,7 @@ namespace PhotoContest.Data
                 .WithMany(m => m.Commettees)
                 .Map(m =>
                 {
-                    m.MapLeftKey("ContestId");
+                    m.MapLeftKey("ComiteeId");
                     m.MapRightKey("MemberId");
                     m.ToTable("VotingCommitteesUsers");
                 });

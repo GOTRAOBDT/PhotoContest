@@ -1,4 +1,5 @@
-﻿using PhotoContest.Models.Enumerations;
+﻿using System.Collections.Generic;
+using PhotoContest.Models.Enumerations;
 
 namespace PhotoContest.App.Controllers
 {
@@ -97,16 +98,26 @@ namespace PhotoContest.App.Controllers
         // GET: Contests/{contestId}/Jury
         // Returned model type: BasicUserInfoViewModel
         [HttpGet]
-        public ActionResult Jury(int id)
+        public ActionResult Jury(int? id)
         {
-            var juryMembers = this.Data.Contests.All()
-                .Where(c => c.Id == id).Select(c => c.Jury).ProjectTo<BasicUserInfoViewModel>();
-            if (juryMembers == null)
+            if (id == null)
             {
                 return this.HttpNotFound();
             }
 
-            return View(juryMembers);
+            Mapper.CreateMap<User, BasicUserInfoViewModel>();
+
+            var juryMembers = this.Data.Contests.All()
+                .Where(c => c.Id == id).Select(c => c.Jury.Members).FirstOrDefault();
+
+            var juryMembersView = Mapper.Map<IEnumerable<User>, IEnumerable<BasicUserInfoViewModel>>(juryMembers);
+
+            if (juryMembersView == null)
+            {
+                return this.HttpNotFound();
+            }
+
+            return View(juryMembersView);
         }
 
         // GET: Contests/{contestId}/Jury/AddJuryMember
@@ -140,6 +151,12 @@ namespace PhotoContest.App.Controllers
             }
 
             var contest = this.Data.Contests.Find(id);
+
+            if (contest.Jury.Members.Any(u => u.Id == user.Id))
+            {
+                return this.HttpNotFound(); // the user have been already added;
+            }
+
             contest.Jury.Members.Add(user);
             this.Data.SaveChanges();
 
