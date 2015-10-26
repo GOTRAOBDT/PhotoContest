@@ -6,6 +6,7 @@
 
     using Bookmarks.Common.Mappings;
 
+    using PhotoContest.Common;
     using PhotoContest.Models;
 
     public class SummaryContestViewModel : IMapFrom<Contest>, IHaveCustomMappings
@@ -48,7 +49,8 @@
                 .ForMember(c => c.DeadlineType, cnf => cnf.MapFrom(m => m.DeadlineType.ToString()))
                 .ForMember(c => c.ParticipantsCount, cnf => cnf.MapFrom(m => m.Pictures.Count))
                 .ForMember(c => c.ParticipantsCount, cnf => cnf.MapFrom(m => m.Participants.Count))
-                .ForMember(c => c.VotesCount, cnf => cnf.MapFrom(m => m.Votes.Count));
+                .ForMember(c => c.VotesCount, cnf => cnf.MapFrom(m => m.Votes.Count))
+                .ForMember(c => c.Thumbnail, cnf => cnf.MapFrom(m => m.Thumbnail ?? GlobalConstants.DefaultContestThumbnail));
         }
     }
 }

@@ -1,6 +1,7 @@
 namespace PhotoContest.Data.Migrations
 {
     using System;
+    using System.Collections.Generic;
     using System.Data.Entity.Migrations;
     using System.Linq;
 
@@ -25,14 +26,14 @@ namespace PhotoContest.Data.Migrations
                 return;
             }
 
-            CreateAdmin(context);
-            CreateUser(context, "strahil", "123");
-            CreateUser(context, "barish", "123");
-            CreateUser(context, "anatoli", "123");
-            CreateUser(context, "asya", "123");
+            this.CreateAdmin(context);
+            this.CreateUserWithContests(context, "strahil", "123");
+            this.CreateUserWithContests(context, "barish", "123");
+            this.CreateUserWithContests(context, "anatoli", "123");
+            this.CreateUserWithContests(context, "asya", "123");
         }
 
-        private void CreateUser(PhotoContestContext context, string username, string password)
+        private void CreateUserWithContests(PhotoContestContext context, string username, string password)
         {
             var userManager = new UserManager<User>(new UserStore<User>(context));
 
@@ -45,6 +46,66 @@ namespace PhotoContest.Data.Migrations
             };
 
             var result = userManager.Create(user, username + password);
+            context.SaveChanges();
+
+            var contests = new List<Contest>
+            {
+                new Contest
+                {
+                    Title = "Nature",
+                    Description = "Photos of nature",
+                    StartDate = DateTime.Now.AddDays(-31),
+                    EndDate = DateTime.Now.AddDays(15),
+                    OwnerId = user.Id,
+                    Status = ContestStatus.Active,
+                    VotingType = VotingType.Open,
+                    ParticipationType = ParticipationType.Open,
+                    DeadlineType = DeadlineType.ParticipationLimit,
+                },
+                new Contest
+                {
+                    Title = "Portrets",
+                    Description = "Portrets photos",
+                    StartDate = DateTime.Now.AddMonths(-1),
+                    EndDate = DateTime.Now.AddDays(-5),
+                    OwnerId = user.Id,
+                    Status = ContestStatus.Finished,
+                    VotingType = VotingType.Closed,
+                    ParticipationType = ParticipationType.Open,
+                    DeadlineType = DeadlineType.EndDate,
+                },
+                new Contest
+                {
+                    Title = "Street",
+                    Description = "Street photography",
+                    StartDate = DateTime.Now.AddMonths(-2),
+                    EndDate = DateTime.Now.AddDays(5),
+                    OwnerId = user.Id,
+                    Status = ContestStatus.Inactive,
+                    VotingType = VotingType.Open,
+                    ParticipationType = ParticipationType.Open,
+                    DeadlineType = DeadlineType.EndDate,
+                },
+                new Contest
+                {
+                    Title = "Portrets at sunset",
+                    Description = "Portrets at sunset photos",
+                    StartDate = DateTime.Now.AddDays(-1),
+                    EndDate = DateTime.Now.AddDays(55),
+                    OwnerId = "1",
+                    Status = ContestStatus.Active,
+                    VotingType = VotingType.Closed,
+                    ParticipationType = ParticipationType.Open,
+                    DeadlineType = DeadlineType.EndDate,
+                },
+            };
+
+            foreach (var contest in contests)
+            {
+                context.Contests.Add(contest);
+                user.MyContests.Add(contest);
+            }
+
             context.SaveChanges();
         }
 

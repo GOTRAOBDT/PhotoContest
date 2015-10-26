@@ -1,4 +1,5 @@
 ﻿@using PagedList
+@using PagedList.Mvc
 @using PhotoContest.App.Models.Contest
 @model IPagedList<SummaryContestViewModel>
 
@@ -6,4 +7,22 @@
     ViewBag.Title = "Home Page";
 }
 
-<h1>Здравейте, колеги!</h1>
+<h1>Welcome to Photo Contests!</h1>
+
+<div class="row">
+    <div class="col-md-3">
+        <ul class="nav nav-pills nav-stacked">
+            <li role="presentation" class="disabled"><a href="#"><h4>Contests</h4></a></li>
+            <li role="presentation" class="active"><a href="#">Most Popular</a></li>
+            <li role="presentation"><a href="#">Latest</a></li>
+            <li role="presentation"><a href="#">Coming soon</a></li>
+            <li role="presentation"><a href="#">Finished</a></li>
+        </ul>
+    </div>
+    <div class="col-md-7 col-md-offset-1">
+        <div class="row">
+            @Html.DisplayForModel()
+        </div>
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, ViewBag.sortBy, ViewBag.filterBy }))
+    </div>
+</div>

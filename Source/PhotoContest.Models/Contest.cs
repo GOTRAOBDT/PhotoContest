@@ -60,8 +60,7 @@
 
         [Required]
         public DeadlineType DeadlineType { get; set; }
-
-        [Required]
+        
         public string Thumbnail { get; set; }
 
         public virtual ICollection<Prize> Prizes

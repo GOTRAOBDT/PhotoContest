@@ -22,3 +22,7 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.contest-list:hover {
+    text-decoration: none
+}

@@ -163,6 +163,9 @@
                 }
             }
 
+            this.ViewBag.filterBy = filterBy;
+            this.ViewBag.sortBy = sortBy;
+
             return this.View(contests);
         }
     }
