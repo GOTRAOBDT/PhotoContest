@@ -15,7 +15,14 @@
 <div class="form-group">
     @Html.LabelFor(m => m.ProfilePicture, new { @class = "col-md-2 control-label" })
     <div class="col-md-10">
-        <img class="img-thumbnail profile-picture-preview" id="profileImagePreview" alt="Select profile photo." src="@Model.ProfilePicture">
+        @if (Model.ProfilePicture == null)
+        {
+            <img class="img-thumbnail profile-picture-preview" id="profileImagePreview" alt="Select profile photo." src="~/Content/img/noavatar.jpg">
+        }
+        else
+        {
+            <img class="img-thumbnail profile-picture-preview" id="profileImagePreview" alt="Select profile photo." src="@Model.ProfilePicture">
+        }
         @Html.ValidationMessage("ProfilePicture")
         <br />
         <p class="label label-info">Allowed format: .jpg, Limit: 128kb</p>

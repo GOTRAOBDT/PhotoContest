@@ -341,8 +341,11 @@
             {
                 user.BirthDate = model.BirthDate;
             }
+            if (model.ProfilePicture != null)
+            {
+                user.ProfilePicture = model.ProfilePicture;
+            }
             user.Gender = model.Gender;
-            user.ProfilePicture = model.ProfilePicture;
             this.Data.SaveChanges();
 
             return RedirectToAction("Index", "Home");

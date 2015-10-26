@@ -1,7 +1,4 @@
 ﻿@model PhotoContest.App.Models.Account.EditProfileBindingModel
-@{
-    ViewBag.Title = "Manage";
-}
 
 <p class="text-success">@ViewBag.StatusMessage</p>
 <div class="row">
@@ -10,11 +7,11 @@
     <dl class="dl-horizontal">
         <dt>Password:</dt>
         <dd>
-            @Html.ActionLink("Change your password", "ChangePassword")
+            @Html.ActionLink("Change your password", "ChangePassword", "Manage")
         </dd>
     </dl>
     <div>
-        @using (Html.BeginForm("EditProfile", "Manage", FormMethod.Post, new { @class = "form-vertical", role = "form" }))
+        @using (Html.BeginForm("Profile", "Me", FormMethod.Post, new { @class = "form-vertical", role = "form" }))
         {
             @Html.EditorForModel();
             <div class="form-group">

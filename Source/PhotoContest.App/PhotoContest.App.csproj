@@ -317,6 +317,7 @@
     <Content Include="Views\Me\contests.cshtml" />
     <Content Include="Views\Contests\AddJuryMember.cshtml" />
     <Content Include="Views\Contests\Candidates.cshtml" />
+    <Content Include="Views\Me\Profile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

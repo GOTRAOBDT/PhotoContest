@@ -1,6 +1,11 @@
 ﻿namespace PhotoContest.App.Controllers
 {
+    using System.Linq;
     using System.Web.Mvc;
+
+    using Microsoft.AspNet.Identity;
+
+    using AutoMapper.QueryableExtensions;
 
     using Data.Contracts;
 
@@ -55,15 +60,53 @@
 
         // GET: Me/Profile
         [HttpGet]
-        public ActionResult EditProfile()
+        public ActionResult Profile()
         {
-            return View();
+            var userId = User.Identity.GetUserId();
+            var user = this.Data.Users.Find(userId);
+
+            if (user == null)
+            {
+                return this.HttpNotFound();
+            }
+
+            var editProfileModel = this.Data.Users.All()
+                .Where(u => u.Id == userId)
+                .ProjectTo<EditProfileBindingModel>()
+                .FirstOrDefault();
+
+            return View(editProfileModel);
         }
 
-        // PUT: Me/Profile
-        [HttpPut]
-        public ActionResult EditProfile(EditProfileBindingModel model)
+        // POST: Me/Profile
+        [HttpPost]
+        public ActionResult Profile(EditProfileBindingModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var userId = User.Identity.GetUserId();
+            var user = this.Data.Users.Find(userId);
+
+            if (user == null)
+            {
+                RedirectToAction("Index", "Home");
+            }
+
+            user.Name = model.Name;
+            if (model.BirthDate != null)
+            {
+                user.BirthDate = model.BirthDate;
+            }
+            if (model.ProfilePicture != null)
+            {
+                user.ProfilePicture = model.ProfilePicture;
+            }
+            user.Gender = model.Gender;
+            this.Data.SaveChanges();
+
             return RedirectToAction("Index", "Home");
         }
     }
