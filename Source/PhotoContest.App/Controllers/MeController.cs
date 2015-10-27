@@ -7,7 +7,6 @@
     using Microsoft.AspNet.Identity;
 
     using AutoMapper.QueryableExtensions;
-<<<<<<< HEAD
 
     using Data.Contracts;
 
@@ -85,68 +84,11 @@
             return RedirectToAction("Pictures");
         }
 
-        // GET: Me/Profile
-        [HttpGet]
-        public ActionResult Profile()
-        {
-=======
-
-    using Data.Contracts;
-
-    using Models.Account;
-    using Models.Pictures;
-
-    [Authorize]
-    public class MeController : BaseController
-    {
-        public MeController(IPhotoContestData data)
-            : base(data)
-        {
-        }
-
-        // GET: Index{?sortBy=popularity&filterBy=active}
-        // Returned model type: SummaryContestViewModel
-        [HttpGet]
-        public ActionResult Index(string sortBy, string filterBy)
-        {
-            return this.View();
-        }
-
-        // GET: Me/Contests
-        // Returned model type: SummaryContestViewModel
-        [HttpGet]
-        public ActionResult Contests()
-        {
-            return this.View();
-        }
-        
-        // GET: Me/Pictures
-        // Returned model type: SummaryPictureViewModel
-        [HttpGet]
-        public ActionResult Pictures()
-        {
-            return View();
-        }
-
-        // GET: Me/UploadPicture
-        [HttpGet]
-        public ActionResult UploadPicture()
-        {
-            return View();
-        }
-
-        // Post: Me/UploadPicture
-        [HttpPost]
-        public ActionResult UploadPicture(UploadPictureBindingModel model)
-        {
-            return View();
-        }
 
         // GET: Me/Profile
         [HttpGet]
         public ActionResult Profile()
         {
->>>>>>> origin/master
             var userId = User.Identity.GetUserId();
             var user = this.Data.Users.Find(userId);
 
