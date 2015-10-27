@@ -323,6 +323,8 @@
     <Content Include="Views\Me\_UploadPicture.cshtml" />
     <Content Include="Views\Me\UploadPicture.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\DateTime.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\SummaryPictureViewModel.cshtml" />
+    <Content Include="Views\Me\Pictures.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

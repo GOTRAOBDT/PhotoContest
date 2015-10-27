@@ -125,6 +125,11 @@ namespace PhotoContest.Data
                     m.MapRightKey("MemberId");
                     m.ToTable("VotingCommitteesUsers");
                 });
+
+            modelBuilder.Entity<Picture>()
+                .HasMany(p => p.Votes)
+                .WithRequired(v => v.Picture)
+                .WillCascadeOnDelete(false);
         }
     }
 }

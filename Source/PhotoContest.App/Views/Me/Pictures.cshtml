@@ -1,0 +1,14 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@using PhotoContest.App.Models.Pictures
+@model IPagedList<SummaryPictureViewModel>
+@{
+    ViewBag.Title = "My Pictures";
+}
+<div class="col-md-7 col-md-offset-1">
+    <h1>My Pictures</h1>
+    <div class="row">
+        @Html.DisplayForModel()
+    </div>
+    @Html.PagedListPager(Model, page => Url.Action("Pictures", new { page, ViewBag.sortBy }))
+</div>
