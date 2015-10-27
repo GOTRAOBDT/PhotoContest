@@ -25,6 +25,9 @@
         public string PictureData { get; set; }
 
         [Required]
+        public string ThumbnailImageData { get; set; }
+
+        [Required]
         public DateTime PostedOn { get; set; }
 
         public virtual ICollection<Contest> Contests

@@ -1,5 +1,6 @@
 ﻿namespace PhotoContest.App.Controllers
 {
+    using System;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -11,6 +12,7 @@
 
     using Models.Account;
     using Models.Pictures;
+    using PhotoContest.Models;
 
     [Authorize]
     public class MeController : BaseController
@@ -48,14 +50,38 @@
         [HttpGet]
         public ActionResult UploadPicture()
         {
-            return View();
+            return View(new UploadPictureBindingModel());
         }
 
         // Post: Me/UploadPicture
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult UploadPicture(UploadPictureBindingModel model)
         {
-            return View();
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var userId = User.Identity.GetUserId();
+            var user = this.Data.Users.Find(userId);
+
+            if (user == null)
+            {
+                RedirectToAction("Index", "Home");
+            }
+
+            var picture = new Picture()
+            {
+                PictureData = model.PictureData,
+                ThumbnailImageData = model.PictureData,
+                AuthorId = userId,
+                PostedOn = DateTime.Now,
+            };
+            this.Data.Pictures.Add(picture);
+            this.Data.SaveChanges();
+
+            return RedirectToAction("Pictures");
         }
 
         // GET: Me/Profile
