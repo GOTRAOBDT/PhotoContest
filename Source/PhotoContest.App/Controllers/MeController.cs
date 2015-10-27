@@ -33,7 +33,7 @@
         [HttpGet]
         public ActionResult Contests()
         {
-            return View();
+            return this.View();
         }
         
         // GET: Me/Pictures
