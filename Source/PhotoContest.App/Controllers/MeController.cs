@@ -4,14 +4,19 @@
     using System.Linq;
     using System.Web.Mvc;
 
-    using Microsoft.AspNet.Identity;
-
     using AutoMapper.QueryableExtensions;
 
+    using Common;
     using Data.Contracts;
 
+    using Microsoft.AspNet.Identity;
+
     using Models.Account;
+    using Models.Contest;
     using Models.Pictures;
+
+    using PagedList;
+
     using PhotoContest.Models;
 
     [Authorize]
@@ -22,20 +27,19 @@
         {
         }
 
-        // GET: Index{?sortBy=popularity&filterBy=active}
-        // Returned model type: SummaryContestViewModel
-        [HttpGet]
-        public ActionResult Index(string sortBy, string filterBy)
-        {
-            return this.View();
-        }
-
         // GET: Me/Contests
         // Returned model type: SummaryContestViewModel
         [HttpGet]
-        public ActionResult Contests()
+        public ActionResult Contests(int? page)
         {
-            return View();
+            var loggedUserId = this.User.Identity.GetUserId();
+            IPagedList<SummaryContestViewModel> contests = this.Data.Contests.All()
+                .Where(c => c.OwnerId == loggedUserId)
+                .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
+                .ProjectTo<SummaryContestViewModel>()
+                .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
+
+            return this.View(contests);
         }
         
         // GET: Me/Pictures
