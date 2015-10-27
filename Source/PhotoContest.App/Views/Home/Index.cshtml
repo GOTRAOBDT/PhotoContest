@@ -1,4 +1,5 @@
-﻿@using PagedList
+﻿@using Microsoft.AspNet.Identity
+@using PagedList
 @using PagedList.Mvc
 @using PhotoContest.App.Models.Contest
 @model IPagedList<SummaryContestViewModel>
@@ -19,6 +20,16 @@
             <li role="presentation" @((ViewBag.sortBy == "ComingSoon") ? "class=active" : "")><a href="@Url.Action("Index", new { sortBy = "ComingSoon" })">Coming soon</a></li>
             <li role="presentation" @((ViewBag.sortBy == "Archive") ? "class=active" : "")><a href="@Url.Action("Index", new { sortBy = "Archive" })">Archive</a></li>
         </ul>
+        @if (this.User.Identity.GetUserId() != null)
+        {
+            <br/>
+            <ul class="nav nav-pills nav-stacked">
+                <li role="presentation" class="disabled"><a href="#"><h4>My menu</h4></a></li>
+                <li role="presentation"><a href="@Url.Action("Contests", "Me")">My contests</a></li>
+                <li role="presentation"><a href="@Url.Action("Pictures", "Me")">My pictures</a></li>
+                <li role="presentation"><a href="@Url.Action("Create", "Contests")">Create contest</a></li>
+            </ul>
+        }
     </div>
     <div class="col-md-7 col-md-offset-1">
         <div class="row">
