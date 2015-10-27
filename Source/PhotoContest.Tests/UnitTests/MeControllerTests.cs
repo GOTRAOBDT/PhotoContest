@@ -283,7 +283,7 @@
         [TestMethod]
         public void CallingEditProfileActionWithoutModelShouldReturnViewResultWithEditProfileBindingModel()
         {
-            var result = this.meController.EditProfile();
+            var result = this.meController.Profile();
             Assert.IsInstanceOfType(result, typeof(ViewResult));
 
             var viewResult = result as ViewResult;
@@ -300,7 +300,7 @@
                 Email = "edited@mail.com",
                 BirthDate = DateTime.Now
             };
-            var result = this.meController.EditProfile(editProfileBindingModel);
+            var result = this.meController.Profile(editProfileBindingModel);
 
             Assert.IsInstanceOfType(result, typeof(RedirectToRouteResult));
 
@@ -326,7 +326,7 @@
             };
 
             this.meController.ModelState.AddModelError("Name", "Current value: " + editProfileBindingModel.Name);
-            var result = this.meController.EditProfile(editProfileBindingModel);
+            var result = this.meController.Profile(editProfileBindingModel);
             Assert.IsInstanceOfType(result, typeof(ViewResult));
 
             var viewResult = result as ViewResult;
