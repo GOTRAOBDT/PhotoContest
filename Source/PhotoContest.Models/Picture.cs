@@ -7,14 +7,18 @@
     public class Picture
     {
         private ICollection<Contest> contests;
+        private ICollection<Vote> votes;
 
         public Picture()
         {
             this.contests = new HashSet<Contest>();
+            this.votes = new HashSet<Vote>();
         }
 
         [Key]
         public int Id { get; set; }
+
+        public string Title { get; set; }
 
         [Required]
         public string AuthorId { get; set; }
@@ -40,6 +44,19 @@
             set
             {
                 this.contests = value;
+            }
+        }
+
+        public virtual ICollection<Vote> Votes
+        {
+            get
+            {
+                return this.votes;
+            }
+
+            set
+            {
+                this.votes = value;
             }
         }
     }

@@ -8,8 +8,11 @@
 
     using AutoMapper.QueryableExtensions;
 
+    using PagedList;
+
     using Data.Contracts;
 
+    using Common;
     using Models.Account;
     using Models.Pictures;
     using PhotoContest.Models;
@@ -41,9 +44,16 @@
         // GET: Me/Pictures
         // Returned model type: SummaryPictureViewModel
         [HttpGet]
-        public ActionResult Pictures()
+        public ActionResult Pictures(int? page)
         {
-            return View();
+            IPagedList<SummaryPictureViewModel> pictures = null;
+                pictures = this.Data.Pictures.All()
+                    .OrderByDescending(p => p.PostedOn)
+                    .ThenByDescending(c => c.Contests.Count())
+                    .ProjectTo<SummaryPictureViewModel>()
+                    .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
+
+            return View(pictures);
         }
 
         // GET: Me/UploadPicture
