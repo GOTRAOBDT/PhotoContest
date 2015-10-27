@@ -6,24 +6,18 @@
 
     using AutoMapper.QueryableExtensions;
 
-<<<<<<< HEAD
     using PagedList;
 
     using Data.Contracts;
 
     using Common;
-=======
-    using Common;
-    using Data.Contracts;
 
     using Microsoft.AspNet.Identity;
 
->>>>>>> origin/master
     using Models.Account;
     using Models.Contest;
     using Models.Pictures;
 
-    using PagedList;
 
     using PhotoContest.Models;
 
