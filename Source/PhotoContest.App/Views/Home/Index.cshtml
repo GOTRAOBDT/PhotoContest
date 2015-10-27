@@ -13,16 +13,17 @@
     <div class="col-md-3">
         <ul class="nav nav-pills nav-stacked">
             <li role="presentation" class="disabled"><a href="#"><h4>Contests</h4></a></li>
-            <li role="presentation" class="active"><a href="#">Most Popular</a></li>
-            <li role="presentation"><a href="#">Latest</a></li>
-            <li role="presentation"><a href="#">Coming soon</a></li>
-            <li role="presentation"><a href="#">Finished</a></li>
+            <li role="presentation" @((ViewBag.sortBy == "MostPopular" || ViewBag.sortBy == null) ? "class=active" : "")><a href="@Url.Action("Index", new { sortBy = "MostPopular" })">Most Popular</a></li>
+            <li role="presentation" @((ViewBag.sortBy == "Latest") ? "class=active" : "")><a href="@Url.Action("Index", new { sortBy = "Latest" })">Latest</a></li>
+            <li role="presentation" @((ViewBag.sortBy == "EndingSoon") ? "class=active" : "")><a href="@Url.Action("Index", new { sortBy = "EndingSoon" })">Ending soon</a></li>
+            <li role="presentation" @((ViewBag.sortBy == "ComingSoon") ? "class=active" : "")><a href="@Url.Action("Index", new { sortBy = "ComingSoon" })">Coming soon</a></li>
+            <li role="presentation" @((ViewBag.sortBy == "Archive") ? "class=active" : "")><a href="@Url.Action("Index", new { sortBy = "Archive" })">Archive</a></li>
         </ul>
     </div>
     <div class="col-md-7 col-md-offset-1">
         <div class="row">
             @Html.DisplayForModel()
         </div>
-        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, ViewBag.sortBy, ViewBag.filterBy }))
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, ViewBag.sortBy }))
     </div>
 </div>

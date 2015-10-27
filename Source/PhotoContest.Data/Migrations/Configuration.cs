@@ -35,6 +35,7 @@ namespace PhotoContest.Data.Migrations
 
         private void CreateUserWithContests(PhotoContestContext context, string username, string password)
         {
+            Random rnd = new Random();
             var userManager = new UserManager<User>(new UserStore<User>(context));
 
             var user = new User()
@@ -54,8 +55,8 @@ namespace PhotoContest.Data.Migrations
                 {
                     Title = "Nature",
                     Description = "Photos of nature",
-                    StartDate = DateTime.Now.AddDays(-31),
-                    EndDate = DateTime.Now.AddDays(15),
+                    StartDate = DateTime.Now.AddDays(rnd.Next(-100, -15)),
+                    EndDate = DateTime.Now.AddDays(rnd.Next(15, 50)),
                     OwnerId = user.Id,
                     Status = ContestStatus.Active,
                     VotingType = VotingType.Open,
@@ -66,8 +67,8 @@ namespace PhotoContest.Data.Migrations
                 {
                     Title = "Portrets",
                     Description = "Portrets photos",
-                    StartDate = DateTime.Now.AddMonths(-1),
-                    EndDate = DateTime.Now.AddDays(-5),
+                    StartDate = DateTime.Now.AddDays(rnd.Next(-100, -50)),
+                    EndDate = DateTime.Now.AddDays(rnd.Next(-5, -1)),
                     OwnerId = user.Id,
                     Status = ContestStatus.Finished,
                     VotingType = VotingType.Closed,
@@ -76,10 +77,22 @@ namespace PhotoContest.Data.Migrations
                 },
                 new Contest
                 {
-                    Title = "Street",
+                    Title = "Street 111",
                     Description = "Street photography",
-                    StartDate = DateTime.Now.AddMonths(-2),
-                    EndDate = DateTime.Now.AddDays(5),
+                    StartDate = DateTime.Now.AddDays(rnd.Next(15, 50)),
+                    EndDate = DateTime.Now.AddDays(rnd.Next(100, 150)),
+                    OwnerId = user.Id,
+                    Status = ContestStatus.Inactive,
+                    VotingType = VotingType.Open,
+                    ParticipationType = ParticipationType.Open,
+                    DeadlineType = DeadlineType.EndDate,
+                },
+                new Contest
+                {
+                    Title = "Street 222",
+                    Description = "Street photography",
+                    StartDate = DateTime.Now.AddDays(rnd.Next(15, 50)),
+                    EndDate = DateTime.Now.AddDays(rnd.Next(100, 150)),
                     OwnerId = user.Id,
                     Status = ContestStatus.Inactive,
                     VotingType = VotingType.Open,
@@ -90,8 +103,8 @@ namespace PhotoContest.Data.Migrations
                 {
                     Title = "Portrets at sunset",
                     Description = "Portrets at sunset photos",
-                    StartDate = DateTime.Now.AddDays(-1),
-                    EndDate = DateTime.Now.AddDays(55),
+                    StartDate = DateTime.Now.AddDays(rnd.Next(-100, -15)),
+                    EndDate = DateTime.Now.AddDays(rnd.Next(15, 50)),
                     OwnerId = "1",
                     Status = ContestStatus.Active,
                     VotingType = VotingType.Closed,

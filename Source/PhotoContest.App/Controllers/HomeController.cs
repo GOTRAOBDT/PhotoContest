@@ -28,10 +28,10 @@
         // GET: Index{?sortBy=popularity&filterBy=active}
         // Returned model type: SummaryContestViewModel
         [HttpGet]
-        public ActionResult Index(int? page, string sortBy, string filterBy)
+        public ActionResult Index(int? page, string sortBy)
         {
             IPagedList<SummaryContestViewModel> contests = null;
-            if (sortBy == null && filterBy == null)
+            if (sortBy == null)
             {
                 contests = this.Data.Contests.All()
                     .Where(c => c.Status == ContestStatus.Active)
@@ -41,11 +41,32 @@
                     .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
             }
 
-            if (sortBy == null && filterBy != null)
+            if (sortBy != null)
             {
-                switch (filterBy)
+                switch (sortBy)
                 {
-                    case "finished":
+                    case "Latest":
+                        contests = this.Data.Contests.All()
+                            .Where(c => c.Status == ContestStatus.Active)
+                            .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
+                            .ProjectTo<SummaryContestViewModel>()
+                            .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
+                        break;
+                    case "ComingSoon":
+                        contests = this.Data.Contests.All()
+                            .Where(c => c.Status == ContestStatus.Inactive)
+                            .OrderByDescending(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
+                            .ProjectTo<SummaryContestViewModel>()
+                            .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
+                        break;
+                    case "EndingSoon":
+                        contests = this.Data.Contests.All()
+                            .Where(c => c.Status == ContestStatus.Active)
+                            .OrderByDescending(c => TestableDbFunctions.DiffMinutes(c.EndDate, DateTime.Now))
+                            .ProjectTo<SummaryContestViewModel>()
+                            .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
+                        break;
+                    case "Archive":
                         contests = this.Data.Contests.All()
                             .Where(c => c.Status == ContestStatus.Finished)
                             .OrderByDescending(c => c.Pictures.Count)
@@ -53,14 +74,6 @@
                             .ProjectTo<SummaryContestViewModel>()
                             .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
                         break;
-                    case "coming-soon":
-                        contests = this.Data.Contests.All()
-                            .Where(c => c.Status == ContestStatus.Inactive)
-                            .OrderByDescending(c => c.Pictures.Count)
-                            .ThenByDescending(c => c.Votes.Count)
-                            .ProjectTo<SummaryContestViewModel>()
-                            .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
-                        break;
                     default:
                         contests = this.Data.Contests.All()
                             .Where(c => c.Status == ContestStatus.Active)
@@ -71,99 +84,7 @@
                         break;
                 }
             }
-
-            if (sortBy != null && filterBy == null)
-            {
-                switch (sortBy)
-                {
-                    case "newest":
-                        contests = this.Data.Contests.All()
-                            .Where(c => c.Status == ContestStatus.Active)
-                            .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
-                            .ProjectTo<SummaryContestViewModel>()
-                            .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
-                        break;
-                    default:
-                        contests = this.Data.Contests.All()
-                            .Where(c => c.Status == ContestStatus.Active)
-                            .OrderByDescending(c => c.Pictures.Count)
-                            .ThenByDescending(c => c.Votes.Count)
-                            .ProjectTo<SummaryContestViewModel>()
-                            .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
-                        break;
-                }
-            }
-
-            if (sortBy != null && filterBy != null)
-            {
-                if (filterBy == "active")
-                {
-                    switch (sortBy)
-                    {
-                        case "newest":
-                            contests = this.Data.Contests.All()
-                                .Where(c => c.Status == ContestStatus.Active)
-                                .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
-                                .ProjectTo<SummaryContestViewModel>()
-                                .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
-                            break;
-                        default:
-                            contests = this.Data.Contests.All()
-                                .Where(c => c.Status == ContestStatus.Active)
-                                .OrderByDescending(c => c.Pictures.Count)
-                                .ThenByDescending(c => c.Votes.Count)
-                                .ProjectTo<SummaryContestViewModel>()
-                                .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
-                            break;
-                    }
-                }
-
-                if (filterBy == "finished")
-                {
-                    switch (sortBy)
-                    {
-                        case "newest":
-                            contests = this.Data.Contests.All()
-                                .Where(c => c.Status == ContestStatus.Finished)
-                                .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
-                                .ProjectTo<SummaryContestViewModel>()
-                                .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
-                            break;
-                        default:
-                            contests = this.Data.Contests.All()
-                                .Where(c => c.Status == ContestStatus.Finished)
-                                .OrderByDescending(c => c.Pictures.Count)
-                                .ThenByDescending(c => c.Votes.Count)
-                                .ProjectTo<SummaryContestViewModel>()
-                                .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
-                            break;
-                    }
-                }
-
-                if (filterBy == "coming-soon")
-                {
-                    switch (sortBy)
-                    {
-                        case "newest":
-                            contests = this.Data.Contests.All()
-                                .Where(c => c.Status == ContestStatus.Inactive)
-                                .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
-                                .ProjectTo<SummaryContestViewModel>()
-                                .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
-                            break;
-                        default:
-                            contests = this.Data.Contests.All()
-                                .Where(c => c.Status == ContestStatus.Inactive)
-                                .OrderByDescending(c => c.Pictures.Count)
-                                .ThenByDescending(c => c.Votes.Count)
-                                .ProjectTo<SummaryContestViewModel>()
-                                .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
-                            break;
-                    }
-                }
-            }
-
-            this.ViewBag.filterBy = filterBy;
+            
             this.ViewBag.sortBy = sortBy;
 
             return this.View(contests);
