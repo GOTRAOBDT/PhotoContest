@@ -319,6 +319,7 @@
     <Content Include="Views\Contests\Candidates.cshtml" />
     <Content Include="Views\Me\Profile.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\SummaryContestViewModel.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\DateTime.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

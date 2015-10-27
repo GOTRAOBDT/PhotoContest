@@ -8,9 +8,9 @@
             <div class="caption">
                 <h3>@Model.Title</h3>
                 <span>Owner: @Model.Owner</span><br/>
-                <span>Start date: @Model.StartDate</span><br/>
-                <span>End date: @Model.EndDate</span><br/>
-                <span>Participation: @Model.ParticipantsCount people with @Model.PicturesCount</span><br/>
+                <span>Start date: @Html.DisplayFor(m => m.StartDate)</span><br/>
+                <span>End date: @Html.DisplayFor(m => m.StartDate)</span><br/>
+                <span>Participation: @Model.ParticipantsCount people with @Model.PicturesCount pictures</span><br/>
                 <span>Votes: @Model.VotesCount</span><br/>
             </div>
         </div>
