@@ -23,6 +23,10 @@ textarea {
     max-width: 280px;
 }
 
+#sidebar {
+    margin-top: 2em;
+}
+
 .contest-list:hover {
     text-decoration: none
 }

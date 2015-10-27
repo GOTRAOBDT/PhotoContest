@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNet.Identity
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -17,7 +18,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Photo Contests", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -30,8 +31,31 @@
         </div>
     </div>
     <div class="container body-content">
-        @RenderBody()
-        <hr />
+        <div class="row" id="sidebar">
+            <div class="col-md-3">
+                <ul class="nav nav-pills nav-stacked">
+                    <li role="presentation" class="disabled"><a href="#"><h4>Contests</h4></a></li>
+                    <li role="presentation" @((ViewBag.sortBy == "MostPopular" || ViewBag.sortBy == null) ? "class=active" : "")><a href="@Url.Action("Index", new { sortBy = "MostPopular" })">Most Popular</a></li>
+                    <li role="presentation" @((ViewBag.sortBy == "Latest") ? "class=active" : "")><a href="@Url.Action("Index", new { sortBy = "Latest" })">Latest</a></li>
+                    <li role="presentation" @((ViewBag.sortBy == "EndingSoon") ? "class=active" : "")><a href="@Url.Action("Index", new { sortBy = "EndingSoon" })">Ending soon</a></li>
+                    <li role="presentation" @((ViewBag.sortBy == "ComingSoon") ? "class=active" : "")><a href="@Url.Action("Index", new { sortBy = "ComingSoon" })">Coming soon</a></li>
+                    <li role="presentation" @((ViewBag.sortBy == "Archive") ? "class=active" : "")><a href="@Url.Action("Index", new { sortBy = "Archive" })">Archive</a></li>
+                </ul>
+                @if (this.User.Identity.GetUserId() != null)
+                {
+                    <br />
+                    <ul class="nav nav-pills nav-stacked">
+                        <li role="presentation" class="disabled"><a href="#"><h4>My menu</h4></a></li>
+                        <li role="presentation"><a href="@Url.Action("Contests", "Me")">My contests</a></li>
+                        <li role="presentation"><a href="@Url.Action("Create", "Contests")">Create contest</a></li>
+                        <li role="presentation"><a href="@Url.Action("Pictures", "Me")">My pictures</a></li>
+                        <li role="presentation"><a href="@Url.Action("UploadPicture", "Me")">Upload picture</a></li>
+                    </ul>
+                }
+            </div>
+            @RenderBody()
+        </div>
+        <hr/>
         <footer>
             <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
         </footer>

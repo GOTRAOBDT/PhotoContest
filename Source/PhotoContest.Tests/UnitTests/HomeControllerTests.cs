@@ -17,7 +17,9 @@
     using Models.Enumerations;
 
     using Moq;
-    
+
+    using PagedList;
+
     [TestClass]
     public class HomeControllerTests
     {
@@ -51,11 +53,11 @@
         }
 
         [TestMethod]
-        public void HomeIndexWithNoSortByAndFilterByOptionsShouldReturnByDefaultActiveEntitiesOrderdByPicturesCountAndThenByVotesCount()
+        public void HomeIndexWithNoSortByOptionShouldReturnByDefaultActiveEntitiesOrderdByPicturesCountAndThenByVotesCount()
         {
             var result = this.homeController.Index(null, null);
             var viewResult = result as ViewResult;
-            var actualModelList = viewResult.Model as List<SummaryContestViewModel>;
+            var actualModelList = viewResult.Model as IPagedList<SummaryContestViewModel>;
             var fakeContestsList = this.fakeContests
                 .Where(c => c.Status == ContestStatus.Active)
                 .OrderByDescending(c => c.Pictures.Count)
@@ -71,15 +73,73 @@
         }
 
         [TestMethod]
-        public void HomeIndexWithNoSortByAndFilterByComingSoonOptionsShouldReturnCorectEntities()
+        public void HomeIndexWithSortByMostPopularShouldReturnCorectEntities()
         {
-            var result = this.homeController.Index(null, "coming-soon");
+            var result = this.homeController.Index(null, "MostPopular");
             var viewResult = result as ViewResult;
-            var actualModelList = viewResult.Model as List<SummaryContestViewModel>;
+            var actualModelList = viewResult.Model as IPagedList<SummaryContestViewModel>;
+            var fakeContestsList = this.fakeContests
+                .Where(c => c.Status == ContestStatus.Active)
+                .OrderByDescending(c => c.Pictures.Count)
+                .ThenByDescending(c => c.Votes.Count)
+                .ToList();
+
+            Assert.AreEqual(fakeContestsList.Count(), actualModelList.Count());
+
+            for (int i = 0; i < fakeContestsList.Count; i++)
+            {
+                Assert.AreEqual(fakeContestsList[i].Id, actualModelList[i].Id);
+            }
+        }
+
+        [TestMethod]
+        public void HomeIndexWithSortByLatestShouldReturnCorectEntities()
+        {
+            var result = this.homeController.Index(null, "Latest");
+            var viewResult = result as ViewResult;
+            var actualModelList = viewResult.Model as IPagedList<SummaryContestViewModel>;
+            var fakeContestsList = this.fakeContests
+                .Where(c => c.Status == ContestStatus.Active)
+                .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
+                .ToList();
+
+            Assert.AreEqual(fakeContestsList.Count(), actualModelList.Count());
+
+            for (int i = 0; i < fakeContestsList.Count; i++)
+            {
+                Assert.AreEqual(fakeContestsList[i].Id, actualModelList[i].Id);
+            }
+        }
+
+        [TestMethod]
+        public void HomeIndexWithSortByComingSoonShouldReturnCorectEntities()
+        {
+            var result = this.homeController.Index(null, "ComingSoon");
+            var viewResult = result as ViewResult;
+            var actualModelList = viewResult.Model as IPagedList<SummaryContestViewModel>;
             var fakeContestsList = this.fakeContests
                 .Where(c => c.Status == ContestStatus.Inactive)
-                .OrderByDescending(c => c.Pictures.Count)
-                .ThenByDescending(c => c.Votes.Count)
+                .OrderByDescending(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
+                .ToList();
+
+            Assert.AreEqual(fakeContestsList.Count(), actualModelList.Count());
+
+            for (int i = 0; i < fakeContestsList.Count; i++)
+            {
+                Assert.AreEqual(fakeContestsList[i].Id, actualModelList[i].Id);
+            }
+        }
+
+
+        [TestMethod]
+        public void HomeIndexWithSortByEndingSoonShouldReturnCorectEntities()
+        {
+            var result = this.homeController.Index(null, "EndingSoon");
+            var viewResult = result as ViewResult;
+            var actualModelList = viewResult.Model as IPagedList<SummaryContestViewModel>;
+            var fakeContestsList = this.fakeContests
+                .Where(c => c.Status == ContestStatus.Active)
+                .OrderByDescending(c => TestableDbFunctions.DiffMinutes(c.EndDate, DateTime.Now))
                 .ToList();
 
             Assert.AreEqual(fakeContestsList.Count(), actualModelList.Count());
@@ -91,94 +151,15 @@
         }
 
         [TestMethod]
-        public void HomeIndexWithNoSortByAndFilterByFinishedOptionsShouldReturnCorectEntities()
+        public void HomeIndexWithSortByArchiveShouldReturnCorectEntities()
         {
-            var result = this.homeController.Index(null, "finished");
+            var result = this.homeController.Index(null, "Archive");
             var viewResult = result as ViewResult;
-            var actualModelList = viewResult.Model as List<SummaryContestViewModel>;
+            var actualModelList = viewResult.Model as IPagedList<SummaryContestViewModel>;
             var fakeContestsList = this.fakeContests
                 .Where(c => c.Status == ContestStatus.Finished)
                 .OrderByDescending(c => c.Pictures.Count)
                 .ThenByDescending(c => c.Votes.Count)
-                .ToList();
-
-            Assert.AreEqual(fakeContestsList.Count(), actualModelList.Count());
-
-            for (int i = 0; i < fakeContestsList.Count; i++)
-            {
-                Assert.AreEqual(fakeContestsList[i].Id, actualModelList[i].Id);
-            }
-        }
-
-        [TestMethod]
-        public void HomeIndexWithNoSortByAndFilterByInvalidCriterionOptionsShouldReturnActiveEntitiesByDefault()
-        {
-            var result = this.homeController.Index(null, "invalidFilter");
-            var viewResult = result as ViewResult;
-            var actualModelList = viewResult.Model as List<SummaryContestViewModel>;
-            var fakeContestsList = this.fakeContests
-                .Where(c => c.Status == ContestStatus.Active)
-                .OrderByDescending(c => c.Pictures.Count)
-                .ThenByDescending(c => c.Votes.Count)
-                .ToList();
-
-            Assert.AreEqual(fakeContestsList.Count(), actualModelList.Count());
-
-            for (int i = 0; i < fakeContestsList.Count; i++)
-            {
-                Assert.AreEqual(fakeContestsList[i].Id, actualModelList[i].Id);
-            }
-        }
-
-
-        [TestMethod]
-        public void HomeIndexWithSortByNewestAndNoFilterByOptionsShouldReturnActiveEntitiesOrderedByNewestOpened()
-        {
-            var result = this.homeController.Index("newest", null);
-            var viewResult = result as ViewResult;
-            var actualModelList = viewResult.Model as List<SummaryContestViewModel>;
-            var fakeContestsList = this.fakeContests
-                .Where(c => c.Status == ContestStatus.Active)
-                .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
-                .ToList();
-
-            Assert.AreEqual(fakeContestsList.Count(), actualModelList.Count());
-
-            for (int i = 0; i < fakeContestsList.Count; i++)
-            {
-                Assert.AreEqual(fakeContestsList[i].Id, actualModelList[i].Id);
-            }
-        }
-
-        [TestMethod]
-        public void HomeIndexWithSortByInvalidSortCriterionAndNoFilterByOptionsShouldReturnByDefaultActiveEntitiesOrderedByPicturesCountAndThenByVotesCount()
-        {
-            var result = this.homeController.Index("invalidSort", null);
-            var viewResult = result as ViewResult;
-            var actualModelList = viewResult.Model as List<SummaryContestViewModel>;
-            var fakeContestsList = this.fakeContests
-                .Where(c => c.Status == ContestStatus.Active)
-                .OrderByDescending(c => c.Pictures.Count)
-                .ThenByDescending(c => c.Votes.Count)
-                .ToList();
-
-            Assert.AreEqual(fakeContestsList.Count(), actualModelList.Count());
-
-            for (int i = 0; i < fakeContestsList.Count; i++)
-            {
-                Assert.AreEqual(fakeContestsList[i].Id, actualModelList[i].Id);
-            }
-        }
-
-        [TestMethod]
-        public void HomeIndexWithSortByNewestAndFilterByFinishedOptionsShouldReturnCorrectEntities()
-        {
-            var result = this.homeController.Index("newest", "finished");
-            var viewResult = result as ViewResult;
-            var actualModelList = viewResult.Model as List<SummaryContestViewModel>;
-            var fakeContestsList = this.fakeContests
-                .Where(c => c.Status == ContestStatus.Finished)
-                .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
                 .ToList();
 
             Assert.AreEqual(fakeContestsList.Count(), actualModelList.Count());
