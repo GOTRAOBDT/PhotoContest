@@ -14,10 +14,17 @@
                         <br />
                         <p class="label label-info">Allowed format: .jpg, Limit: 1mb</p>
                         <br /><br />
-                        <input type="text" style="display:none;" name="PictureData" id="pictureContainer" />
+                        @Html.HiddenFor(m => m.PictureData, new { style = "display:none", id = "pictureContainer" })
                         <input type="file" id="pictureSelector" style="display:none;" />
                         <button class="btn btn-default" onclick="getImage(); return false;">Choose</button>
 
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Title, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
                     </div>
                 </div>
             </div>            
@@ -43,8 +50,7 @@
                     reader.onload = function () {
                         $('#picturePreview')
                             .text(file.name)
-                            .attr('src', reader.result)
-                            .show();
+                            .attr('src', reader.result);
                         $('#pictureContainer')
                             .attr('value', reader.result);
                     };

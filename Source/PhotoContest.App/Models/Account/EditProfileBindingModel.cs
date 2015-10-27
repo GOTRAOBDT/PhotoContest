@@ -28,7 +28,7 @@
         public UserGender Gender { get; set; }
 
         [Display(Name ="Picture")]
-        [StringLength(98304, ErrorMessage = "The picture exceeds the allowed limit of 128kb.", MinimumLength = 3)]
+        [StringLength(174762, ErrorMessage = "The picture exceeds the allowed limit of 128kb.", MinimumLength = 3)]
         public string ProfilePicture { get; set; }
 
         public void CreateMappings(AutoMapper.IConfiguration configuration)

@@ -12,5 +12,5 @@
     <div class="row">
         @Html.DisplayForModel()
     </div>
-    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, ViewBag.sortBy }))
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
 </div>

@@ -88,6 +88,7 @@
             {
                 PictureData = model.PictureData,
                 ThumbnailImageData = model.PictureData,
+                Title = model.Title,
                 AuthorId = userId,
                 PostedOn = DateTime.Now,
             };
