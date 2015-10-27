@@ -35,11 +35,11 @@
             <div class="col-md-3">
                 <ul class="nav nav-pills nav-stacked">
                     <li role="presentation" class="disabled"><a href="#"><h4>Contests</h4></a></li>
-                    <li role="presentation" @((ViewBag.sortBy == "MostPopular" || ViewBag.sortBy == null) ? "class=active" : "")><a href="@Url.Action("Index", new { sortBy = "MostPopular" })">Most Popular</a></li>
-                    <li role="presentation" @((ViewBag.sortBy == "Latest") ? "class=active" : "")><a href="@Url.Action("Index", new { sortBy = "Latest" })">Latest</a></li>
-                    <li role="presentation" @((ViewBag.sortBy == "EndingSoon") ? "class=active" : "")><a href="@Url.Action("Index", new { sortBy = "EndingSoon" })">Ending soon</a></li>
-                    <li role="presentation" @((ViewBag.sortBy == "ComingSoon") ? "class=active" : "")><a href="@Url.Action("Index", new { sortBy = "ComingSoon" })">Coming soon</a></li>
-                    <li role="presentation" @((ViewBag.sortBy == "Archive") ? "class=active" : "")><a href="@Url.Action("Index", new { sortBy = "Archive" })">Archive</a></li>
+                    <li role="presentation" @((ViewBag.sortBy == "MostPopular" || ViewBag.sortBy == null) ? "class=active" : "")><a href="@Url.Action("Index", "Home", new { sortBy = "MostPopular" })">Most Popular</a></li>
+                    <li role="presentation" @((ViewBag.sortBy == "Latest") ? "class=active" : "")><a href="@Url.Action("Index", "Home", new { sortBy = "Latest" })">Latest</a></li>
+                    <li role="presentation" @((ViewBag.sortBy == "EndingSoon") ? "class=active" : "")><a href="@Url.Action("Index", "Home", new { sortBy = "EndingSoon" })">Ending soon</a></li>
+                    <li role="presentation" @((ViewBag.sortBy == "ComingSoon") ? "class=active" : "")><a href="@Url.Action("Index", "Home", new { sortBy = "ComingSoon" })">Coming soon</a></li>
+                    <li role="presentation" @((ViewBag.sortBy == "Archive") ? "class=active" : "")><a href="@Url.Action("Index", "Home", new { sortBy = "Archive" })">Archive</a></li>
                 </ul>
                 @if (this.User.Identity.GetUserId() != null)
                 {

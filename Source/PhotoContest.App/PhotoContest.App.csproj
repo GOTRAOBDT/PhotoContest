@@ -315,7 +315,7 @@
     <Content Include="Views\Shared\EditorTemplates\LoginViewModel.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\EditProfileBindingModel.cshtml" />
     <Content Include="Views\Contests\Jury.cshtml" />
-    <Content Include="Views\Me\contests.cshtml" />
+    <Content Include="Views\Me\Contests.cshtml" />
     <Content Include="Views\Contests\AddJuryMember.cshtml" />
     <Content Include="Views\Contests\Candidates.cshtml" />
     <Content Include="Views\Me\Profile.cshtml" />
