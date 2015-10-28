@@ -67,14 +67,23 @@
             </div>
         </div>
 
-            <div class="row">
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" class="btn btn-default" value="Create Contest" />
-                        @Html.ActionLink("Cancel", "Index", "Home", null, new { @class = "btn btn-primary" })
-                    </div>
+       <div class="form-group">
+           <h4>Prizes:</h4>
+           <label class="col-md-4 control-label">Name </label>
+           <input type="text" class="form-control col-md-8" name="Prizes[0].Name" />
+           
+           <label class="col-md-4 control-label">Description </label>
+           <input type="text" class="form-control" name="Prizes[0].Description" />
+       </div>
+
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" class="btn btn-default" value="Create Contest" />
+                    @Html.ActionLink("Cancel", "Index", "Home", null, new { @class = "btn btn-primary" })
                 </div>
             </div>
+        </div>
     }
 </div>
 

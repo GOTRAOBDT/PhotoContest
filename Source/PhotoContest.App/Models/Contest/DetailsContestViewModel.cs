@@ -4,10 +4,13 @@ namespace PhotoContest.App.Models.Contest
 {
     using System;
     using System.Collections.Generic;
+
     using AutoMapper;
+
     using Bookmarks.Common.Mappings;
     using PhotoContest.Models;
     using Pictures;
+    
 
     public class DetailsContestViewModel : IMapFrom<Contest>, IHaveCustomMappings
     {
