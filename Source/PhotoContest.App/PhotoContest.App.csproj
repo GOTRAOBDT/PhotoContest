@@ -232,6 +232,7 @@
     <Compile Include="Models\Contest\DetailsContestViewModel.cs" />
     <Compile Include="Models\Contest\EditContestBindingModel.cs" />
     <Compile Include="Models\Contest\JuryViewModel.cs" />
+    <Compile Include="Models\Contest\PrizeViewModel.cs" />
     <Compile Include="Models\Contest\SummaryContestViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Notification\NotificationViewModel.cs" />
@@ -330,6 +331,7 @@
     <Content Include="Views\Me\Pictures.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\DetailsPictureViewModel.cshtml" />
     <Content Include="Views\Me\Picture.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\PrizeViewModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

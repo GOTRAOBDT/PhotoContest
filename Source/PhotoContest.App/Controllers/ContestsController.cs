@@ -114,6 +114,12 @@
             contest.EndDate = model.EndDate;
             contest.StartDate = model.StartDate;
             contest.Thumbnail = model.Thumbnail;
+
+            for (int i = 0; i < contest.Prizes.Count; i++)
+            {
+                contest.Prizes.ElementAt(i).Name = model.Prizes.ElementAt(i).Name;
+                contest.Prizes.ElementAt(i).Description = model.Prizes.ElementAt(i).Description;
+            }
             this.Data.SaveChanges();
             return this.RedirectToAction("contests", "Me");
         }

@@ -1,55 +1,112 @@
-﻿@model PhotoContest.App.Models.Contest.EditContestBindingModel
+﻿@using System.Activities.Statements
+@model PhotoContest.App.Models.Contest.EditContestBindingModel
 @{
     ViewBag.Title = "Manage";
 }
 
-@using (Html.BeginForm("Manage", "Contests", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-{
-    @Html.AntiForgeryToken()
-    <h4>Edit contest.</h4>
-    <hr />
-    @Html.ValidationSummary("", new { @class = "text-danger" })
+<div class="col-md-7 col-md-offset-1">
+    @using (Html.BeginForm("Manage", "Contests", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
+    {
+        @Html.AntiForgeryToken()
+        <h1>Edit contest</h1>
+        <hr/>
+        @Html.ValidationSummary("", new {@class = "text-danger"})
 
-    @Html.LabelFor(m => m.Title)
-    @Html.EditorFor(m => m.Title)
-    <br />
-
-    @Html.LabelFor(m => m.Description)
-    @Html.TextAreaFor(m => m.Description)
-    <br />
-
-
-    @Html.LabelFor(m => m.DeadlineType)
-    @Html.EnumDropDownListFor(m => m.DeadlineType)
-    <br />
-
-
-    @Html.LabelFor(m => m.VotingType)
-    @Html.EnumDropDownListFor(m => m.VotingType)
-    <br />
-
-
-    @Html.LabelFor(m => m.ParticipationType)
-    @Html.EnumDropDownListFor(m => m.ParticipationType)
-    <br />
-
-    @Html.LabelFor(m => m.StartDate)
-    @Html.EditorFor(m => m.StartDate, new { @type = "date" })
-    <br />
-
-    @Html.LabelFor(m => m.EndDate)
-    @Html.EditorFor(m => m.EndDate, new { @type = "date" })
-    <br />
-
-    @Html.LabelFor(m => m.Thumbnail)
-    @Html.EditorFor(m => m.Thumbnail);
-
-
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Edit" />
+        @Html.LabelFor(m => m.Title, new {@class = "col-md-4 control-label"})
+        <div class="col-md-8">
+            @Html.TextBoxFor(m => m.Title, new {@class = "form-control"})
         </div>
-    </div>
+        @Html.ValidationMessage("Title")
+
+        @Html.LabelFor(m => m.Description, new {@class = "col-md-4 control-label"})
+        <div class="col-md-8">
+            @Html.TextAreaFor(m => m.Description, new {@class = "form-control"})
+        </div>
+        @Html.ValidationMessage("Description")
+
+        @Html.LabelFor(m => m.DeadlineType, new {@class = "col-md-4 control-label"})
+        <div class="col-md-8">
+            @Html.EnumDropDownListFor(m => m.DeadlineType, new {@class = "form-control"})
+        </div>
+        @Html.ValidationMessage("DeadlineType")
+
+        @Html.LabelFor(m => m.VotingType, new {@class = "col-md-4 control-label"})
+        <div class="col-md-8">
+            @Html.EnumDropDownListFor(m => m.VotingType, new {@class = "form-control"})
+        </div>
+        @Html.ValidationMessage("VotingType")
+
+        @Html.LabelFor(m => m.ParticipationType, new {@class = "col-md-4 control-label"})
+        <div class="col-md-8">
+            @Html.EnumDropDownListFor(m => m.ParticipationType, new {@class = "form-control"})
+        </div>
+        @Html.ValidationMessage("ParticipationType")
+
+        @Html.LabelFor(m => m.StartDate, new {@class = "col-md-4 control-label"})
+        <div class="col-md-8">
+            <input type="date" name="StartDate" value="@Model.StartDate.ToString("yyyy-MM-dd")" class="form-control"/>
+        </div>
+        @Html.ValidationMessage("StartDate")
+
+        @Html.LabelFor(m => m.EndDate, new {@class = "col-md-4 control-label"})
+        <div class="col-md-8">
+            <input type="date" name="EndDate" value="@Model.EndDate.ToString("yyyy-MM-dd")" class="form-control"/>
+        </div>
+        @Html.ValidationMessage("EndDate")
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Thumbnail, new {@class = "col-md-4 control-label"})
+            <div class="col-md-8">
+                <img class="img-thumbnail profile-picture-preview" id="picturePreview" alt="Select picture." src="@Model.Thumbnail"><br/>
+                @Html.ValidationMessage("Thumbnail")
+                <br/>
+                <p class="label label-info">Allowed format: .jpg, Limit: 1mb</p>
+                <br/><br/>
+                @Html.HiddenFor(m => m.Thumbnail, new {style = "display:none", id = "pictureContainer"})
+                <input type="file" id="pictureSelector" style="display: none;"/>
+                <button class="btn btn-default" onclick="getImage(); return false;">Choose</button>
+
+            </div>
+        </div>
+
+            <h4>Prizes:</h4>
+            @Html.EditorFor(m => m.Prizes)
+
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" class="btn btn-default" value="Save Changes"/>
+                    @Html.ActionLink("Cancel", "Index", "Home", null, new {@class = "btn btn-primary"})
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+
+<script>
+    function getImage () {
+        $('#pictureSelector').click()
+            .on('change', function () {
+                var file = this.files[0];
+                if (file.type.match(/image\/.*/)) {
+                    var reader = new FileReader();
+                    reader.onload = function () {
+                        $('#picturePreview')
+                            .text(file.name)
+                            .attr('src', reader.result);
+                        $('#pictureContainer')
+                            .attr('value', reader.result);
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                }
+            });
+    };
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
 }
 

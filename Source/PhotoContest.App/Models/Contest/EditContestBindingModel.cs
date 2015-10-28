@@ -1,16 +1,20 @@
-﻿using PhotoContest.Models.Enumerations;
-
-namespace PhotoContest.App.Models.Contest
+﻿namespace PhotoContest.App.Models.Contest
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using AutoMapper;
     using Bookmarks.Common.Mappings;
+    using PhotoContest.Models.Enumerations;
     using PhotoContest.Models;
 
     public class EditContestBindingModel : IMapFrom<Contest>, IHaveCustomMappings
     {
+        public EditContestBindingModel()
+        {
+            this.Prizes = new HashSet<PrizeViewModel>();
+        }
+
         [Required]
         [MinLength(3)]
         public string Title { get; set; }
@@ -43,7 +47,7 @@ namespace PhotoContest.App.Models.Contest
         [Required]
         public string Thumbnail { get; set; }
         
-        public IEnumerable<Prize> Prizes { get; set; }
+        public IEnumerable<PrizeViewModel> Prizes { get; set; }
 
         public void CreateMappings(IConfiguration configuration)
         {
