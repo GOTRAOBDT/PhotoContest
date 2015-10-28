@@ -1,7 +1,16 @@
 ﻿namespace PhotoContest.App.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Web.Mvc;
+
+    using Microsoft.AspNet.Identity;
+    using Models.Contest;
+
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
+
     using System.Web.Mvc;
 
     using AutoMapper;
@@ -15,6 +24,8 @@
     using Models.Contest;
     using PhotoContest.Models;
     using PhotoContest.Models.Enumerations;
+
+
 
     [Authorize]
     public class ContestsController : BaseController
@@ -37,15 +48,33 @@
         public ActionResult Create(CreateContestBindingModel model)
         {
             var loggedUserId = this.User.Identity.GetUserId();
-            var contest = Mapper.Map<Contest>(model);
-            contest.OwnerId = this.User.Identity.GetUserId();
-            contest.Status = ContestStatus.Active;
+            var contest = new Contest()
+            {
+                Title = model.Title,
+                Description = model.Description,
+                StartDate = model.StartDate,
+                EndDate = model.EndDate,
+                OwnerId = loggedUserId,
+                VotingType = model.VotingType,
+                ParticipationType = model.ParticipationType,
+                DeadlineType = model.DeadlineType,
+                Thumbnail = model.Thumbnail,
+                Status = model.StartDate < DateTime.Now ? ContestStatus.Active : ContestStatus.Inactive,
+            };
 
             this.Data.Contests.Add(contest);
-            this.Data.SaveChanges();
 
-            contest.Jury = new VotingCommittee();
-            contest.Jury.ContestId = contest.Id;
+            foreach (var prize in model.Prizes)
+            {
+                var dbPrize = new Prize()
+                {
+                    Name = prize.Name,
+                    Description = prize.Description,
+                    ContestId = contest.Id,
+                };
+                contest.Prizes.Add(dbPrize);
+            }
+
             this.Data.SaveChanges();
 
             return this.RedirectToAction("Contests", "Me");
@@ -161,7 +190,7 @@
             var user = this.Data.Users.All().FirstOrDefault(u => u.UserName == model.Username);
 
             if (!this.ModelState.IsValid)
-            {
+        {
                 return this.View(model);
             }
 
