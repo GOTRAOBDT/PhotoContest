@@ -5,14 +5,6 @@
     using System.Linq;
     using System.Web.Mvc;
 
-    using Microsoft.AspNet.Identity;
-    using Models.Contest;
-
-    using AutoMapper;
-    using AutoMapper.QueryableExtensions;
-
-    using System.Web.Mvc;
-
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
 
@@ -22,11 +14,10 @@
 
     using Models.Account;
     using Models.Contest;
+
     using PhotoContest.Models;
     using PhotoContest.Models.Enumerations;
-
-
-
+    
     [Authorize]
     public class ContestsController : BaseController
     {
@@ -39,7 +30,7 @@
         [HttpGet]
         public ActionResult Create()
         {
-            return View();
+            return this.View();
         }
 
         // POST: Contests/Create
@@ -196,18 +187,18 @@
 
             if (user == null)
             {
-                return this.HttpNotFound();
+                throw new ArgumentException("User not found!");
             }
 
             var contest = this.Data.Contests.Find(model.ContestId);
             if (contest == null)
             {
-                return this.HttpNotFound();
+                throw new ArgumentException("Contest not found!");
             }
 
             if (contest.Jury.Members.Any(u => u.Id == user.Id))
             {
-                return this.HttpNotFound(); // TODO already added!
+                throw new ArgumentException("This user has been already added as jury member!");
             }
 
             contest.Jury.Members.Add(user);
