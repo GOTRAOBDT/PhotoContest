@@ -54,7 +54,7 @@
         [TestMethod]
         public void CallingIndexActionShouldReturnViewResultAndIEnumerableOfSummuryContestViewModel()
         {
-            var result = this.meController.Index(null, null);
+            var result = this.meController.Contests(null);
             Assert.IsInstanceOfType(result, typeof(ViewResult));
 
             var viewResult = result as ViewResult;
@@ -65,7 +65,7 @@
         public void CallingIndexActionWithNoSortByAndFilterByOptionsShouldReturnByDefaultActiveEntitiesOrderdByPicturesCountAndThenByVotesCount()
         {
             this.LoginMock(true);
-            var result = this.meController.Index(null, null);
+            var result = this.meController.Contests(null);
             var viewResult = result as ViewResult;
             var actualModelList = viewResult.Model as List<SummaryContestViewModel>;
             var fakeContestsList = this.fakeContests
@@ -85,7 +85,7 @@
         [TestMethod]
         public void CallingIndexActionWithNoSortByAndFilterByComingSoonOptionsShouldReturnCorectEntities()
         {
-            var result = this.meController.Index(null, "coming-soon");
+            var result = this.meController.Contests(null);
             var viewResult = result as ViewResult;
             var actualModelList = viewResult.Model as List<SummaryContestViewModel>;
             var fakeContestsList = this.fakeContests
@@ -105,7 +105,7 @@
         [TestMethod]
         public void CallingIndexActionWithNoSortByAndFilterByFinishedOptionsShouldReturnCorectEntities()
         {
-            var result = this.meController.Index(null, "finished");
+            var result = this.meController.Contests(null);
             var viewResult = result as ViewResult;
             var actualModelList = viewResult.Model as List<SummaryContestViewModel>;
             var fakeContestsList = this.fakeContests
@@ -125,7 +125,7 @@
         [TestMethod]
         public void CallingIndexActionWithNoSortByAndFilterByInvalidCriterionOptionsShouldReturnActiveEntitiesByDefault()
         {
-            var result = this.meController.Index(null, "invalidFilter");
+            var result = this.meController.Contests(null);
             var viewResult = result as ViewResult;
             var actualModelList = viewResult.Model as List<SummaryContestViewModel>;
             var fakeContestsList = this.fakeContests
@@ -146,7 +146,7 @@
         [TestMethod]
         public void CallingIndexActionWithSortByNewestAndNoFilterByOptionsShouldReturnActiveEntitiesOrderedByNewestOpened()
         {
-            var result = this.meController.Index("newest", null);
+            var result = this.meController.Contests(null);
             var viewResult = result as ViewResult;
             var actualModelList = viewResult.Model as List<SummaryContestViewModel>;
             var fakeContestsList = this.fakeContests
@@ -165,7 +165,7 @@
         [TestMethod]
         public void CallingIndexActionWithSortByInvalidSortCriterionAndNoFilterByOptionsShouldReturnByDefaultActiveEntitiesOrderedByPicturesCountAndThenByVotesCount()
         {
-            var result = this.meController.Index("invalidSort", null);
+            var result = this.meController.Contests(null);
             var viewResult = result as ViewResult;
             var actualModelList = viewResult.Model as List<SummaryContestViewModel>;
             var fakeContestsList = this.fakeContests
@@ -185,7 +185,7 @@
         [TestMethod]
         public void CallingIndexActionWithSortByNewestAndFilterByFinishedOptionsShouldReturnCorrectEntities()
         {
-            var result = this.meController.Index("newest", "finished");
+            var result = this.meController.Contests(null);
             var viewResult = result as ViewResult;
             var actualModelList = viewResult.Model as List<SummaryContestViewModel>;
             var fakeContestsList = this.fakeContests
@@ -204,7 +204,7 @@
         [TestMethod]
         public void CallingContestsActionShouldReturnViewResultAndIEnumerableOfSummaryContestViewModel()
         {
-            var result = this.meController.Contests();
+            var result = this.meController.Contests(null);
             Assert.IsInstanceOfType(result, typeof(ViewResult));
 
             var viewResult = result as ViewResult;
@@ -215,7 +215,7 @@
         public void CallingContestsActionShouldReturnLoggedUsersActiveSummaryContestViewModelEntitiesOrderedByNewestFirst()
         {
             this.LoginMock(true);
-            var result = this.meController.Contests() as ViewResult;
+            var result = this.meController.Contests(null) as ViewResult;
             var actualModelList = result.Model as List<SummaryContestViewModel>;
             var fakeContestsList = this.fakeContests
                 .Where(c => c.Status == ContestStatus.Active && c.OwnerId == this.user.Id)
@@ -234,7 +234,7 @@
         [TestMethod]
         public void CallingPicturesActionShouldReturnViewResultAndIEnumerableOfSummaryPictureViewModel()
         {
-            var result = this.meController.Pictures();
+            var result = this.meController.Pictures(null);
             Assert.IsInstanceOfType(result, typeof(ViewResult));
 
             var viewResult = result as ViewResult;
@@ -245,7 +245,7 @@
         public void CallingPicturesActionShouldReturnLoggedUsersUploadedPicturesOrderedByNewestFirst()
         {
             this.LoginMock(true);
-            var result = this.meController.Pictures() as ViewResult;
+            var result = this.meController.Pictures(null) as ViewResult;
             var actualModelList = result.Model as List<SummaryPictureViewModel>;
             var fakePicturesList = this.fakePictures
                 .Where(c => c.AuthorId == this.user.Id)
