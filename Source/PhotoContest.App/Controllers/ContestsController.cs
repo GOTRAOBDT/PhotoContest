@@ -1,17 +1,20 @@
-﻿using System.Collections.Generic;
-using PhotoContest.Models.Enumerations;
-
-namespace PhotoContest.App.Controllers
+﻿namespace PhotoContest.App.Controllers
 {
-    using System.Web.Mvc;
+    using System.Collections.Generic;
     using System.Linq;
-    using AutoMapper.QueryableExtensions;
-    using Microsoft.AspNet.Identity;
-    using Data.Contracts;
-    using PhotoContest.App.Models.Account;
-    using PhotoContest.Models;
-    using Models.Contest;
+    using System.Web.Mvc;
+
     using AutoMapper;
+    using AutoMapper.QueryableExtensions;
+
+    using Data.Contracts;
+
+    using Microsoft.AspNet.Identity;
+
+    using Models.Account;
+    using Models.Contest;
+    using PhotoContest.Models;
+    using PhotoContest.Models.Enumerations;
 
     [Authorize]
     public class ContestsController : BaseController
@@ -45,7 +48,7 @@ namespace PhotoContest.App.Controllers
             contest.Jury.ContestId = contest.Id;
             this.Data.SaveChanges();
 
-            return RedirectToAction("Contests", "Me");
+            return this.RedirectToAction("Contests", "Me");
         }
 
         // GET: Contests/{contestId}
@@ -61,7 +64,7 @@ namespace PhotoContest.App.Controllers
                 return this.HttpNotFound();
             }
 
-            return View(contest);
+            return this.View(contest);
         }
 
         // GET: Contests/{contestId}/Manage
@@ -71,7 +74,7 @@ namespace PhotoContest.App.Controllers
             var contest = this.Data.Contests.All()
                 .Where(c => c.Id == id).ProjectTo<EditContestBindingModel>().FirstOrDefault();
 
-            return View(contest);
+            return this.View(contest);
         }
 
         // POST: Contests/{contestId}/Manage
@@ -92,7 +95,7 @@ namespace PhotoContest.App.Controllers
             contest.StartDate = model.StartDate;
             contest.Thumbnail = model.Thumbnail;
             this.Data.SaveChanges();
-            return RedirectToAction("contests", "Me");
+            return this.RedirectToAction("contests", "Me");
         }
 
         // GET: Contests/{contestId}/Jury
@@ -117,7 +120,14 @@ namespace PhotoContest.App.Controllers
                 return this.HttpNotFound();
             }
 
-            return View(juryMembersView);
+            var juryViewModel = new JuryViewModel
+            {
+                Members = juryMembersView,
+                ContestId = id
+            };
+
+            this.ViewBag.ContestId = id;
+            return this.View(juryViewModel);
         }
 
         // GET: Contests/{contestId}/AddJuryMember
@@ -136,21 +146,35 @@ namespace PhotoContest.App.Controllers
                 return this.RedirectToAction("Contests", "Me");
             }
 
-            return View(contest);
+            var addJuryMemberBindingModel = new AddJuryMemberBindingModel
+            {
+                ContestId = id
+            };
+            return this.View(addJuryMemberBindingModel);
         }
 
         // POST: Contests/{contestId}/AddJuryMember/{username}
         [HttpPost]
-        public ActionResult AddJuryMember(int id, string username, Contest model)
+        [ValidateAntiForgeryToken]
+        public ActionResult AddJuryMember(AddJuryMemberBindingModel model)
         {
-            var user = this.Data.Users.All().FirstOrDefault(u => u.UserName == username);
+            var user = this.Data.Users.All().FirstOrDefault(u => u.UserName == model.Username);
+
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(model);
+            }
 
             if (user == null)
             {
                 return this.HttpNotFound();
             }
 
-            var contest = this.Data.Contests.Find(id);
+            var contest = this.Data.Contests.Find(model.ContestId);
+            if (contest == null)
+            {
+                return this.HttpNotFound();
+            }
 
             if (contest.Jury.Members.Any(u => u.Id == user.Id))
             {
@@ -160,7 +184,7 @@ namespace PhotoContest.App.Controllers
             contest.Jury.Members.Add(user);
             this.Data.SaveChanges();
 
-            return this.RedirectToAction("Contests", "Me");
+            return this.RedirectToRoute("Manage", new { action = "Jury", controller = "Contests", id = model.ContestId });
         }
 
         // GET: Contests/{contestId}/Candidates
@@ -196,17 +220,17 @@ namespace PhotoContest.App.Controllers
                 return this.HttpNotFound();
             }
 
-            return View(candidatesView);
+            return this.View(candidatesView);
         }
 
         public ActionResult ManageCandidate(string operation, int id, string username)
         {
             if (operation == "approve")
             {
-                return RedirectToAction("ApproveCandidate" , new {id, username});
+                return this.RedirectToAction("ApproveCandidate" , new {id, username});
             }
 
-            return RedirectToAction("RejectCandidate", new { id, username });
+            return this.RedirectToAction("RejectCandidate", new { id, username });
 
         }
 
@@ -237,7 +261,7 @@ namespace PhotoContest.App.Controllers
             contest.Candidates.Remove(user);
             this.Data.SaveChanges();
 
-            return RedirectToAction("Contests", "Me");
+            return this.RedirectToAction("Contests", "Me");
         }
 
         // POST: Contests/{contestId}/Candidates/RejectCandidate/{username}
@@ -263,21 +287,21 @@ namespace PhotoContest.App.Controllers
             }
             contest.Candidates.Remove(user);
             this.Data.SaveChanges();
-            return RedirectToAction("Contests", "Me");
+            return this.RedirectToAction("Contests", "Me");
         }
 
         // GET: Contests/{contestId}/Participants
         [HttpGet]
         public ActionResult Participants(int id)
         {
-            return View();
+            return this.View();
         }
 
         // POST: Contests/{contestId}/Participants/RemoveParticipant/{username}
         [HttpPost]
         public ActionResult RemoveParticipant(int contestId, string username)
         {
-            return View();
+            return this.View();
         }
 
         // GET: Contests/{contestId}/Gallery/{pictureId}
@@ -285,14 +309,14 @@ namespace PhotoContest.App.Controllers
         [HttpGet]
         public ActionResult Gallery(int contestId, int pictureId)
         {
-            return View();
+            return this.View();
         }
 
         // POST: Contests/{contestId}/Vote/{pictureId}
         [HttpPost]
         public ActionResult Vote(int contestId, int pictureId)
         {
-            return View();
+            return this.View();
         }
     }
 }

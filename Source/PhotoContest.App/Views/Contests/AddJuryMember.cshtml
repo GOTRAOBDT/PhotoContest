@@ -1,23 +1,31 @@
-﻿@model PhotoContest.Models.Contest
+﻿@using PhotoContest.App.Models.Contest
+@model AddJuryMemberBindingModel
 @{
-    ViewBag.Title = "AddJuryMember";
+    ViewBag.Title = "Add Jury Member";
 }
 
-@using (Html.BeginForm("AddJuryMember", "Contests", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-{
-    @Html.AntiForgeryToken()
-    <h4>Add jury to @Model.Title contest.</h4>
-    <hr />
-    @Html.ValidationSummary("", new { @class = "text-danger" })
-
-    <label for="username">Username: </label>
-    <input type="text" name ="UserName" id="username"/>   
-    <br />
-
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Add" />
+<div class="col-md-7">
+    @using (Html.BeginForm("AddJuryMember", "Contests", new { id = Model.ContestId }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <h4>Add jury to contest</h4>
+        <hr />
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+        <div class="row">
+            <div class="form-group">
+                @Html.LabelFor(m => m.Username, new { @class = "col-md-2 control-label" })
+                <div class="col-md-5">
+                    @Html.TextBoxFor(m => m.Username, new { @class = "form-control" })
+                    @Html.HiddenFor(m => m.ContestId, new { @class = "form-control", value = Model.ContestId })
+                </div>
+                <div class="col-md-2">
+                    <input type="submit" class="btn btn-default pull-left" value="Add"/>
+                </div>
+            </div>
         </div>
-    </div>
-}
+    }
+</div>
 
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

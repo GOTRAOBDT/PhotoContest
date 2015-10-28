@@ -1,10 +1,22 @@
-﻿@model IEnumerable<PhotoContest.App.Models.Account.BasicUserInfoViewModel>
+﻿@using PhotoContest.App.Models.Contest
+@model JuryViewModel
 @{
     ViewBag.Title = "Jury";
 }
 
-@foreach (var m in Model)
-{
-    <h2>@m.UserName</h2>
-    <img src=@m.ProfilePicture alt=""/>
-}
+<div class="col-md-7">
+    <h2>Manage contest's Jury</h2>
+
+    <div class="row">
+        <div class="col-md-12">
+            @foreach (var m in Model.Members)
+            {
+                <h2>@m.UserName</h2>
+                <img src=@m.ProfilePicture alt=""/>
+            }
+        </div>
+        <div class="col-md-3">
+            <a href="/Contests/@Model.ContestId/AddJuryMember" class="btn btn-warning">Add member</a>
+        </div>
+    </div>
+</div>
