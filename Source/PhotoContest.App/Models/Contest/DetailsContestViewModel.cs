@@ -18,6 +18,8 @@ namespace PhotoContest.App.Models.Contest
 
         public string Title { get; set; }
 
+        public string Description { get; set; }
+
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
@@ -37,6 +39,8 @@ namespace PhotoContest.App.Models.Contest
         public int PicturesCount { get; set; }
 
         public int ParticipantsCount { get; set; }
+
+        public string Thumbnail { get; set; }
 
         public int VotesCount { get; set; }
 

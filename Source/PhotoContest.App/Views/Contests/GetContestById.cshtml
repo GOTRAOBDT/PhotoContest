@@ -3,5 +3,16 @@
     ViewBag.Title = "GetContestById";
 }
 
-@Html.DisplayForModel(Model);
+<div class="col-md-7 col-md-offset-1">
+    <div class="thumbnail">
+        <img src="@Model.Thumbnail" alt="123" class="img-rounded full-image">
+        <div class="caption">
+            @Html.ActionLink("Apply", "", "", null, new { @class = "btn btn-success" })
+
+            
+            <h2>@Model.Title</h2>
+            <span>@Model.Description</span>
+        </div>
+    </div>
+</div>
 
