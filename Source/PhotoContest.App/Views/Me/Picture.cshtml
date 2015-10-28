@@ -1,0 +1,23 @@
+﻿@model PhotoContest.App.Models.Pictures.DetailsPictureViewModel
+
+@{
+    ViewBag.Title = "My Pictures";
+}
+<div class="col-md-7 col-md-offset-1">
+    <h1>
+        Title:
+        @if (Model.Title == null)
+        {
+            <span>(not available)</span>
+        }
+        else
+        {
+            <span>@Model.Title</span>
+        }
+    </h1>
+    <h4>@Html.ActionLink("Delete", "DeletePicture", new { id = Model.Id})</h4>
+    <div class="row">
+        @Html.DisplayForModel()
+    </div>
+</div>
+

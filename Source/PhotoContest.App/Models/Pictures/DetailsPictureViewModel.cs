@@ -28,6 +28,10 @@
 
         public void CreateMappings(IConfiguration configuration)
         {
+            configuration.CreateMap<Picture, DetailsPictureViewModel>()
+                .ForMember(p => p.Author, cfg => cfg.MapFrom(p => p.Author.Name))
+                .ForMember(p => p.ContestsCount, cfg => cfg.MapFrom(p => p.Contests.Count))
+                .ForMember(p => p.VotesCount, cfg => cfg.MapFrom(p => p.Votes.Count));
         }
     }
 }

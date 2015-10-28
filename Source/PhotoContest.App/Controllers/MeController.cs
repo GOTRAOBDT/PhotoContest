@@ -2,7 +2,12 @@
 {
     using System;
     using System.Linq;
+    using System.Net.Http;
+    using System.Net;
+    using System.Web.Http;
     using System.Web.Mvc;
+
+    using Microsoft.AspNet.Identity;
 
     using AutoMapper.QueryableExtensions;
 
@@ -12,8 +17,6 @@
 
     using Common;
 
-    using Microsoft.AspNet.Identity;
-
     using Models.Account;
     using Models.Contest;
     using Models.Pictures;
@@ -21,7 +24,7 @@
 
     using PhotoContest.Models;
 
-    [Authorize]
+    [System.Web.Mvc.Authorize]
     public class MeController : BaseController
     {
         public MeController(IPhotoContestData data)
@@ -31,7 +34,7 @@
 
         // GET: Me/Contests
         // Returned model type: SummaryContestViewModel
-        [HttpGet]
+        [System.Web.Mvc.HttpGet]
         public ActionResult Contests(int? page)
         {
             var loggedUserId = this.User.Identity.GetUserId();
@@ -46,7 +49,7 @@
         
         // GET: Me/Pictures
         // Returned model type: SummaryPictureViewModel
-        [HttpGet]
+        [System.Web.Mvc.HttpGet]
         public ActionResult Pictures(int? page)
         {
             IPagedList<SummaryPictureViewModel> pictures = null;
@@ -60,14 +63,14 @@
         }
 
         // GET: Me/UploadPicture
-        [HttpGet]
+        [System.Web.Mvc.HttpGet]
         public ActionResult UploadPicture()
         {
             return View(new UploadPictureBindingModel());
         }
 
         // Post: Me/UploadPicture
-        [HttpPost]
+        [System.Web.Mvc.HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult UploadPicture(UploadPictureBindingModel model)
         {
@@ -98,9 +101,55 @@
             return RedirectToAction("Pictures");
         }
 
+        [System.Web.Mvc.HttpGet]
+        public ActionResult Picture(int id)
+        {
+            var picture = this.Data.Pictures.All()
+                .Where(p => p.Id == id)
+                .ProjectTo<DetailsPictureViewModel>()
+                .FirstOrDefault();
+
+            if (picture == null)
+            {
+                return this.HttpNotFound();
+            }
+
+            var user = this.Data.Users.Find(this.User.Identity.GetUserId());
+
+            if (picture.Author != user.Name)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            }
+               
+            return this.View(picture);
+        }
+
+        [System.Web.Mvc.HttpGet]
+        public ActionResult DeletePicture(int id)
+        {
+            var picture = this.Data.Pictures.Find(id);
+
+            if (picture == null)
+            {
+                return this.HttpNotFound();
+            }
+
+            var user = this.Data.Users.Find(this.User.Identity.GetUserId());
+
+            if (picture.Author.Id != user.Id)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            }
+
+            this.Data.Pictures.Delete(picture);
+            this.Data.SaveChanges();
+
+            return RedirectToAction("Pictures");
+        }
+
 
         // GET: Me/Profile
-        [HttpGet]
+        [System.Web.Mvc.HttpGet]
         public ActionResult Profile()
         {
             var userId = User.Identity.GetUserId();
@@ -120,7 +169,7 @@
         }
 
         // POST: Me/Profile
-        [HttpPost]
+        [System.Web.Mvc.HttpPost]
         public ActionResult Profile(EditProfileBindingModel model)
         {
             if (!ModelState.IsValid)

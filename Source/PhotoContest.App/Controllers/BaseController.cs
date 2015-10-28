@@ -1,5 +1,6 @@
 ﻿namespace PhotoContest.App.Controllers
 {
+    using System;
     using System.Web.Mvc;
 
     using Data.Contracts;
@@ -19,6 +20,21 @@
             {
                 return this.data;
             }
+        }
+
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            Exception exception = filterContext.Exception;
+            filterContext.ExceptionHandled = true;
+
+            var result = this.View(
+                "Error",
+                new HandleErrorInfo(
+                    exception,
+                    filterContext.RouteData.Values["controller"].ToString(),
+                    filterContext.RouteData.Values["action"].ToString()));
+
+            filterContext.Result = result;
         }
     }
 }

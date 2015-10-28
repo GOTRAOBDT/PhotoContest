@@ -30,3 +30,7 @@ textarea {
 .contest-list:hover {
     text-decoration: none
 }
+
+.full-image {
+    max-width: 600px;
+}
