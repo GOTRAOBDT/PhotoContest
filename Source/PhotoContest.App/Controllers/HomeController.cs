@@ -37,6 +37,7 @@
                     .Where(c => c.Status == ContestStatus.Active)
                     .OrderByDescending(c => c.Pictures.Count)
                     .ThenByDescending(c => c.Votes.Count)
+                    .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
                     .ProjectTo<SummaryContestViewModel>()
                     .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
             }
@@ -79,6 +80,7 @@
                             .Where(c => c.Status == ContestStatus.Active)
                             .OrderByDescending(c => c.Pictures.Count)
                             .ThenByDescending(c => c.Votes.Count)
+                            .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
                             .ProjectTo<SummaryContestViewModel>()
                             .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
                         break;

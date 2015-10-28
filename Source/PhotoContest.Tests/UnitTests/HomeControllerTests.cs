@@ -49,7 +49,7 @@
             Assert.IsInstanceOfType(result, typeof(ViewResult));
 
             var viewResult = result as ViewResult;
-            Assert.IsInstanceOfType(viewResult.Model, typeof(IEnumerable<SummaryContestViewModel>));
+            Assert.IsInstanceOfType(viewResult.Model, typeof(IPagedList<SummaryContestViewModel>));
         }
 
         [TestMethod]
@@ -62,6 +62,7 @@
                 .Where(c => c.Status == ContestStatus.Active)
                 .OrderByDescending(c => c.Pictures.Count)
                 .ThenByDescending(c => c.Votes.Count)
+                .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
                 .ToList();
 
             Assert.AreEqual(fakeContestsList.Count(), actualModelList.Count());
@@ -82,6 +83,7 @@
                 .Where(c => c.Status == ContestStatus.Active)
                 .OrderByDescending(c => c.Pictures.Count)
                 .ThenByDescending(c => c.Votes.Count)
+                .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
                 .ToList();
 
             Assert.AreEqual(fakeContestsList.Count(), actualModelList.Count());
