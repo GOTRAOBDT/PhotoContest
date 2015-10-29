@@ -1,6 +1,30 @@
 ﻿@model PhotoContest.App.Models.Notification.NotificationViewModel
 
-<div class="row">
-        <h5>Date: @Model.CreatedOn</h5>
-        <p><strong>Content:</strong> @Model.Content</p>
+@if (Model.IsRead)
+{
+    ViewBag.background = "thumbnailRead";
+}
+else
+{
+    ViewBag.background = "thumbnail";
+}
+<div class="row @ViewBag.background" id="@Model.Id">
+    <p><strong>Content:</strong> @Model.Content</p>
+    <h5>Date: @Model.CreatedOn</h5>
+
+    @if (!Model.IsRead)
+    {
+        using (Ajax.BeginForm("MarkAsRead", "Notifications", new {Model.Id}, new AjaxOptions {HttpMethod = "POST", UpdateTargetId = "notification-" + @Model.Id, InsertionMode = InsertionMode.ReplaceWith}, new {id = "notification-" + Model.Id}))
+        {
+            @Html.AntiForgeryToken()
+            <button type="submit" onclick="changeBackground(@Model.Id)" class="btn btn-sm btn-default pull-right">Mark As Read</button>
+        }
+    }
 </div>
+
+<script>
+    function changeBackground(parameters) {
+        $("#" + parameters).removeAttr("class");
+        $("#" + parameters).attr("class", "row thumbnailRead");
+    }
+</script>

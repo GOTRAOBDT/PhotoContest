@@ -210,6 +210,7 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="CommonFunctions\PagedListConverter.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ContestsController.cs" />
@@ -232,6 +233,7 @@
     <Compile Include="Models\Contest\DetailsContestViewModel.cs" />
     <Compile Include="Models\Contest\EditContestBindingModel.cs" />
     <Compile Include="Models\Contest\JuryViewModel.cs" />
+    <Compile Include="Models\Contest\ParticipantsViewModel.cs" />
     <Compile Include="Models\Contest\PrizeViewModel.cs" />
     <Compile Include="Models\Contest\SummaryContestViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -335,11 +337,19 @@
     <Content Include="Views\Shared\EditorTemplates\PrizeViewModel.cshtml" />
     <Content Include="Views\Contests\_ContestHeader.cshtml" />
     <Content Include="Views\Contests\Pictures.cshtml" />
+<<<<<<< HEAD
     <Content Include="Views\Pictures\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Notifications\" />
+=======
+    <Content Include="Views\Notifications\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Views\Pictures\" />
+>>>>>>> origin/master
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

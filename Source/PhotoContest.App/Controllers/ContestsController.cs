@@ -10,6 +10,9 @@
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
 
+    using Common;
+    using CommonFunctions;
+
     using Data.Contracts;
 
     using Microsoft.AspNet.Identity;
@@ -17,11 +20,11 @@
     using Models.Account;
     using Models.Contest;
 
-    using PhotoContest.Models;
-    using PhotoContest.Models.Enumerations;
     using Models.Pictures;
     using PagedList;
-    using Common;
+    
+    using PhotoContest.Models;
+    using PhotoContest.Models.Enumerations;
 
     [Authorize]
     public class ContestsController : BaseController
@@ -29,6 +32,9 @@
         public ContestsController(IPhotoContestData data)
             : base(data)
         {
+            Mapper.CreateMap<User, BasicUserInfoViewModel>();
+            Mapper.CreateMap<IPagedList<User>, IPagedList<BasicUserInfoViewModel>>()
+                .ConvertUsing<PagedListConverter>();
         }
 
         // GET: Contests/Create
@@ -122,6 +128,16 @@
             var contest = this.Data.Contests.All()
                 .Where(c => c.Id == id).ProjectTo<EditContestBindingModel>().FirstOrDefault();
 
+            if (contest == null)
+            {
+                throw new ArgumentException("Contest not found!");
+            }
+
+            if (contest.Owner.Id != this.User.Identity.GetUserId())
+            {
+                return this.RedirectToAction("Contests", "Me");
+            }
+
             return this.View(contest);
         }
 
@@ -131,7 +147,12 @@
         {
             if (model == null)
             {
-                return this.HttpNotFound();
+                throw new ArgumentException("Contest not found!");
+            }
+
+            if (model.Owner.Id != this.User.Identity.GetUserId())
+            {
+                return this.RedirectToAction("Contests", "Me");
             }
 
             var contest = this.Data.Contests.Find(id);
@@ -161,9 +182,7 @@
             {
                 return this.HttpNotFound();
             }
-
-            Mapper.CreateMap<User, BasicUserInfoViewModel>();
-
+            
             var juryMembers = this.Data.Contests.All()
                 .Where(c => c.Id == id).Select(c => c.Jury.Members).FirstOrDefault();
 
@@ -385,16 +404,75 @@
 
         // GET: Contests/{contestId}/Participants
         [HttpGet]
-        public ActionResult Participants(int id)
+        public ActionResult Participants(int id, int? page)
         {
-            return this.View();
+            var loggedUserId = this.User.Identity.GetUserId();
+            var contestOwnerId = this.Data.Contests.All()
+                .Where(c => c.Id == id)
+                .Select(c => c.OwnerId)
+                .FirstOrDefault();
+
+            if (contestOwnerId == null)
+            {
+                throw new HttpRequestException("Not existing contest!");
+            }
+
+            var participants = this.Data.Contests.All()
+                .Where(c => c.Id == id)
+                .Select(c => c.Participants)
+                .FirstOrDefault()
+                .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
+
+            var pagedParticipants = Mapper.Map<IPagedList<User>, IPagedList<BasicUserInfoViewModel>>(participants);
+            var participantsViewModel = new ParticipantsViewModel
+            {
+                ContestId = id,
+                Participants = pagedParticipants
+            };
+
+            if (loggedUserId == contestOwnerId)
+            {
+                participantsViewModel.IsContestOwner = true;
+            }
+            else
+            {
+                participantsViewModel.IsContestOwner = false;
+            }
+
+            return this.View(participantsViewModel);
         }
 
-        // POST: Contests/{contestId}/Participants/RemoveParticipant/{username}
+        // POST: Contests/{contestId}/RemoveParticipant?username={username}
         [HttpPost]
-        public ActionResult RemoveParticipant(int contestId, string username)
+        public ActionResult RemoveParticipant(int id, string username)
         {
-            return this.View();
+            if (!this.Request.IsAjaxRequest())
+            {
+                throw new InvalidOperationException("Invalid operation!");
+            }
+
+            var user = this.Data.Users.All().FirstOrDefault(u => u.UserName == username);
+
+            if (user == null)
+            {
+                throw new ArgumentException("User not found!");
+            }
+
+            var contest = this.Data.Contests.Find(id);
+            if (contest == null)
+            {
+                throw new ArgumentException("Contest not found!");
+            }
+
+            if (!contest.Participants.Any(u => u.Id == user.Id))
+            {
+                throw new ArgumentException("This user is not a participant of this contest!");
+            }
+
+            contest.Participants.Remove(user);
+            this.Data.SaveChanges();
+
+            return this.Content(string.Empty);
         }
 
         // GET: Contests/{contestId}/Gallery/{pictureId}
@@ -432,13 +510,6 @@
             return View(pictures);
         }
 
-        // POST: Contests/{contestId}/Vote/{pictureId}
-        [HttpPost]
-        public ActionResult Vote(int contestId, int pictureId)
-        {
-            return this.View();
-        }
-
         [HttpGet]
         public ActionResult SelectPictures(int id)
         {
@@ -474,6 +545,89 @@
             this.Data.SaveChanges();
 
             return this.RedirectToAction("GetContestById", new { id = contestId});
+        }
+
+
+
+        // POST: Contests/{contestId}/Vote/{pictureId}
+        [HttpPost]
+        public ActionResult Vote(int id, int pictureId)
+        {
+            if (!this.Request.IsAjaxRequest())
+            {
+                throw new InvalidOperationException("Invalid operation!");
+            }
+
+            var loggedUserId = this.User.Identity.GetUserId();
+            var contest = this.Data.Contests.Find(id);
+
+            if (contest == null)
+            {
+                throw new ArgumentException("Contest not found!");
+            }
+
+            if (loggedUserId == contest.OwnerId)
+            {
+                throw new ArgumentException("You are not allowed to vote in your own contest!");
+            }
+
+            if (this.Data.Votes.All()
+                .Any(
+                v => v.PictureId == pictureId && 
+                loggedUserId == v.VoterId &&
+                id == contest.Id))
+            {
+                throw new ArgumentException("You are not allowed to vote more than one time each picture!");
+            }
+            
+            this.Data.Votes.Add(new Vote
+            {
+                ContestId = id,
+                PictureId = pictureId,
+                VoterId = loggedUserId
+            });
+
+            this.Data.SaveChanges();
+            return this.Content(string.Empty);
+        }
+
+        // POST: Contests/{contestId}/Vote/{pictureId}
+        [HttpPost]
+        public ActionResult UnVote(int id, int pictureId)
+        {
+            if (!this.Request.IsAjaxRequest())
+            {
+                throw new InvalidOperationException("Invalid operation!");
+            }
+
+            var loggedUserId = this.User.Identity.GetUserId();
+            var contest = this.Data.Contests.Find(id);
+
+            if (contest == null)
+            {
+                throw new ArgumentException("Contest not found!");
+            }
+
+            if (loggedUserId == contest.OwnerId)
+            {
+                throw new ArgumentException("You are not allowed to vote in your own contest!");
+            }
+
+            var vote = this.Data.Votes.All()
+                .FirstOrDefault(
+                    v => v.PictureId == pictureId &&
+                    v.ContestId == id &&
+                    v.VoterId == loggedUserId);
+
+            if (vote == null)
+            {
+                throw new ArgumentException("You have not voted to this picture in this contest!");
+            }
+
+            this.Data.Votes.Delete(vote);
+            this.Data.SaveChanges();
+
+            return this.Content(string.Empty);
         }
     }
 }

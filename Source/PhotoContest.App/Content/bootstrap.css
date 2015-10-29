@@ -5059,6 +5059,21 @@ a.badge:focus {
   -o-transition: border 0.2s ease-in-out;
   transition: border 0.2s ease-in-out;
 }
+
+.thumbnailRead {
+  display: block;
+  padding: 4px;
+  margin-bottom: 20px;
+  line-height: 1.42857143;
+  background-color: #1c1e22;
+  border: 1px solid #0c0d0e;
+  border-radius: 4px;
+  -webkit-transition: border 0.2s ease-in-out;
+  -o-transition: border 0.2s ease-in-out;
+  transition: border 0.2s ease-in-out;
+  opacity: 0.5
+}
+
 .thumbnail > img,
 .thumbnail a > img {
   margin-left: auto;
