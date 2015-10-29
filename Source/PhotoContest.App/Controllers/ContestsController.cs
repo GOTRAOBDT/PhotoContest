@@ -10,6 +10,9 @@
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
 
+    using Common;
+    using CommonFunctions;
+
     using Data.Contracts;
 
     using Microsoft.AspNet.Identity;
@@ -17,11 +20,11 @@
     using Models.Account;
     using Models.Contest;
 
-    using PhotoContest.Models;
-    using PhotoContest.Models.Enumerations;
     using Models.Pictures;
     using PagedList;
-    using Common;
+    
+    using PhotoContest.Models;
+    using PhotoContest.Models.Enumerations;
 
     [Authorize]
     public class ContestsController : BaseController
@@ -29,6 +32,9 @@
         public ContestsController(IPhotoContestData data)
             : base(data)
         {
+            Mapper.CreateMap<User, BasicUserInfoViewModel>();
+            Mapper.CreateMap<IPagedList<User>, IPagedList<BasicUserInfoViewModel>>()
+                .ConvertUsing<PagedListConverter>();
         }
 
         // GET: Contests/Create
@@ -161,9 +167,7 @@
             {
                 return this.HttpNotFound();
             }
-
-            Mapper.CreateMap<User, BasicUserInfoViewModel>();
-
+            
             var juryMembers = this.Data.Contests.All()
                 .Where(c => c.Id == id).Select(c => c.Jury.Members).FirstOrDefault();
 
@@ -385,9 +389,42 @@
 
         // GET: Contests/{contestId}/Participants
         [HttpGet]
-        public ActionResult Participants(int id)
+        public ActionResult Participants(int id, int? page)
         {
-            return this.View();
+            var loggedUserId = this.User.Identity.GetUserId();
+            var contestOwnerId = this.Data.Contests.All()
+                .Where(c => c.Id == id)
+                .Select(c => c.OwnerId)
+                .FirstOrDefault();
+
+            if (contestOwnerId == null)
+            {
+                throw new HttpRequestException("Not existing contest!");
+            }
+
+            var participants = this.Data.Contests.All()
+                .Where(c => c.Id == id)
+                .Select(c => c.Participants)
+                .FirstOrDefault()
+                .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
+
+            var pagedParticipants = Mapper.Map<IPagedList<User>, IPagedList<BasicUserInfoViewModel>>(participants);
+            var participantsViewModel = new ParticipantsViewModel
+            {
+                ContestId = id,
+                Participants = pagedParticipants
+            };
+
+            if (loggedUserId == contestOwnerId)
+            {
+                participantsViewModel.IsContestOwner = true;
+            }
+            else
+            {
+                participantsViewModel.IsContestOwner = false;
+            }
+
+            return this.View(participantsViewModel);
         }
 
         // POST: Contests/{contestId}/Participants/RemoveParticipant/{username}

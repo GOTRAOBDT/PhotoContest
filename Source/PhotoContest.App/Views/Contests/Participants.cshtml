@@ -1,1 +1,31 @@
-﻿
+﻿@using PagedList
+@using PagedList.Mvc
+@using PhotoContest.App.Models.Contest
+@model ParticipantsViewModel
+@{
+    ViewBag.Title = "Participants";
+}
+
+<div class="col-md-7 col-md-offset-1">
+    <h2>Manage contest's participants</h2>
+
+    <div class="row">
+        <div class="col-md-12">
+            @Html.DisplayForModel()
+        </div>
+        <div class="col-md-3">
+            <a href="/Contests/@Model.ContestId/AddJuryMember" class="btn btn-warning">Add member</a>
+        </div>
+    </div>
+    @Html.PagedListPager(Model.Participants, page => Url.Action("Participants", new { page, ViewBag.sortBy }))
+</div>
+
+@section scripts
+{
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script>
+        function hideModal(id) {
+            $(id).modal('hide');
+        }
+    </script>
+}
