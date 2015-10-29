@@ -37,7 +37,7 @@
         [TestMethod]
         public void CallingIndexActionWithExistingPictureIdShouldReturnViewResultAndDetailsPictureViewModel()
         {
-            var result = this.pictureController.Index(1);
+            var result = this.pictureController.Index(1, null);
             Assert.IsInstanceOfType(result, typeof(ViewResult));
 
             var viewResult = result as ViewResult;
@@ -47,7 +47,7 @@
         [TestMethod]
         public void CallingIndexActionWithExistingPictureIdShouldReturnCorrectPicture()
         {
-            var returnedPicture = (this.pictureController.Index(1) as ViewResult).Model as DetailsPictureViewModel;
+            var returnedPicture = (this.pictureController.Index(1, null) as ViewResult).Model as DetailsPictureViewModel;
             var fakePicture = this.fakePictures.FirstOrDefault(p => p.Id == 1);
 
             Assert.AreEqual(fakePicture.Id, returnedPicture.Id);
@@ -56,7 +56,7 @@
         [TestMethod]
         public void CallingIndexActionWithNotExistingPictureIdShouldReturnNotFound()
         {
-            var result = this.pictureController.Index(-1);
+            var result = this.pictureController.Index(-1, null);
             Assert.IsInstanceOfType(result, typeof(HttpNotFoundResult));
         }
     }

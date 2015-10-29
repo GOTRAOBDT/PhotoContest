@@ -26,6 +26,8 @@
     using PhotoContest.Models;
     using PhotoContest.Models.Enumerations;
 
+    using WebGrease.Css.Extensions;
+
     [Authorize]
     public class ContestsController : BaseController
     {
@@ -293,6 +295,14 @@
                 throw new ArgumentException("This user is not a jury member of this contest!");
             }
 
+            var memberVotes = this.Data.Votes.All()
+                .Where(v => v.ContestId == id && v.VoterId == user.Id);
+
+            foreach (var vote in memberVotes)
+            {
+                this.Data.Votes.Delete(vote);
+            }
+
             contest.Jury.Members.Remove(user);
             this.Data.SaveChanges();
 
@@ -467,6 +477,20 @@
             if (!contest.Participants.Any(u => u.Id == user.Id))
             {
                 throw new ArgumentException("This user is not a participant of this contest!");
+            }
+
+            var votesForDeleting = this.Data.Votes.All()
+                .Where(v => v.ContestId == id && v.Picture.AuthorId == user.Id);
+
+            foreach (var vote in votesForDeleting)
+            {
+                this.Data.Votes.Delete(vote);
+            }
+
+            var participantPictures = contest.Pictures.Where(p => p.AuthorId == user.Id);
+            foreach (var picture in participantPictures)
+            {
+                contest.Pictures.Remove(picture);
             }
 
             contest.Participants.Remove(user);
