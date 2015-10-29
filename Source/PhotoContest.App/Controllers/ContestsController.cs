@@ -584,7 +584,7 @@
 
 
 
-        // POST: Contests/{contestId}/Vote/{pictureId}
+        // GET: Contests/{contestId}/Vote/{pictureId}
         [HttpGet]
         public ActionResult Vote(int id, int contestId)
         {
@@ -617,7 +617,7 @@
             
             this.Data.Votes.Add(new Vote
             {
-                ContestId = id,
+                ContestId = contestId,
                 PictureId = id,
                 VoterId = loggedUserId
             });

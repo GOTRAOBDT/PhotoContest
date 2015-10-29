@@ -11,11 +11,28 @@
             }
             @if (Model.HasVoted && !Model.IsAuthor)
             {
-                @Html.ActionLink("Unvote", "Unvote", "Contests", new { id = Model.Id, contestId = Model.ContestId }, new { @class = "btn btn-warning" })
+                @Ajax.ActionLink("Unvote",
+                 "Unvote",
+                 "Contests",
+                 new { id = Model.Id, contestId = Model.ContestId },
+                 new AjaxOptions
+                 {
+                     HttpMethod = "GET",
+                 },
+                 new { @class = "btn btn-warning" })
+
             }
             @if (Model.CanVote)
             {
-                @Html.ActionLink("Vote", "Vote", "Contests", new { id = Model.Id, contestId = Model.ContestId }, new { @class = "btn btn-success" })
+                @Ajax.ActionLink("Vote",
+                 "Vote",
+                 "Contests",
+                 new { contestId = Model.ContestId, id = Model.Id },
+                 new AjaxOptions
+                 {
+                     HttpMethod = "GET",
+                 },
+                 new { @class = "btn btn-success" })
             }
         </h3>
         <span>Author: @Model.Author</span><br />
@@ -24,4 +41,3 @@
         <span>Total votes: @Model.VotesCount</span><br />
     </div>
 </div>
-
