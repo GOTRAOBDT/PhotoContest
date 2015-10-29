@@ -179,15 +179,20 @@
             return this.View(addJuryMemberBindingModel);
         }
 
-        // POST: Contests/{contestId}/AddJuryMember/{username}
+        // POST: Contests/{contestId}/AddJuryMember
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AddJuryMember(AddJuryMemberBindingModel model)
         {
+            if (this.User.Identity.GetUserName().ToLower() == model.Username.ToLower())
+            {
+                throw new ArgumentException("Owner of the contest can not be jury member!");
+            }
+
             var user = this.Data.Users.All().FirstOrDefault(u => u.UserName == model.Username);
 
             if (!this.ModelState.IsValid)
-        {
+            {
                 return this.View(model);
             }
 
@@ -211,6 +216,40 @@
             this.Data.SaveChanges();
 
             return this.RedirectToRoute("Manage", new { action = "Jury", controller = "Contests", id = model.ContestId });
+        }
+
+        // POST: Contests/{contestId}/RemoveJuryMember
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult RemoveJuryMember(int id, string username)
+        {
+            if (!this.Request.IsAjaxRequest())
+            {
+                throw new InvalidOperationException("Invalid operation!");
+            }
+
+            var user = this.Data.Users.All().FirstOrDefault(u => u.UserName == username);
+
+            if (user == null)
+            {
+                throw new ArgumentException("User not found!");
+            }
+
+            var contest = this.Data.Contests.Find(id);
+            if (contest == null)
+            {
+                throw new ArgumentException("Contest not found!");
+            }
+
+            if (!contest.Jury.Members.Any(u => u.Id == user.Id))
+            {
+                throw new ArgumentException("This user is not a jury member of this contest!");
+            }
+
+            contest.Jury.Members.Remove(user);
+            this.Data.SaveChanges();
+
+            return this.Content(string.Empty);
         }
 
         // GET: Contests/{contestId}/Candidates
