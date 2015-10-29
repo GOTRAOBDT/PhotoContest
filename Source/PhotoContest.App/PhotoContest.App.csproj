@@ -336,6 +336,8 @@
     <Content Include="Views\Shared\EditorTemplates\PrizeViewModel.cshtml" />
     <Content Include="Views\Contests\_ContestHeader.cshtml" />
     <Content Include="Views\Contests\Pictures.cshtml" />
+    <Content Include="Views\Contests\Participants.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\JuryViewModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
