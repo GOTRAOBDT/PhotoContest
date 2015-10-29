@@ -128,6 +128,16 @@
             var contest = this.Data.Contests.All()
                 .Where(c => c.Id == id).ProjectTo<EditContestBindingModel>().FirstOrDefault();
 
+            if (contest == null)
+            {
+                throw new ArgumentException("Contest not found!");
+            }
+
+            if (contest.Owner.Id != this.User.Identity.GetUserId())
+            {
+                return this.RedirectToAction("Contests", "Me");
+            }
+
             return this.View(contest);
         }
 
@@ -137,7 +147,12 @@
         {
             if (model == null)
             {
-                return this.HttpNotFound();
+                throw new ArgumentException("Contest not found!");
+            }
+
+            if (model.Owner.Id != this.User.Identity.GetUserId())
+            {
+                return this.RedirectToAction("Contests", "Me");
             }
 
             var contest = this.Data.Contests.Find(id);
@@ -490,13 +505,6 @@
             return View(pictures);
         }
 
-        // POST: Contests/{contestId}/Vote/{pictureId}
-        [HttpPost]
-        public ActionResult Vote(int contestId, int pictureId)
-        {
-            return this.View();
-        }
-
         [HttpGet]
         public ActionResult SelectPictures(int id)
         {
@@ -532,6 +540,89 @@
             this.Data.SaveChanges();
 
             return this.RedirectToAction("GetContestById", new { id = contestId});
+        }
+
+
+
+        // POST: Contests/{contestId}/Vote/{pictureId}
+        [HttpPost]
+        public ActionResult Vote(int id, int pictureId)
+        {
+            if (!this.Request.IsAjaxRequest())
+            {
+                throw new InvalidOperationException("Invalid operation!");
+            }
+
+            var loggedUserId = this.User.Identity.GetUserId();
+            var contest = this.Data.Contests.Find(id);
+
+            if (contest == null)
+            {
+                throw new ArgumentException("Contest not found!");
+            }
+
+            if (loggedUserId == contest.OwnerId)
+            {
+                throw new ArgumentException("You are not allowed to vote in your own contest!");
+            }
+
+            if (this.Data.Votes.All()
+                .Any(
+                v => v.PictureId == pictureId && 
+                loggedUserId == v.VoterId &&
+                id == contest.Id))
+            {
+                throw new ArgumentException("You are not allowed to vote more than one time each picture!");
+            }
+            
+            this.Data.Votes.Add(new Vote
+            {
+                ContestId = id,
+                PictureId = pictureId,
+                VoterId = loggedUserId
+            });
+
+            this.Data.SaveChanges();
+            return this.Content(string.Empty);
+        }
+
+        // POST: Contests/{contestId}/Vote/{pictureId}
+        [HttpPost]
+        public ActionResult UnVote(int id, int pictureId)
+        {
+            if (!this.Request.IsAjaxRequest())
+            {
+                throw new InvalidOperationException("Invalid operation!");
+            }
+
+            var loggedUserId = this.User.Identity.GetUserId();
+            var contest = this.Data.Contests.Find(id);
+
+            if (contest == null)
+            {
+                throw new ArgumentException("Contest not found!");
+            }
+
+            if (loggedUserId == contest.OwnerId)
+            {
+                throw new ArgumentException("You are not allowed to vote in your own contest!");
+            }
+
+            var vote = this.Data.Votes.All()
+                .FirstOrDefault(
+                    v => v.PictureId == pictureId &&
+                    v.ContestId == id &&
+                    v.VoterId == loggedUserId);
+
+            if (vote == null)
+            {
+                throw new ArgumentException("You have not voted to this picture in this contest!");
+            }
+
+            this.Data.Votes.Delete(vote);
+            this.Data.SaveChanges();
+
+            return this.Content(string.Empty);
         }
     }
 }

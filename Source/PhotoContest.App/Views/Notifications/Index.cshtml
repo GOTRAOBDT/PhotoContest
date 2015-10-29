@@ -1,0 +1,26 @@
+﻿@model IEnumerable<PhotoContest.App.Models.Notification.NotificationViewModel>
+@{
+    ViewBag.Title = "Index";
+}
+
+@if (!Model.Any())
+{
+    <div class="col-md-7 col-md-offset-1">
+        <h2>No Notifications</h2>
+        <hr/>
+    </div>
+}
+else
+{
+    <div class="col-md-7 col-md-offset-1">
+        <h2>Notifications</h2>
+        <hr />
+        @Html.DisplayForModel()
+    </div>
+}
+
+
+@section scripts
+{
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+}

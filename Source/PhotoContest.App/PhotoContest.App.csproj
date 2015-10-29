@@ -338,13 +338,10 @@
     <Content Include="Views\Shared\EditorTemplates\PrizeViewModel.cshtml" />
     <Content Include="Views\Contests\_ContestHeader.cshtml" />
     <Content Include="Views\Contests\Pictures.cshtml" />
-    <Content Include="Views\Contests\Participants.cshtml" />
-    <Content Include="Views\Shared\DisplayTemplates\JuryViewModel.cshtml" />
-    <Content Include="Views\Shared\DisplayTemplates\ParticipantsViewModel.cshtml" />
+    <Content Include="Views\Notifications\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Notifications\" />
     <Folder Include="Views\Pictures\" />
   </ItemGroup>
   <ItemGroup>

@@ -47,6 +47,11 @@
             get { return this.GetRepository<VotingCommittee>(); }
         }
 
+        public IRepository<Notification> Notifications
+        {
+            get { return this.GetRepository<Notification>(); }
+        }
+
         public int SaveChanges()
         {
             return this.context.SaveChanges();

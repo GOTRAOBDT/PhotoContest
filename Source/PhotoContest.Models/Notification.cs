@@ -9,6 +9,8 @@
         public int Id { get; set; }
 
         [Required]
+        public string RecipientId { get; set; }
+
         public virtual User Recipient { get; set; }
 
         [Required]
