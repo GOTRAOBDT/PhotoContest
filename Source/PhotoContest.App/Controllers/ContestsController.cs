@@ -5,7 +5,6 @@
     using System.Linq;
     using System.Net;
     using System.Net.Http;
-    using System.Web.DynamicData;
     using System.Web.Mvc;
 
     using AutoMapper;
@@ -26,6 +25,8 @@
     
     using PhotoContest.Models;
     using PhotoContest.Models.Enumerations;
+
+    using WebGrease.Css.Extensions;
 
     [Authorize]
     public class ContestsController : BaseController
@@ -177,14 +178,11 @@
         // GET: Contests/{contestId}/Jury
         // Returned model type: BasicUserInfoViewModel
         [HttpGet]
-        public ActionResult Jury(int id)
+        public ActionResult Jury(int? id)
         {
-            var contest = this.Data.Contests.All()
-                .FirstOrDefault(c => c.Id == id);
-
-            if (contest == null)
+            if (id == null)
             {
-                throw new HttpRequestException("This contest does not exist!");
+                return this.HttpNotFound();
             }
             
             var juryMembers = this.Data.Contests.All()
@@ -203,15 +201,6 @@
                 ContestId = id
             };
 
-            if (this.User.Identity.GetUserId() == contest.OwnerId)
-            {
-                juryViewModel.IsContestOwner = true;
-            }
-            else
-            {
-                juryViewModel.IsContestOwner = false;
-            }
-
             this.ViewBag.ContestId = id;
             return this.View(juryViewModel);
         }
@@ -223,7 +212,7 @@
             var contest = this.Data.Contests.Find(id);
             if (contest == null)
             {
-                throw new HttpRequestException("This contest does not exist!");
+                return this.HttpNotFound();
             }
 
             var loggedUserId = this.User.Identity.GetUserId();
@@ -599,27 +588,18 @@
                 throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
             }
 
-            if (contest.Pictures.Any(p => p.Id == picture.Id))
-            {
-                throw new InvalidOperationException("You have already added this picture to the contest.");
-            }
-
-            if (contest.ParticipationType == ParticipationType.Closed &&
-                !contest.Participants.Any(p => p.Id == userId))
-            {
-                throw new InvalidOperationException("You have not applied and/or have not been approved to participate in this contest.");
-            }
-
             contest.Pictures.Add(picture);
-            contest.Participants.Add(this.Data.Users.Find(userId));
             this.Data.SaveChanges();
 
             return this.RedirectToAction("GetContestById", new { id = contestId});
         }
 
-        // GET: Contests/{contestId}/Vote/{pictureId}
-        [HttpGet]
-        public ActionResult Vote(int id, int contestId)
+
+
+        // POST: Contests/{contestId}/Vote/{pictureId}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Vote(int id, int pictureId)
         {
             if (!this.Request.IsAjaxRequest())
             {
@@ -627,11 +607,19 @@
             }
 
             var loggedUserId = this.User.Identity.GetUserId();
-            var contest = this.Data.Contests.Find(contestId);
+            var contest = this.Data.Contests.Find(id);
 
             if (contest == null)
             {
                 throw new ArgumentException("Contest not found!");
+            }
+
+            if (contest.VotingType == VotingType.Closed)
+            {
+                if (!contest.Jury.Members.Any(m => m.Id == loggedUserId))
+                {
+                    throw new ArgumentException("You are not allowed to vote only jury members can!");
+                }
             }
 
             if (loggedUserId == contest.OwnerId)
@@ -641,17 +629,17 @@
 
             if (this.Data.Votes.All()
                 .Any(
-                v => v.PictureId == id && 
+                v => v.PictureId == pictureId && 
                 loggedUserId == v.VoterId &&
                 id == contest.Id))
             {
-                throw new ArgumentException("You are not allowed to vote more than one time for each picture!");
+                throw new ArgumentException("You are not allowed to vote more than one time each picture!");
             }
             
             this.Data.Votes.Add(new Vote
             {
-                ContestId = contestId,
-                PictureId = id,
+                ContestId = id,
+                PictureId = pictureId,
                 VoterId = loggedUserId
             });
 
@@ -660,6 +648,7 @@
         }
 
         // POST: Contests/{contestId}/Vote/{pictureId}
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult UnVote(int id, int pictureId)
         {

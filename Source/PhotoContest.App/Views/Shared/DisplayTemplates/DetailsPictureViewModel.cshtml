@@ -11,28 +11,15 @@
             }
             @if (Model.HasVoted && !Model.IsAuthor)
             {
-                @Ajax.ActionLink("Unvote",
-                 "Unvote",
-                 "Contests",
-                 new { id = Model.Id, contestId = Model.ContestId },
-                 new AjaxOptions
-                 {
-                     HttpMethod = "GET",
-                 },
-                 new { @class = "btn btn-warning" })
-
+                @Html.ActionLink("Unvote", "Unvote", "Contests", new { id = Model.Id, contestId = Model.ContestId }, new { @class = "btn btn-warning" })
             }
             @if (Model.CanVote)
             {
-                @Ajax.ActionLink("Vote",
-                 "Vote",
-                 "Contests",
-                 new { contestId = Model.ContestId, id = Model.Id },
-                 new AjaxOptions
-                 {
-                     HttpMethod = "GET",
-                 },
-                 new { @class = "btn btn-success" })
+                using (Ajax.BeginForm("Vote", "Contests", new {id = Model.ContestId, pictureId = Model.Id }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = @Model.Id.ToString(), InsertionMode = InsertionMode.ReplaceWith }, new { id = Model.Id }))
+                {
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-success">Vote</button>
+                }
             }
         </h3>
         <span>Author: @Model.Author</span><br />
