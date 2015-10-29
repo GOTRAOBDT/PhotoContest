@@ -8,6 +8,8 @@
     {
         public IEnumerable<BasicUserInfoViewModel> Members { get; set; }
 
+        public bool IsContestOwner { get; set; }
+
         public int? ContestId { get; set; }
     }
 }
