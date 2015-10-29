@@ -585,8 +585,8 @@
 
 
         // POST: Contests/{contestId}/Vote/{pictureId}
-        [HttpPost]
-        public ActionResult Vote(int id, int pictureId)
+        [HttpGet]
+        public ActionResult Vote(int id, int contestId)
         {
             if (!this.Request.IsAjaxRequest())
             {
@@ -594,7 +594,7 @@
             }
 
             var loggedUserId = this.User.Identity.GetUserId();
-            var contest = this.Data.Contests.Find(id);
+            var contest = this.Data.Contests.Find(contestId);
 
             if (contest == null)
             {
@@ -608,17 +608,17 @@
 
             if (this.Data.Votes.All()
                 .Any(
-                v => v.PictureId == pictureId && 
+                v => v.PictureId == id && 
                 loggedUserId == v.VoterId &&
                 id == contest.Id))
             {
-                throw new ArgumentException("You are not allowed to vote more than one time each picture!");
+                throw new ArgumentException("You are not allowed to vote more than one time for each picture!");
             }
             
             this.Data.Votes.Add(new Vote
             {
                 ContestId = id,
-                PictureId = pictureId,
+                PictureId = id,
                 VoterId = loggedUserId
             });
 

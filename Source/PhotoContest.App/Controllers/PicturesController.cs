@@ -49,6 +49,7 @@
             else
             {
                 var dbContest = this.Data.Contests.Find(contestId);
+                picture.ContestId = contestId;
                 picture.CanVote = this.CanVote(user, dbPicture, dbContest);
                 picture.HasVoted = this.HasVoted(user, dbPicture, dbContest);
             }
