@@ -8,6 +8,8 @@
 
     public class NotificationViewModel
     {
+        public int Id { get; set; }
+
         [Required]
         public string RecipientUsername { get; set; }
 
@@ -26,6 +28,7 @@
             {
                 return n => new NotificationViewModel()
                 {
+                    Id = n.Id,
                     RecipientUsername = n.Recipient.UserName,
                     Content = n.Content,
                     IsRead = n.IsRead,

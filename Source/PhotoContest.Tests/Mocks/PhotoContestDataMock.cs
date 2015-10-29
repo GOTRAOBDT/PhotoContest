@@ -10,6 +10,7 @@
         private IRepository<Picture> pictureRepositoryMock = new GenericRepositoryMock<Picture>();
         private IRepository<Prize> prizesRepositoryMock = new GenericRepositoryMock<Prize>();
         private IRepository<Vote> votesRepositoryMock = new GenericRepositoryMock<Vote>();
+        private IRepository<Notification> notificationsRepositoryMock = new GenericRepositoryMock<Notification>();
         private IRepository<VotingCommittee> votingCommitteesRepositoryMock = new GenericRepositoryMock<VotingCommittee>();
 
         public bool ChangesSaved { get; set; }
@@ -42,6 +43,11 @@
         public IRepository<VotingCommittee> Committees
         {
             get { return this.votingCommitteesRepositoryMock; }
+        }
+
+        public IRepository<Notification> Notifications
+        {
+            get { return this.notificationsRepositoryMock; }
         }
 
         public int SaveChanges()

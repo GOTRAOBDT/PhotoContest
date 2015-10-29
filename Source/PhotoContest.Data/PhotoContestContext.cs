@@ -81,6 +81,11 @@ namespace PhotoContest.Data
                 .WithRequired(n => n.Recipient)
                 .WillCascadeOnDelete(false);
 
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Notifications)
+                .WithRequired(n => n.Recipient)
+                .WillCascadeOnDelete(false);
+
             modelBuilder.Entity<Contest>()
                 .HasMany(c => c.Pictures)
                 .WithMany(p => p.Contests)

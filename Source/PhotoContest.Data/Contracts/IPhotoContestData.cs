@@ -16,6 +16,9 @@
 
         IRepository<VotingCommittee> Committees { get; }
 
+        IRepository<Notification> Notifications { get; }
+
+
         int SaveChanges();
     }
 }
