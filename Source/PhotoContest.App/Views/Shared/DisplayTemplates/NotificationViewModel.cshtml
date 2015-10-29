@@ -8,7 +8,7 @@ else
 {
     ViewBag.background = "thumbnail";
 }
-<div class="row @ViewBag.background">
+<div class="row @ViewBag.background" id="@Model.Id">
     <p><strong>Content:</strong> @Model.Content</p>
     <h5>Date: @Model.CreatedOn</h5>
 
@@ -17,13 +17,14 @@ else
         using (Ajax.BeginForm("MarkAsRead", "Notifications", new {Model.Id}, new AjaxOptions {HttpMethod = "POST", UpdateTargetId = "notification-" + @Model.Id, InsertionMode = InsertionMode.ReplaceWith}, new {id = "notification-" + Model.Id}))
         {
             @Html.AntiForgeryToken()
-            <button type="submit" class="btn btn-sm btn-default pull-right">Mark As Read</button>
+            <button type="submit" onclick="changeBackground(@Model.Id)" class="btn btn-sm btn-default pull-right">Mark As Read</button>
         }
     }
 </div>
 
 <script>
-    function(parameters) {
-        
+    function changeBackground(parameters) {
+        $("#" + parameters).removeAttr("class");
+        $("#" + parameters).attr("class", "row thumbnailRead");
     }
 </script>
