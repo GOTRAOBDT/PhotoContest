@@ -575,6 +575,7 @@
 
         // POST: Contests/{contestId}/Vote/{pictureId}
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Vote(int id, int pictureId)
         {
             if (!this.Request.IsAjaxRequest())
@@ -588,6 +589,14 @@
             if (contest == null)
             {
                 throw new ArgumentException("Contest not found!");
+            }
+
+            if (contest.VotingType == VotingType.Closed)
+            {
+                if (!contest.Jury.Members.Any(m => m.Id == loggedUserId))
+                {
+                    throw new ArgumentException("You are not allowed to vote only jury members can!");
+                }
             }
 
             if (loggedUserId == contest.OwnerId)
@@ -616,6 +625,7 @@
         }
 
         // POST: Contests/{contestId}/Vote/{pictureId}
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult UnVote(int id, int pictureId)
         {

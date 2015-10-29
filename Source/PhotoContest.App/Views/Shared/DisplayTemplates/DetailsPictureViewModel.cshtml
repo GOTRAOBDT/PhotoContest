@@ -15,7 +15,11 @@
             }
             @if (Model.CanVote)
             {
-                @Html.ActionLink("Vote", "Vote", "Contests", new { id = Model.Id, contestId = Model.ContestId }, new { @class = "btn btn-success" })
+                using (Ajax.BeginForm("Vote", "Contests", new {Model.Id}, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "notification-" + @Model.Id, InsertionMode = InsertionMode.ReplaceWith }))
+                {
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-success">Vote</button>
+                }
             }
         </h3>
         <span>Author: @Model.Author</span><br />
@@ -25,3 +29,7 @@
     </div>
 </div>
 
+@section scripts
+{
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+}
