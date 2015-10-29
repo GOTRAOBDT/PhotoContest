@@ -15,11 +15,11 @@
         if (Model.VotingType == VotingType.Closed)
         {
             <div class="col-md-offset-1">
-                @Html.ActionLink("Manage Jury", "Jury", "Contests")
+                @Html.ActionLink("Manage Jury", "Jury", "Contests", new { @class = "btn btn-primary" })
             </div>
         }
         <div class="col-md-offset-1" style="margin-bottom: 3%;">
-            @Html.ActionLink("Manage Participants", "Participants", "Contests")
+            @Html.ActionLink("Manage Participants", "Participants", "Contests", new { @class = "btn btn-primary" })
         </div>
         @Html.LabelFor(m => m.Title, new {@class = "col-md-4 control-label"})
         <div class="col-md-8">
