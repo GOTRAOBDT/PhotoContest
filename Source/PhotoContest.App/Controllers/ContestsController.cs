@@ -576,13 +576,23 @@
                 throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
             }
 
+            if (contest.Pictures.Any(p => p.Id == picture.Id))
+            {
+                throw new InvalidOperationException("You have already added this picture to the contest.");
+            }
+
+            if (contest.ParticipationType == ParticipationType.Closed &&
+                !contest.Participants.Any(p => p.Id == userId))
+            {
+                throw new InvalidOperationException("You have not applied and/or have not been approved to participate in this contest.");
+            }
+
             contest.Pictures.Add(picture);
+            contest.Participants.Add(this.Data.Users.Find(userId));
             this.Data.SaveChanges();
 
             return this.RedirectToAction("GetContestById", new { id = contestId});
         }
-
-
 
         // GET: Contests/{contestId}/Vote/{pictureId}
         [HttpGet]
