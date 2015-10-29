@@ -104,6 +104,18 @@
                 throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
             }
 
+            picture.Votes.Clear();
+            this.Data.SaveChanges();
+
+            var participationContests = this.Data.Contests.All()
+                .Where(c => c.Pictures.Any(p => p.Id == picture.Id))
+                .ToList();
+            for (int i = 0; i < participationContests.Count(); i++)
+            {
+                participationContests[i].Pictures.Remove(picture);
+            }
+            this.Data.SaveChanges();
+
             this.Data.Pictures.Delete(picture);
             this.Data.SaveChanges();
 
