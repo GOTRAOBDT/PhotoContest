@@ -337,19 +337,16 @@
     <Content Include="Views\Shared\EditorTemplates\PrizeViewModel.cshtml" />
     <Content Include="Views\Contests\_ContestHeader.cshtml" />
     <Content Include="Views\Contests\Pictures.cshtml" />
-<<<<<<< HEAD
     <Content Include="Views\Pictures\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Notifications\" />
-=======
     <Content Include="Views\Notifications\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Pictures\" />
->>>>>>> origin/master
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
