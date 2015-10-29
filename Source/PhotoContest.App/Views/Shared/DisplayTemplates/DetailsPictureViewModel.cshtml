@@ -15,7 +15,7 @@
             }
             @if (Model.CanVote)
             {
-                using (Ajax.BeginForm("Vote", "Contests", new {Model.Id}, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "notification-" + @Model.Id, InsertionMode = InsertionMode.ReplaceWith }))
+                using (Ajax.BeginForm("Vote", "Contests", new {id = Model.ContestId, pictureId = Model.Id }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = @Model.Id.ToString(), InsertionMode = InsertionMode.ReplaceWith }, new { id = Model.Id }))
                 {
                     @Html.AntiForgeryToken()
                     <button type="submit" class="btn btn-success">Vote</button>
@@ -28,8 +28,3 @@
         <span>Total votes: @Model.VotesCount</span><br />
     </div>
 </div>
-
-@section scripts
-{
-    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
-}
