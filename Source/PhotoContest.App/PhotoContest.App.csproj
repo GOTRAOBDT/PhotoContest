@@ -231,10 +231,7 @@
     <Compile Include="Models\Contest\CreateContestBindingModel.cs" />
     <Compile Include="Models\Contest\DetailsContestViewModel.cs" />
     <Compile Include="Models\Contest\EditContestBindingModel.cs" />
-<<<<<<< Updated upstream
     <Compile Include="Models\Contest\JuryViewModel.cs" />
-=======
->>>>>>> Stashed changes
     <Compile Include="Models\Contest\PrizeViewModel.cs" />
     <Compile Include="Models\Contest\SummaryContestViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -334,11 +331,8 @@
     <Content Include="Views\Me\Pictures.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\DetailsPictureViewModel.cshtml" />
     <Content Include="Views\Me\Picture.cshtml" />
-<<<<<<< Updated upstream
     <Content Include="Views\Shared\EditorTemplates\PrizeViewModel.cshtml" />
-=======
     <Content Include="Views\Contests\_Contest.cshtml" />
->>>>>>> Stashed changes
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

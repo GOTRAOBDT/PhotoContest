@@ -20,10 +20,6 @@
 
         public string Description { get; set; }
 
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
@@ -47,8 +43,6 @@
         public int PicturesCount { get; set; }
 
         public int ParticipantsCount { get; set; }
-
-        public string Thumbnail { get; set; }
 
         public int VotesCount { get; set; }
 
