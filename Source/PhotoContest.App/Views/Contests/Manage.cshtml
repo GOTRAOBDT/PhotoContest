@@ -1,17 +1,26 @@
 ﻿@using System.Activities.Statements
+@using PhotoContest.Models.Enumerations
 @model PhotoContest.App.Models.Contest.EditContestBindingModel
 @{
     ViewBag.Title = "Manage";
 }
 
-<div class="col-md-7 col-md-offset-1">
+<div class="col-md-6 col-md-offset-1">
+
     @using (Html.BeginForm("Manage", "Contests", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
     {
         @Html.AntiForgeryToken()
         <h1>Edit contest</h1>
         <hr/>
-        @Html.ValidationSummary("", new {@class = "text-danger"})
-
+        if (Model.VotingType == VotingType.Closed)
+        {
+            <div class="col-md-offset-1">
+                @Html.ActionLink("Manage Jury", "Jury", "Contests")
+            </div>
+        }
+        <div class="col-md-offset-1" style="margin-bottom: 3%;">
+            @Html.ActionLink("Manage Participants", "Participants", "Contests")
+        </div>
         @Html.LabelFor(m => m.Title, new {@class = "col-md-4 control-label"})
         <div class="col-md-8">
             @Html.TextBoxFor(m => m.Title, new {@class = "form-control"})
@@ -30,6 +39,7 @@
         </div>
         @Html.ValidationMessage("DeadlineType")
 
+        
         @Html.LabelFor(m => m.VotingType, new {@class = "col-md-4 control-label"})
         <div class="col-md-8">
             @Html.EnumDropDownListFor(m => m.VotingType, new {@class = "form-control"})
@@ -69,9 +79,8 @@
             </div>
         </div>
 
-            <h4>Prizes:</h4>
-            @Html.EditorFor(m => m.Prizes)
-
+        <h4>Prizes:</h4>
+        @Html.EditorFor(m => m.Prizes)
         <div class="row">
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
@@ -82,7 +91,6 @@
         </div>
     }
 </div>
-
 
 
 <script>

@@ -54,6 +54,14 @@
             };
 
             this.Data.Contests.Add(contest);
+            this.Data.SaveChanges();
+
+            if (model.VotingType == VotingType.Closed)
+            {
+                contest.Jury = new VotingCommittee();
+                contest.Jury.ContestId = contest.Id;
+            }
+
 
             foreach (var prize in model.Prizes)
             {
