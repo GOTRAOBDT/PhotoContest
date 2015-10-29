@@ -102,7 +102,7 @@
             }
         }
 
-        public ICollection<User> Participants
+        public virtual ICollection<User> Participants
         {
             get
             {

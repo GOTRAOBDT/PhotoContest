@@ -427,11 +427,37 @@
             return this.View(participantsViewModel);
         }
 
-        // POST: Contests/{contestId}/Participants/RemoveParticipant/{username}
+        // POST: Contests/{contestId}/RemoveParticipant?username={username}
         [HttpPost]
-        public ActionResult RemoveParticipant(int contestId, string username)
+        public ActionResult RemoveParticipant(int id, string username)
         {
-            return this.View();
+            if (!this.Request.IsAjaxRequest())
+            {
+                throw new InvalidOperationException("Invalid operation!");
+            }
+
+            var user = this.Data.Users.All().FirstOrDefault(u => u.UserName == username);
+
+            if (user == null)
+            {
+                throw new ArgumentException("User not found!");
+            }
+
+            var contest = this.Data.Contests.Find(id);
+            if (contest == null)
+            {
+                throw new ArgumentException("Contest not found!");
+            }
+
+            if (!contest.Participants.Any(u => u.Id == user.Id))
+            {
+                throw new ArgumentException("This user is not a participant of this contest!");
+            }
+
+            contest.Participants.Remove(user);
+            this.Data.SaveChanges();
+
+            return this.Content(string.Empty);
         }
 
         // GET: Contests/{contestId}/Gallery/{pictureId}

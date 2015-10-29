@@ -13,9 +13,6 @@
         <div class="col-md-12">
             @Html.DisplayForModel()
         </div>
-        <div class="col-md-3">
-            <a href="/Contests/@Model.ContestId/AddJuryMember" class="btn btn-warning">Add member</a>
-        </div>
     </div>
     @Html.PagedListPager(Model.Participants, page => Url.Action("Participants", new { page, ViewBag.sortBy }))
 </div>
