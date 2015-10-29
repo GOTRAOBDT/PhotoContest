@@ -26,8 +26,6 @@
     using PhotoContest.Models;
     using PhotoContest.Models.Enumerations;
 
-    using WebGrease.Css.Extensions;
-
     [Authorize]
     public class ContestsController : BaseController
     {
@@ -178,15 +176,18 @@
         // GET: Contests/{contestId}/Jury
         // Returned model type: BasicUserInfoViewModel
         [HttpGet]
-        public ActionResult Jury(int? id)
+        public ActionResult Jury(int id)
         {
-            if (id == null)
+            var contest = this.Data.Contests.All()
+                .FirstOrDefault(c => c.Id == id);
+
+            if (contest == null)
             {
-                return this.HttpNotFound();
+                throw new HttpRequestException("This contest does not exist!");
             }
-            
+
             var juryMembers = this.Data.Contests.All()
-                .Where(c => c.Id == id).Select(c => c.Jury.Members).FirstOrDefault();
+            .Where(c => c.Id == id).Select(c => c.Jury.Members).FirstOrDefault();
 
             var juryMembersView = Mapper.Map<IEnumerable<User>, IEnumerable<BasicUserInfoViewModel>>(juryMembers);
 
@@ -201,6 +202,15 @@
                 ContestId = id
             };
 
+            if (this.User.Identity.GetUserId() == contest.OwnerId)
+            {
+                juryViewModel.IsContestOwner = true;
+            }
+            else
+            {
+                juryViewModel.IsContestOwner = false;
+            }
+
             this.ViewBag.ContestId = id;
             return this.View(juryViewModel);
         }
@@ -212,7 +222,7 @@
             var contest = this.Data.Contests.Find(id);
             if (contest == null)
             {
-                return this.HttpNotFound();
+                throw new HttpRequestException("This contest does not exist!");
             }
 
             var loggedUserId = this.User.Identity.GetUserId();
@@ -349,17 +359,6 @@
             };
 
             return this.View(candidatesViewModel);
-        }
-
-        public ActionResult ManageCandidate(string operation, int id, string username)
-        {
-            if (operation == "approve")
-            {
-                return this.RedirectToAction("ApproveCandidate" , new {id, username});
-            }
-
-            return this.RedirectToAction("RejectCandidate", new { id, username });
-
         }
 
         // POST: Contests/{contestId}/Candidates/ApproveCandidate/{username}
