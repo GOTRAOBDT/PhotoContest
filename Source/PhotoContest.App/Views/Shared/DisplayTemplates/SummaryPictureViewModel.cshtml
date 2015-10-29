@@ -1,6 +1,6 @@
 ﻿@model PhotoContest.App.Models.Pictures.SummaryPictureViewModel
 <div class="col-md-6">
-    <a href="@(Url.Action("Picture", "Me", new { id = @Model.Id }))" class="contest-list">
+    <a href="@(Url.Action("Index", "Pictures", new { id = @Model.Id, contestId = Model.ContestId }))" class="contest-list">
         <div class="thumbnail">
             <img src="@Model.ThumbnailImageData" alt="Title: @Model.Title">
             <div class="caption">

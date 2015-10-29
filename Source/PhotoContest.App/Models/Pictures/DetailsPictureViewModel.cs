@@ -18,6 +18,12 @@
 
         public bool IsAuthor { get; set; }
 
+        public bool CanVote { get; set; }
+
+        public bool HasVoted { get; set; }
+
+        public int? ContestId { get; set; }
+
         public string PictureData { get; set; }
 
         public int VotesCount { get; set; }

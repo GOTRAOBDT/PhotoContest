@@ -18,6 +18,8 @@
         
         public string ThumbnailImageData { get; set; }
 
+        public int? ContestId { get; set; }
+
         public int ContestsCount { get; set; }
 
         public int VotesCount { get; set; }

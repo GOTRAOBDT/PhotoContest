@@ -422,6 +422,11 @@
                 .ProjectTo<SummaryPictureViewModel>()
                 .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
 
+            for (int i = 0; i < pictures.Count; i++)
+            {
+                pictures[i].ContestId = id;
+            }
+
             this.ViewData["ContestTitle"] = contest.Title;
 
             return View(pictures);

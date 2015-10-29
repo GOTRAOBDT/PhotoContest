@@ -104,53 +104,6 @@
             return RedirectToAction("Pictures");
         }
 
-        [System.Web.Mvc.HttpGet]
-        public ActionResult Picture(int id)
-        {
-            var picture = this.Data.Pictures.All()
-                .Where(p => p.Id == id)
-                .ProjectTo<DetailsPictureViewModel>()
-                .FirstOrDefault();
-
-            if (picture == null)
-            {
-                return this.HttpNotFound();
-            }
-
-            var user = this.Data.Users.Find(this.User.Identity.GetUserId());
-
-            if (picture.Author != user.Name)
-            {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
-            }
-               
-            return this.View(picture);
-        }
-
-        [System.Web.Mvc.HttpGet]
-        public ActionResult DeletePicture(int id)
-        {
-            var picture = this.Data.Pictures.Find(id);
-
-            if (picture == null)
-            {
-                return this.HttpNotFound();
-            }
-
-            var user = this.Data.Users.Find(this.User.Identity.GetUserId());
-
-            if (picture.Author.Id != user.Id)
-            {
-                throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
-            }
-
-            this.Data.Pictures.Delete(picture);
-            this.Data.SaveChanges();
-
-            return RedirectToAction("Pictures");
-        }
-
-
         // GET: Me/Profile
         [System.Web.Mvc.HttpGet]
         public ActionResult Profile()
