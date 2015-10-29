@@ -338,15 +338,15 @@
     <Content Include="Views\Contests\_ContestHeader.cshtml" />
     <Content Include="Views\Contests\Pictures.cshtml" />
     <Content Include="Views\Pictures\Index.cshtml" />
+    <Content Include="Views\Contests\Participants.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\JuryViewModel.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\ParticipantsViewModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
-    <Folder Include="Views\Notifications\" />
     <Content Include="Views\Notifications\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Pictures\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

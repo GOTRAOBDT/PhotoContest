@@ -6,7 +6,10 @@
         <li class="list-group-item" id="container-@m.UserName">
             <h3>
                 @m.UserName
-                <button class="btn btn-default pull-right" role="button" data-toggle="modal" data-target="#confirm-@m.UserName">Remove</button>
+                @if (Model.IsContestOwner)
+                {
+                    <button class="btn btn-default pull-right" role="button" data-toggle="modal" data-target="#confirm-@m.UserName">Remove</button>
+                }
             </h3>
 
             @if (Model.IsContestOwner)
