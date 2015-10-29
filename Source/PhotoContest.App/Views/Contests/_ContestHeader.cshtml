@@ -5,17 +5,19 @@
     <img src="@Model.Thumbnail" alt="123" class="img-rounded img-responsive">
     <div class="caption">
         @if (Model.VotingType == VotingType.Closed && !Model.IsOwner)
-            {
+        {
             @Html.ActionLink("Apply", "", "", null, new { @class = "btn btn-success" })
         }
         @if (Model.IsOwner)
-            {
+        {
             @Html.ActionLink("Manage Contest", "Manage", "Contests", new { id = Model.Id }, new { @class = "btn btn-warning" })
         }
         @if (Model.CanParticipate)
-            {
-            @Html.ActionLink("Add Picture", "", "", null, new { @class = "btn btn-info" })
+        {
+            @Html.ActionLink("Add Picture", "SelectPictures", "Contests", new { id = Model.Id }, new { @class = "btn btn-info" })
         }
+        @Html.ActionLink("Browse Pictures", "Pictures", "Contests", new { id = Model.Id }, new { @class = "btn btn-danger" })
+        @Html.ActionLink("View Gallery", "", "", new { id = Model.Id }, new { @class = "btn btn-primary" })
         <h2>@Model.Title</h2>
         <span>@Model.Description</span><br />
         <div class="row">

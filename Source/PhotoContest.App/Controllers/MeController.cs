@@ -53,7 +53,10 @@
         public ActionResult Pictures(int? page)
         {
             IPagedList<SummaryPictureViewModel> pictures = null;
+            var userId = this.User.Identity.GetUserId();
+
                 pictures = this.Data.Pictures.All()
+                    .Where(p => p.Author.Id == userId)
                     .OrderByDescending(p => p.PostedOn)
                     .ThenByDescending(c => c.Contests.Count())
                     .ProjectTo<SummaryPictureViewModel>()

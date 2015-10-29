@@ -3,6 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net;
+    using System.Net.Http;
     using System.Web.Mvc;
 
     using AutoMapper;
@@ -17,7 +19,10 @@
 
     using PhotoContest.Models;
     using PhotoContest.Models.Enumerations;
-    
+    using Models.Pictures;
+    using PagedList;
+    using Common;
+
     [Authorize]
     public class ContestsController : BaseController
     {
@@ -353,11 +358,70 @@
             return this.View();
         }
 
+        [HttpGet]
+        public ActionResult Pictures(int id, int? page)
+        {
+            IPagedList<SummaryPictureViewModel> pictures = null;
+            var contest = this.Data.Contests.Find(id);
+
+            if (contest == null)
+            {
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            }
+
+            pictures = contest.Pictures
+                .AsQueryable()
+                .OrderByDescending(p => p.PostedOn)
+                .ProjectTo<SummaryPictureViewModel>()
+                .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
+
+            this.ViewData["ContestTitle"] = contest.Title;
+
+            return View(pictures);
+        }
+
         // POST: Contests/{contestId}/Vote/{pictureId}
         [HttpPost]
         public ActionResult Vote(int contestId, int pictureId)
         {
             return this.View();
+        }
+
+        [HttpGet]
+        public ActionResult SelectPictures(int id)
+        {
+            this.TempData["SelectPicture"] = true;
+            this.TempData["contestId"] = id;
+
+            return this.RedirectToAction("Pictures", "Me");
+        }
+
+        [HttpGet]
+        public ActionResult AddPicture(int contestId, int pictureId)
+        {
+            var contest = this.Data.Contests.Find(contestId);
+            if (contest == null)
+            {
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+
+            }
+
+            var picture = this.Data.Pictures.Find(pictureId);
+            if (picture == null)
+            {
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            }
+
+            var userId = this.User.Identity.GetUserId();
+            if (picture.AuthorId != userId)
+            {
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            }
+
+            contest.Pictures.Add(picture);
+            this.Data.SaveChanges();
+
+            return this.RedirectToAction("GetContestById", new { id = contestId});
         }
     }
 }
