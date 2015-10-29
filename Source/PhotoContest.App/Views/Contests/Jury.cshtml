@@ -11,8 +11,11 @@
         <div class="col-md-12">
             @Html.DisplayForModel()
         </div>
-        <div class="col-md-3">
-            <a href="/Contests/@Model.ContestId/AddJuryMember" class="btn btn-warning">Add member</a>
-        </div>
+        @if (Model.IsContestOwner)
+        {
+            <div class="col-md-3">
+                <a href="/Contests/@Model.ContestId/AddJuryMember" class="btn btn-warning">Add member</a>
+            </div>
+        }
     </div>
 </div>

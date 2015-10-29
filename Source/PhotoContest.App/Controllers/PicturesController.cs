@@ -49,6 +49,7 @@
             else
             {
                 var dbContest = this.Data.Contests.Find(contestId);
+                picture.ContestId = contestId;
                 picture.CanVote = this.CanVote(user, dbPicture, dbContest);
                 picture.HasVoted = this.HasVoted(user, dbPicture, dbContest);
             }
@@ -78,6 +79,11 @@
                 return false;
             }
 
+            if (dbPicture.Votes.Any(v => v.VoterId == user.Id))
+            {
+                return false;
+            }
+
             if (dbContest.VotingType == PhotoContest.Models.Enumerations.VotingType.Closed &&
                 !dbContest.Jury.Members.Any(m => m.Id == user.Id))
             {
@@ -103,6 +109,18 @@
             {
                 throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
             }
+
+            picture.Votes.Clear();
+            this.Data.SaveChanges();
+
+            var participationContests = this.Data.Contests.All()
+                .Where(c => c.Pictures.Any(p => p.Id == picture.Id))
+                .ToList();
+            for (int i = 0; i < participationContests.Count(); i++)
+            {
+                participationContests[i].Pictures.Remove(picture);
+            }
+            this.Data.SaveChanges();
 
             this.Data.Pictures.Delete(picture);
             this.Data.SaveChanges();
