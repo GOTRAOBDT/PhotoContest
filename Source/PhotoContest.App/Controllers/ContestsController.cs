@@ -301,6 +301,11 @@
                 throw new ArgumentException("Contest not found!");
             }
 
+            if (this.User.Identity.GetUserId() != contest.OwnerId)
+            {
+                throw new HttpRequestException("Not authorized!");
+            }
+
             if (!contest.Jury.Members.Any(u => u.Id == user.Id))
             {
                 throw new ArgumentException("This user is not a jury member of this contest!");
@@ -323,37 +328,38 @@
         // GET: Contests/{contestId}/Candidates
         // Returned model type: BasicUserInfoViewModel
         [HttpGet]
-        public ActionResult Candidates(int? id)
+        public ActionResult Candidates(int id, int? page)
         {
-            if (id == null)
+            var contestOwnerId = this.Data.Contests.All()
+                .Where(c => c.Id == id)
+                .Select(c => c.OwnerId)
+                .FirstOrDefault();
+
+            if (this.User.Identity.GetUserId() != contestOwnerId)
             {
-                return this.HttpNotFound();
+                throw new HttpRequestException("Not authorized!");
             }
 
-            Mapper.CreateMap<User, BasicUserInfoViewModel>();
+            var contestCandidates = this.Data.Contests.All()
+                .Where(c => c.Id == id)
+                .Select(c => c.Candidates)
+                .FirstOrDefault()
+                .ToPagedList(page ?? GlobalConstants.DefaultStartPage, 2);
 
-            var contest = this.Data.Contests.All().FirstOrDefault(c => c.Id == id);
-
-            if (contest == null)
+            if (contestCandidates == null)
             {
-                return this.HttpNotFound();
+                throw new HttpRequestException("This contest not exists!");
             }
 
-            if (contest.OwnerId != this.User.Identity.GetUserId())
+            var candidatesView = Mapper.Map<IPagedList<User>, IPagedList<BasicUserInfoViewModel>>(contestCandidates);
+            var candidatesViewModel = new CandidatesViewModel
             {
-                return this.HttpNotFound(); // TODO unauthorized!
-            }
+                Candidates = candidatesView,
+                IsContestOwner = true,
+                ContestId = id
+            };
 
-            var candidates = contest.Candidates;
-
-            var candidatesView = Mapper.Map<IEnumerable<User>, IEnumerable<BasicUserInfoViewModel>>(candidates);
-
-            if (candidatesView == null)
-            {
-                return this.HttpNotFound();
-            }
-
-            return this.View(candidatesView);
+            return this.View(candidatesViewModel);
         }
 
         public ActionResult ManageCandidate(string operation, int id, string username)
@@ -368,59 +374,76 @@
         }
 
         // POST: Contests/{contestId}/Candidates/ApproveCandidate/{username}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult ApproveCandidate(int id, string username)
         {
+            if (!this.Request.IsAjaxRequest())
+            {
+                throw new InvalidOperationException("Invalid operation!");
+            }
+
             var user = this.Data.Users.All().FirstOrDefault(u => u.UserName == username);
             var loggedUserId = this.User.Identity.GetUserId();
 
             if (user == null)
             {
-                return this.HttpNotFound();
+                throw new ArgumentException("User not exists!");
             }
 
             var contest = this.Data.Contests.Find(id);
 
             if (contest == null)
             {
-                return this.HttpNotFound();
+                throw new ArgumentException("Contest not exists!");
             }
 
             if (contest.OwnerId != loggedUserId)
             {
-                return this.HttpNotFound(); // TODO unauthorized;
+                throw new HttpRequestException("Not authorized!");
             }
 
             contest.Participants.Add(user);
             contest.Candidates.Remove(user);
             this.Data.SaveChanges();
 
-            return this.RedirectToAction("Contests", "Me");
+            return this.Content(string.Empty);
         }
 
         // POST: Contests/{contestId}/Candidates/RejectCandidate/{username}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult RejectCandidate(int id, string username)
         {
+            if (!this.Request.IsAjaxRequest())
+            {
+                throw new InvalidOperationException("Invalid operation!");
+            }
+
             var user = this.Data.Users.All().FirstOrDefault(u => u.UserName == username);
             var loggedUserId = this.User.Identity.GetUserId();
+
             if (user == null)
             {
-                return this.HttpNotFound();
+                throw new ArgumentException("User not exists!");
             }
 
             var contest = this.Data.Contests.Find(id);
 
             if (contest == null)
             {
-                return this.HttpNotFound();
+                throw new ArgumentException("Contest not exists!");
             }
 
             if (contest.OwnerId != loggedUserId)
             {
-                return this.HttpNotFound(); // TODO unauthorized;
+                throw new HttpRequestException("Not authorized!");
             }
+
             contest.Candidates.Remove(user);
             this.Data.SaveChanges();
-            return this.RedirectToAction("Contests", "Me");
+            
+            return this.Content(string.Empty);
         }
 
         // GET: Contests/{contestId}/Participants

@@ -229,6 +229,7 @@
     <Compile Include="Models\Account\LoginViewModel.cs" />
     <Compile Include="Models\Account\UserRegistrationModel.cs" />
     <Compile Include="Models\Contest\AddJuryMemberBindingModel.cs" />
+    <Compile Include="Models\Contest\CandidatesViewModel.cs" />
     <Compile Include="Models\Contest\CreateContestBindingModel.cs" />
     <Compile Include="Models\Contest\DetailsContestViewModel.cs" />
     <Compile Include="Models\Contest\EditContestBindingModel.cs" />
@@ -341,6 +342,7 @@
     <Content Include="Views\Contests\Participants.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\JuryViewModel.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\ParticipantsViewModel.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\CandidatesViewModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Notifications\Index.cshtml" />
