@@ -1,0 +1,44 @@
+﻿@model PhotoContest.App.Models.Contest.JuryViewModel
+
+@foreach (var m in Model.Members)
+{
+    <div class="col-sm-6 col-md-4" id="container-@m.UserName">
+        <div class="thumbnail">
+            @if (m.ProfilePicture != null)
+            {
+                <img class="thumbnail" src="@m.ProfilePicture" alt="@m.UserName" />
+            }
+            else
+            {
+                <img class="thumbnail" src="~/Content/img/no-photo.png" alt="@m.UserName" />
+            }
+            <div class="caption">
+                <h3>@m.UserName</h3>
+                <p>
+                    <button class="btn btn-default" role="button" data-toggle="modal" data-target="#confirm-@m.UserName">Remove</button>
+                </p>
+            </div>
+        </div>
+        <div class="modal" id="confirm-@m.UserName">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Remove jure member confirmation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>You are about to remove "@m.UserName" from jury members. Are you sure?</p>
+                    </div>
+                    <div class="modal-footer">
+                        @using (Ajax.BeginForm("RemoveJuryMember", "Contests", new { id = Model.ContestId, username = m.UserName }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "container-" + @m.UserName, InsertionMode = InsertionMode.ReplaceWith }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-primary" id="delete-member-@m.UserName" onclick="hideModal('#confirm-@m.UserName')">Confirm</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
