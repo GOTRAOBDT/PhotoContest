@@ -8,6 +8,7 @@
     using AutoMapper.QueryableExtensions;
 
     using Bookmarks.Common.Mappings;
+    using PhotoContest.Common;
     using PhotoContest.Models;
     using PhotoContest.Models.Enumerations;
     using Pictures;
@@ -27,6 +28,8 @@
         public string Owner { get; set; }
 
         public bool IsOwner { get; set; }
+
+        public bool CanParticipate { get; set; }
 
         public ContestStatus Status { get; set; }
 
@@ -51,6 +54,8 @@
         public void CreateMappings(IConfiguration configuration)
         {
             configuration.CreateMap<Contest, DetailsContestViewModel>()
+                .ForMember(c => c.Owner, cfg => cfg.MapFrom(c => c.Owner.Name))
+                .ForMember(c => c.Thumbnail, cnf => cnf.MapFrom(m => m.Thumbnail ?? GlobalConstants.DefaultContestThumbnail))
                 .ForMember(c => c.PicturesCount, cfg => cfg.MapFrom(c => c.Pictures.Count))
                 .ForMember(c => c.VotesCount, cfg => cfg.MapFrom(c => c.Votes.Count))
                 .ForMember(c => c.Prizes, cfg => cfg.MapFrom(c => c.Prizes.AsQueryable().ProjectTo<PrizeViewModel>()))

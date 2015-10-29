@@ -77,11 +77,26 @@
         [AllowAnonymous]
         public ActionResult GetContestById(int id)
         {
-            var contest = Mapper.Map<DetailsContestViewModel>(this.Data.Contests.Find(id));
+            var dbContest = this.Data.Contests.Find(id);
+            var contest = Mapper.Map<DetailsContestViewModel>(dbContest);
 
             if (contest == null)
             {
                 return this.HttpNotFound();
+            }
+
+            var userId = this.User.Identity.GetUserId();
+            var user = this.Data.Users.Find(userId);
+
+            if (dbContest.Owner == user)
+            {
+                contest.IsOwner = true;
+            }
+
+            if (dbContest.ParticipationType == ParticipationType.Open ||
+                dbContest.Participants.Any(p => p.Id == user.Id))
+            {
+                contest.CanParticipate = true;
             }
 
             return this.View(contest);

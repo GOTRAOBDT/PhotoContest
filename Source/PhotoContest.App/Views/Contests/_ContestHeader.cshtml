@@ -1,0 +1,77 @@
+﻿@model PhotoContest.App.Models.Contest.DetailsContestViewModel
+@using PhotoContest.Models.Enumerations
+
+<div class="thumbnail">
+    <img src="@Model.Thumbnail" alt="123" class="img-rounded img-responsive">
+    <div class="caption">
+        @if (Model.VotingType == VotingType.Closed && !Model.IsOwner)
+            {
+            @Html.ActionLink("Apply", "", "", null, new { @class = "btn btn-success" })
+        }
+        @if (Model.IsOwner)
+            {
+            @Html.ActionLink("Manage Contest", "Manage", "Contests", new { id = Model.Id }, new { @class = "btn btn-warning" })
+        }
+        @if (Model.CanParticipate)
+            {
+            @Html.ActionLink("Add Picture", "", "", null, new { @class = "btn btn-info" })
+        }
+        <h2>@Model.Title</h2>
+        <span>@Model.Description</span><br />
+        <div class="row">
+            <div class="col-md-4">
+                <span><strong>Moderator: </strong>@Model.Owner</span><br />
+                <span><strong>Start Date: </strong>@Html.DisplayFor(m => m.StartDate)</span><br />
+                <span><strong>End Date: </strong>@Html.DisplayFor(m => m.EndDate)</span><br />
+            </div>
+            <div class="col-md-4">
+                <span><strong>Status: </strong>@Model.Status</span><br />
+                <span>
+                    <strong>Participation: </strong>
+                    @if (Model.ParticipationType == ParticipationType.Closed)
+                    {
+                        @: needs approval from moderator
+                        }
+                    else
+                    {
+                        @: open for all members
+                        }
+                </span><br />
+                <span>
+                    <strong>Voting: </strong>
+                    @if (Model.VotingType == VotingType.Closed)
+                    {
+                        @: voting by jury
+                        }
+                    else
+                    {
+                        @: all members can vote
+                        }
+                </span><br />
+            </div>
+            <div class="col-md-4">
+                <span><strong>Pictures: </strong>@Model.PicturesCount</span><br />
+                <span><strong>Participants: </strong>@Model.ParticipantsCount</span><br />
+                <span><strong>Votes: </strong>@Model.VotesCount</span><br />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <span>
+                    <strong>Prizes: </strong>
+                    @if (Model.Prizes.Count() == 0)
+                    {
+                        @: (not available)
+                        }
+                    else
+                    {
+                        foreach (var prize in Model.Prizes)
+                        {
+                            @Html.ActionLink(prize.Name, "Prizes", new { id = prize.Id })
+                        }
+                    }
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

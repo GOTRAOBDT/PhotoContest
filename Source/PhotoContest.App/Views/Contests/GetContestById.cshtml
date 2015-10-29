@@ -1,18 +1,8 @@
 ﻿@model PhotoContest.App.Models.Contest.DetailsContestViewModel
+@using PhotoContest.Models.Enumerations
 @{
     ViewBag.Title = "GetContestById";
 }
-
 <div class="col-md-7 col-md-offset-1">
-    <div class="thumbnail">
-        <img src="@Model.Thumbnail" alt="123" class="img-rounded full-image">
-        <div class="caption">
-            @Html.ActionLink("Apply", "", "", null, new { @class = "btn btn-success" })
-
-            
-            <h2>@Model.Title</h2>
-            <span>@Model.Description</span>
-        </div>
-    </div>
+    @Html.Partial("_ContestHeader", Model)
 </div>
-
