@@ -79,6 +79,11 @@
                 return false;
             }
 
+            if (dbPicture.Votes.Any(v => v.VoterId == user.Id))
+            {
+                return false;
+            }
+
             if (dbContest.VotingType == PhotoContest.Models.Enumerations.VotingType.Closed &&
                 !dbContest.Jury.Members.Any(m => m.Id == user.Id))
             {
