@@ -1,0 +1,11 @@
+﻿@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Administration/Views/Shared/_Layout.cshtml";
+}
+
+<h2>
+    @this.User.Identity.GetUserName(),<br/>
+    wellcome to administration area!
+</h2>
+

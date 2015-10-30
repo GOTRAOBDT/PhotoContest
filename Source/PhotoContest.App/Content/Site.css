@@ -43,3 +43,7 @@ textarea {
     border-radius: 5px;
     padding: 5px;
 }
+
+#admin-link {
+    color: #CD3333;
+}

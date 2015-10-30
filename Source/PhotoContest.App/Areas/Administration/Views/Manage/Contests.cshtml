@@ -1,0 +1,41 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@using PhotoContest.App.Models.Contest
+@model IPagedList<SummaryContestViewModel>
+
+@{
+    ViewBag.Title = "Manage Contests";
+    Layout = "~/Areas/Administration/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Manage Contests</h2>
+
+<div class="col-md-7">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel-body" id="admin-table">
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Title</th>
+                        <th>Start<br/>Date</th>
+                        <th>End<br/>Date</th>
+                        <th>Status</th>
+                        <th>Voting<br/>Type</th>
+                        <th>Participation<br/>Type</th>
+                        <th>Deadline<br/>Type</th>
+                        <th>Participants<br/>Count</th>
+                        <th>Pictures<br/>Count</th>
+                        <th>Votes<br/>Count</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @Html.DisplayForModel()
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+    @Html.PagedListPager(Model, page => Url.Action("Contests", new { page }))
+</div>
