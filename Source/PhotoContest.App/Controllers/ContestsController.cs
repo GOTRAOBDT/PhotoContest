@@ -640,6 +640,12 @@
                 return this.RedirectToAction("GetContestById", new { id = contestId });
             }
 
+            if (contest.OwnerId == userId)
+            {
+                this.TempData["message"] = "Moderators are not allowed to participate in their contests.";
+                return this.RedirectToAction("GetContestById", new { id = contestId });
+            }
+
             if (contest.ParticipationType == ParticipationType.Closed &&
                 !contest.Participants.Any(p => p.Id == userId))
             {
