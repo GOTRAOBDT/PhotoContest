@@ -163,6 +163,7 @@
 
         // POST: Contests/{contestId}/Manage
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Manage(int id, EditContestBindingModel model)
         {
             if (model == null)
@@ -524,6 +525,7 @@
 
         // POST: Contests/{contestId}/RemoveParticipant?username={username}
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult RemoveParticipant(int id, string username)
         {
             if (!this.Request.IsAjaxRequest())
