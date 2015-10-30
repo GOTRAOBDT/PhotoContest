@@ -1,0 +1,15 @@
+﻿@model PhotoContest.App.Models.Contest.FullContestViewModel
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Areas/Administration/Views/Shared/_Layout.cshtml";
+}
+<div class="col-md-7 col-md-offset-1">
+    @Html.Partial("_ContestHeader", Model.ContestSummary)
+
+    @if (Model.Winners != null)
+    {
+        @Html.Partial("_ContestWinners", Model.Winners)
+    }
+</div>
+
+

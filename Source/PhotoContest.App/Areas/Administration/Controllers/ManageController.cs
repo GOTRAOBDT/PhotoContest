@@ -35,6 +35,7 @@
         // GET: Administration/Manage/Users
         public ActionResult Users()
         {
+            this.ViewBag.Manage = "Users";
             return this.View();
         }
 

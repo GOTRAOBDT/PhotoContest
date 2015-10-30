@@ -4,13 +4,9 @@
 <tr>
     <td>@Model.Id</td>
     <td>@Model.Title</td>
+    <td>@Model.Owner</td>
     <td>@Html.DisplayFor(d => d.StartDate)</td>
     <td>@Html.DisplayFor(d => d.EndDate)</td>
     <td>@Model.Status</td>
-    <td>@Model.VotingType</td>
-    <td>@Model.ParticipationType</td>
-    <td>@Model.DeadlineType</td>
-    <td>@Model.ParticipantsCount</td>
-    <td>@Model.PicturesCount</td>
-    <td>@Model.VotesCount</td>
+    <td><a href="@Url.Action("Details", "Contests", new { id = Model.Id} )" class="btn btn-primary">Details</a></td>
 </tr>

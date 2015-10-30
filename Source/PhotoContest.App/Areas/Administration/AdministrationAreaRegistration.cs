@@ -15,9 +15,15 @@
         public override void RegisterArea(AreaRegistrationContext context) 
         {
             context.MapRoute(
+                "AdminManage",
+                "Administration/{controller}/{id}/{action}",
+                namespaces: new[] { "PhotoContest.App.Areas.Administration.Controllers" });
+
+            context.MapRoute(
                 "Administration_default",
                 "Administration/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional });
+                new { action = "Index", id = UrlParameter.Optional },
+                namespaces: new[] { "PhotoContest.App.Areas.Administration.Controllers" });
         }
     }
 }

@@ -43,8 +43,8 @@
             <div class="col-md-3">
                 <ul class="nav nav-pills nav-stacked">
                     <li role="presentation" class="disabled"><a href="#"><h4>Manage</h4></a></li>
-                    <li role="presentation" @((ViewBag.Manage == "Users") ? "class=active" : "")><a href="@Url.Action("Users", "Manage")">Users</a></li>
-                    <li role="presentation" @((ViewBag.Manage == "Contests") ? "class=active" : "")><a href="@Url.Action("Contests", "Manage")">Contests</a></li>
+                    <li role="presentation" @((ViewBag.Manage == "Users") ? "class=active" : "")><a href="@Url.Action("Users", "Manage", new { area = "Administration" })">Users</a></li>
+                    <li role="presentation" @((ViewBag.Manage == "Contests") ? "class=active" : "")><a href="@Url.Action("Contests", "Manage", new { area = "Administration" })">Contests</a></li>
                 </ul>
             </div>
             @RenderBody()
