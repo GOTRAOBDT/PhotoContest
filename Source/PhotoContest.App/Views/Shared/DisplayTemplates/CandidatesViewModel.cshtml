@@ -1,0 +1,80 @@
+﻿@model PhotoContest.App.Models.Contest.CandidatesViewModel
+
+<ul class="list-group">
+    @foreach (var m in Model.Candidates)
+    {
+        <li class="list-group-item" id="container-@m.UserName">
+            <div class="row">
+                <div class="col-md-4">
+                    @if (m.ProfilePicture != null)
+                    {
+                        <img class="thumbnail" src="@m.ProfilePicture" alt="@m.UserName" />
+                    }
+                    else
+                    {
+                        <img class="thumbnail" src="~/Content/img/no-photo.png" alt="@m.UserName" />
+                    }
+                </div>
+                <div class="col-md-8">
+                    <h3>@m.UserName</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-1 col-md-offset-8">
+                    @if (Model.IsContestOwner)
+                    {
+                        <button class="btn btn-success" role="button" data-toggle="modal" data-target="#approve-@m.UserName">Approve</button>
+                        <div class="modal" id="approve-@m.UserName">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                        <h4 class="modal-title">Remove contest participant confirmation</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>You are about to remove "@m.UserName" from contest participants. Are you sure?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        @using (Ajax.BeginForm("ApproveCandidate", "Contests", new { id = Model.ContestId, username = m.UserName }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "container-" + @m.UserName, InsertionMode = InsertionMode.ReplaceWith }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-primary" id="approve-member-@m.UserName" onclick="hideModal('#approve-@m.UserName')">Confirm</button>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="col-md-1 col-md-offset-1">
+                    @if (Model.IsContestOwner)
+                    {
+                        <button class="btn btn-danger" role="button" data-toggle="modal" data-target="#reject-@m.UserName">Reject</button>
+                        <div class="modal" id="reject-@m.UserName">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                        <h4 class="modal-title">Remove contest participant confirmation</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>You are about to remove "@m.UserName" from contest participants. Are you sure?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        @using (Ajax.BeginForm("RejectCandidate", "Contests", new { id = Model.ContestId, username = m.UserName }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "container-" + @m.UserName, InsertionMode = InsertionMode.ReplaceWith }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-primary" id="reject-member-@m.UserName" onclick="hideModal('#reject-@m.UserName')">Confirm</button>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </li>
+    }
+</ul>
