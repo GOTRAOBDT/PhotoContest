@@ -12,7 +12,7 @@
         {
             @Html.ActionLink("Manage Contest", "Manage", "Contests", new { id = Model.Id }, new { @class = "btn btn-warning" })
         }
-        @if (Model.CanParticipate)
+        @if (Model.CanParticipate && !Model.IsOwner)
         {
             @Html.ActionLink("Add Picture", "SelectPictures", "Contests", new { id = Model.Id }, new { @class = "btn btn-info" })
         }
@@ -69,7 +69,7 @@
                     {
                         foreach (var prize in Model.Prizes)
                         {
-                            @Html.ActionLink(prize.Name, "Prizes", new { id = prize.Id })
+                            @Html.ActionLink(prize.Name, "Prizes", new { id = prize.Id }) @: / 
                         }
                     }
                 </span>

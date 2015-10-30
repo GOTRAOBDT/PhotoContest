@@ -1,4 +1,5 @@
-﻿@model PhotoContest.App.Models.Notification.NotificationViewModel
+﻿@using PhotoContest.Models.Enumerations
+@model PhotoContest.App.Models.Notification.NotificationViewModel
 
 @if (Model.IsRead)
 {
@@ -9,8 +10,16 @@ else
     ViewBag.background = "thumbnail";
 }
 <div class="row @ViewBag.background" id="@Model.Id">
-    <p><strong>Content:</strong> @Model.Content</p>
-    <h5>Date: @Model.CreatedOn.ToString("dd.MM.yyyy hh:mm")</h5>
+    @if (Model.NotificationType == NotificationType.Vote)
+    {
+        <p><strong>
+            @Model.SenderUsername.ToUpper() has voted to your Picture:
+            @Html.ActionLink(Model.PictureTitle, "Index", "Pictures", new { id = Model.PictureId }, new {@clas="btn"})
+            in @Html.ActionLink(Model.ContestTitle, "GetContestById", "Contests", new { id = Model.ContestId }, new { @clas = "btn" })
+    </strong> 
+        </p>
+        <h5>Date: @Model.CreatedOn.ToString("dd.MM.yyyy hh:mm")</h5>
+    }
 
     @if (!Model.IsRead)
     {

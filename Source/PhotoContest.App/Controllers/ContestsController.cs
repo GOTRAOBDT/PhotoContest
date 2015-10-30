@@ -360,13 +360,13 @@
             }
 
             contest.Candidates.Add(user);
-            var notification = new Notification()
-            {
-                Recipient = contest.Owner,
-                CreatedOn = DateTime.Now,
-                Content = string.Format("Member {0} applied to participate in the contest {1}. Please, go to contest page to process his/her application.",
-                    user.UserName, contest.Title)
-            };
+            //var notification = new Notification()
+            //{
+            //    Recipient = contest.Owner,
+            //    CreatedOn = DateTime.Now,
+            //    Content = string.Format("Member {0} applied to participate in the contest {1}. Please, go to contest page to process his/her application.",
+            //        user.UserName, contest.Title)
+            //};
             this.Data.SaveChanges();
             this.TempData["message"] = string.Format("Successfully applied to contest {0}.", contest.Title);
             return this.RedirectToAction("GetContestById", new { id = contestId });
@@ -640,6 +640,12 @@
                 return this.RedirectToAction("GetContestById", new { id = contestId });
             }
 
+            if (contest.OwnerId == userId)
+            {
+                this.TempData["message"] = "Moderators are not allowed to participate in their contests.";
+                return this.RedirectToAction("GetContestById", new { id = contestId });
+            }
+
             if (contest.ParticipationType == ParticipationType.Closed &&
                 !contest.Participants.Any(p => p.Id == userId))
             {
@@ -708,6 +714,20 @@
             picture.CanVote = false;
             picture.ContestId = id;
 
+            var notification = new Notification
+            {
+                ContestId = id,
+                PictureId = pictureId,
+                CreatedOn = DateTime.Now,
+                IsRead = false,
+                NotificationType = NotificationType.Vote,
+                SenderId = loggedUserId,
+                RecipientId = dbPicture.AuthorId,
+            };
+
+            this.Data.Notifications.Add(notification);
+            this.Data.SaveChanges();
+            
             return this.PartialView("_PictureInfo", picture);
         }
 
