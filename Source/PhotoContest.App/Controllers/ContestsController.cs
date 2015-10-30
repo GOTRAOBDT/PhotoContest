@@ -113,7 +113,7 @@
             }
 
             if (userId != null && dbContest.ParticipationType == ParticipationType.Open ||
-                dbContest.Participants.Any(p => p.Id == user.Id))
+                dbContest.Participants.Any(p => p.Id == userId))
             {
                 contest.CanParticipate = true;
             }
