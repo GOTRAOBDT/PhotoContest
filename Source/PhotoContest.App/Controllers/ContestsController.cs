@@ -138,7 +138,6 @@
         [HttpGet]
         public ActionResult Manage(int id)
         {
-            var dbContest = this.Data.Contests.Find(id);
             var contest = this.Data.Contests.All()
                 .Where(c => c.Id == id).ProjectTo<EditContestBindingModel>().FirstOrDefault();
 
@@ -147,7 +146,7 @@
                 throw new ArgumentException("Contest not found!");
             }
 
-            if (dbContest.OwnerId != this.User.Identity.GetUserId())
+            if (contest.OwnerId != this.User.Identity.GetUserId())
             {
                 return this.RedirectToAction("Contests", "Me");
             }

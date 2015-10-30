@@ -16,6 +16,9 @@
         }
 
         [Required]
+        public string OwnerId { get; set; }
+
+        [Required]
         [MinLength(3)]
         public string Title { get; set; }
 
@@ -28,6 +31,7 @@
 
         [Required]
         public DateTime EndDate { get; set; }
+
 
         [Required]
         public ContestStatus Status { get; set; }
