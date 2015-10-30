@@ -67,15 +67,21 @@
             </div>
         </div>
 
-       <div class="form-group">
+       <div class="form-group" id="prizes-container">
            <h4>Prizes:</h4>
-           <label class="col-md-4 control-label">Name </label>
+           <label class="col-md-4 control-label">Prize <span class="prize-number">#1. </span></label>
            <input type="text" class="form-control col-md-8" name="Prizes[0].Name" />
            
            <label class="col-md-4 control-label">Description </label>
            <input type="text" class="form-control" name="Prizes[0].Description" />
        </div>
-
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <a  onclick="addPrize()" class="btn btn-primary">Add Prize</a>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
@@ -106,6 +112,54 @@
                 }
             });
     };
+
+    function addPrize() {
+        var prizesCount = $('.prize-number').length;
+        if (prizesCount > 4) {
+            return;
+        }
+
+        var $container = $("<div>")
+            .attr('id', 'prize-container' + prizesCount);
+
+        var $span = $("<span>")
+            .attr('class', 'prize-number')
+            .text('#' + (prizesCount + 1) + '. ');
+        var $label = $("<label>")
+            .attr('class', 'col-md-4 control-label')
+            .text(' Prize ');
+        $span.appendTo($label);
+        $label.appendTo($container);
+
+        var $input = $('<input type="text">')
+            .attr({ class: 'form-control', name: "Prizes[" + prizesCount + "].Name" });
+        $input.appendTo($container);
+
+        var $descriptionLabel = $("<label>")
+            .attr('class', 'col-md-4 control-label')
+            .text('Description ');
+        var $descriptionInput = $('<input type="text">')
+            .attr({ class: 'form-control', name: "Prizes[" + prizesCount + "].Description" });
+
+        $descriptionLabel.appendTo($container);
+        $descriptionInput.appendTo($container);
+
+        var $formGroupDiv = $("<div>")
+            .attr('class', 'form-group');
+        var $labelDiv = $("<div>")
+            .attr('class', 'col-md-4');
+        var $deleteLink = $("<a>")
+            .text("Delete")
+            .attr({ class: 'col-md-8' })
+            .click(function () {
+            $('#prize-container' + prizesCount).remove();
+            });
+        
+        $labelDiv.appendTo($formGroupDiv);
+        $deleteLink.appendTo($formGroupDiv);
+        $formGroupDiv.appendTo($container);
+        $container.appendTo($('#prizes-container'));
+    }
 </script>
 
 @section Scripts {
