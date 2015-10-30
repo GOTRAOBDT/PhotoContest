@@ -346,6 +346,7 @@
     <Content Include="Views\Shared\DisplayTemplates\ParticipantsViewModel.cshtml" />
     <Content Include="Views\Contests\_ContestWinners.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\CandidatesViewModel.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Notifications\Index.cshtml" />

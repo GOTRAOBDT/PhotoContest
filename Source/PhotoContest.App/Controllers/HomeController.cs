@@ -91,5 +91,17 @@
 
             return this.View(contests);
         }
+
+        [HttpGet]
+        public ActionResult Contact()
+        {
+            return this.View();
+        }
+
+        [HttpGet]
+        public ActionResult Rules()
+        {
+            return this.View();
+        }
     }
 }
