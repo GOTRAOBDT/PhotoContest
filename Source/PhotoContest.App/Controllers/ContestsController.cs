@@ -596,7 +596,6 @@
                 throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
             }
 
-<<<<<<< HEAD
             if (contest.Pictures.Any(p => p.Id == picture.Id))
             {
                 this.TempData["message"] = "You have already added this picture to the contest.";
@@ -609,8 +608,6 @@
                 throw new InvalidOperationException("You have not applied and/or have not been approved to participate in this contest.");
             }
 
-=======
->>>>>>> origin/master
             contest.Pictures.Add(picture);
             this.Data.SaveChanges();
 

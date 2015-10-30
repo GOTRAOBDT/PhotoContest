@@ -229,11 +229,8 @@
     <Compile Include="Models\Account\LoginViewModel.cs" />
     <Compile Include="Models\Account\UserRegistrationModel.cs" />
     <Compile Include="Models\Contest\AddJuryMemberBindingModel.cs" />
-<<<<<<< HEAD
     <Compile Include="Models\Contest\ContestWinnerViewModel.cs" />
-=======
     <Compile Include="Models\Contest\CandidatesViewModel.cs" />
->>>>>>> origin/master
     <Compile Include="Models\Contest\CreateContestBindingModel.cs" />
     <Compile Include="Models\Contest\DetailsContestViewModel.cs" />
     <Compile Include="Models\Contest\EditContestBindingModel.cs" />
@@ -347,11 +344,8 @@
     <Content Include="Views\Contests\Participants.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\JuryViewModel.cshtml" />
     <Content Include="Views\Shared\DisplayTemplates\ParticipantsViewModel.cshtml" />
-<<<<<<< HEAD
     <Content Include="Views\Contests\_ContestWinners.cshtml" />
-=======
     <Content Include="Views\Shared\DisplayTemplates\CandidatesViewModel.cshtml" />
->>>>>>> origin/master
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Notifications\Index.cshtml" />
