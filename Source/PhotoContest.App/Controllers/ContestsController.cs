@@ -165,8 +165,6 @@
             }
 
             var contest = this.Data.Contests.Find(id);
-            contest.VotingType = model.VotingType;
-            contest.DeadlineType = model.DeadlineType;
             contest.Title = model.Title;
             contest.Description = model.Description;
             contest.EndDate = model.EndDate;

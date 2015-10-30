@@ -30,16 +30,7 @@
         public DateTime EndDate { get; set; }
 
         [Required]
-        public VotingType VotingType { get; set; }
-
-        [Required]
         public ContestStatus Status { get; set; }
-
-        [Required]
-        public ParticipationType ParticipationType { get; set; }
-
-        [Required]
-        public DeadlineType DeadlineType { get; set; }
 
         [Required]
         public string Thumbnail { get; set; }
