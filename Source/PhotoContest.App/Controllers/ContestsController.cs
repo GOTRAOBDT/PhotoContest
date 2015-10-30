@@ -391,7 +391,7 @@
                 .Where(c => c.Id == id)
                 .Select(c => c.Candidates)
                 .FirstOrDefault()
-                .ToPagedList(page ?? GlobalConstants.DefaultStartPage, 2);
+                .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
 
             if (contestCandidates == null)
             {

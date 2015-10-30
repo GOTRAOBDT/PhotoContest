@@ -14,7 +14,7 @@
         {
             var models = (IPagedList<User>)context.SourceValue;
             var viewModels = models.Select(p => Mapper.Map<User, BasicUserInfoViewModel>(p)).ToList();
-            return new PagedList<BasicUserInfoViewModel>(viewModels, models.PageNumber, models.PageSize);
+            return new StaticPagedList<BasicUserInfoViewModel>(viewModels, models.PageNumber, models.PageSize, models.TotalItemCount);
         }
     }
 }
