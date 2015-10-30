@@ -107,15 +107,22 @@
             var userId = this.User.Identity.GetUserId();
             var user = this.Data.Users.Find(userId);
 
-            if (dbContest.Owner == user)
+            if (userId != null && dbContest.Owner.Id == userId)
             {
                 contest.IsOwner = true;
             }
 
-            if (dbContest.ParticipationType == ParticipationType.Open ||
+            if (userId != null && dbContest.ParticipationType == ParticipationType.Open ||
                 dbContest.Participants.Any(p => p.Id == user.Id))
             {
                 contest.CanParticipate = true;
+            }
+
+            if (userId != null && dbContest.ParticipationType == ParticipationType.Closed &&
+                !dbContest.Candidates.Any(p => p.Id == userId) &&
+                !dbContest.Participants.Any(p => p.Id == userId))
+            {
+                contest.CanApply = true;
             }
 
 
@@ -328,6 +335,41 @@
             this.Data.SaveChanges();
 
             return this.Content(string.Empty);
+        }
+
+        [HttpGet]
+        public ActionResult Apply(int contestId)
+        {
+            var contest = this.Data.Contests.Find(contestId);
+            if (contest == null)
+            {
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            }
+
+            var user = this.Data.Users.Find(this.User.Identity.GetUserId());
+            if (contest.Candidates.Any(u => u.Id == user.Id))
+            {
+                this.TempData["message"] = "You have already applied to participate in the contest.";
+                return this.RedirectToAction("GetContestById", new { id = contestId });
+            }
+
+            if (contest.Participants.Any(u => u.Id == user.Id))
+            {
+                this.TempData["message"] = "You are already approved to participate in the contest.";
+                return this.RedirectToAction("GetContestById", new { id = contestId });
+            }
+
+            contest.Candidates.Add(user);
+            var notification = new Notification()
+            {
+                Recipient = contest.Owner,
+                CreatedOn = DateTime.Now,
+                Content = string.Format("Member {0} applied to participate in the contest {1}. Please, go to contest page to process his/her application.",
+                    user.UserName, contest.Title)
+            };
+            this.Data.SaveChanges();
+            this.TempData["message"] = string.Format("Successfully applied to contest {0}.", contest.Title);
+            return this.RedirectToAction("GetContestById", new { id = contestId });
         }
 
         // GET: Contests/{contestId}/Candidates
@@ -578,7 +620,6 @@
             if (contest == null)
             {
                 throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
-
             }
 
             var picture = this.Data.Pictures.Find(pictureId);
@@ -610,8 +651,6 @@
 
             return this.RedirectToAction("GetContestById", new { id = contestId});
         }
-
-
 
         // POST: Contests/{contestId}/Vote/{pictureId}
         [HttpPost]

@@ -4,9 +4,9 @@
 <div class="thumbnail">
     <img src="@Model.Thumbnail" alt="123" class="img-rounded img-responsive">
     <div class="caption">
-        @if (Model.ParticipationType == ParticipationType.Closed && !Model.IsOwner && !Model.CanParticipate)
+        @if (Model.CanApply && !Model.IsOwner)
         {
-            @Html.ActionLink("Apply", "", "", null, new { @class = "btn btn-success" })
+            @Html.ActionLink("Apply", "Apply", "Contests", new { contestId = Model.Id}, new { @class = "btn btn-success" })
         }
         @if (Model.IsOwner)
         {

@@ -31,6 +31,8 @@
 
         public bool CanParticipate { get; set; }
 
+        public bool CanApply { get; set; }
+
         public ContestStatus Status { get; set; }
 
         public VotingType VotingType { get; set; }
