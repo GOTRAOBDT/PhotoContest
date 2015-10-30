@@ -12,9 +12,13 @@
         @Html.AntiForgeryToken()
         <h1>Edit contest</h1>
         <hr/>
-        <div class="col-md-offset-1" style="margin-bottom: 3%;">
-            @Html.ActionLink("Manage Participants", "Participants", "Contests", new { @class = "btn btn-primary" })
+        <div class="col-md-offset-1" style="margin-bottom: 1%;">
+            @Html.ActionLink("Manage Participants", "Participants", "Contests", new {@class = "btn btn-primary"})
         </div>
+        <div class="col-md-offset-1" style="margin-bottom: 3%;">
+            @Html.ActionLink("Manage Candidates", "Candidates", "Contests", new {@class = "btn btn-primary"})
+        </div>
+
         @Html.LabelFor(m => m.Title, new {@class = "col-md-4 control-label"})
         <div class="col-md-8">
             @Html.TextBoxFor(m => m.Title, new {@class = "form-control"})
