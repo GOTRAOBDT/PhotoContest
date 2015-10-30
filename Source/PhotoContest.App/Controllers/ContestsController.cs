@@ -662,7 +662,15 @@
             });
 
             this.Data.SaveChanges();
-            return this.Content(string.Empty);
+
+            var dbPicture = this.Data.Pictures.Find(pictureId);
+            var picture = Mapper.Map<DetailsPictureViewModel>(dbPicture);
+
+            picture.HasVoted = true;
+            picture.CanVote = false;
+            picture.ContestId = id;
+
+            return this.PartialView("_PictureInfo", picture);
         }
 
         // POST: Contests/{contestId}/Vote/{pictureId}
@@ -702,7 +710,14 @@
             this.Data.Votes.Delete(vote);
             this.Data.SaveChanges();
 
-            return this.Content(string.Empty);
+            var dbPicture = this.Data.Pictures.Find(pictureId);
+            var picture = Mapper.Map<DetailsPictureViewModel>(dbPicture);
+
+            picture.HasVoted = false;
+            picture.CanVote = true;
+            picture.ContestId = id;
+
+            return this.PartialView("_PictureInfo", picture);
         }
 
         private IEnumerable<ContestWinnerViewModel> GetContestWinners(Contest contest)

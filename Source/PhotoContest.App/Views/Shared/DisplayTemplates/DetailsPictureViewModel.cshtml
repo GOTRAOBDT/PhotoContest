@@ -1,30 +1,34 @@
 ﻿@model PhotoContest.App.Models.Pictures.DetailsPictureViewModel
 
-<div class="col-md-6">
+<div class="col-md-6" id="picture-info-container">
     <img src="@Model.PictureData" class="img-rounded full-image" alt="Title: @Model.Title">
     <div class="caption">
         <h3>
             @Model.Title
             @if (Model.IsAuthor)
             {
-                @Html.ActionLink("Delete", "Delete", "Pictures", new { id = Model.Id }, new { @class = "btn btn-danger" })
+                @Html.ActionLink("Delete", "Delete", "Pictures", new {id = Model.Id}, new {@class = "btn btn-danger"})
             }
             @if (Model.HasVoted && !Model.IsAuthor)
             {
-                @Html.ActionLink("Unvote", "Unvote", "Contests", new { id = Model.Id, contestId = Model.ContestId }, new { @class = "btn btn-warning" })
+                using (Ajax.BeginForm("UnVote", "Contests", new {id = Model.ContestId, pictureId = Model.Id}, new AjaxOptions {HttpMethod = "POST", UpdateTargetId = "picture-info-container", InsertionMode = InsertionMode.ReplaceWith}, new {id = Model.Id}))
+                {
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger pull-right">Unvote</button>
+                }
             }
             @if (Model.CanVote)
             {
-                using (Ajax.BeginForm("Vote", "Contests", new {id = Model.ContestId, pictureId = Model.Id }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = @Model.Id.ToString(), InsertionMode = InsertionMode.ReplaceWith }, new { id = Model.Id }))
+                using (Ajax.BeginForm("Vote", "Contests", new {id = Model.ContestId, pictureId = Model.Id}, new AjaxOptions {HttpMethod = "POST", UpdateTargetId = "picture-info-container", InsertionMode = InsertionMode.ReplaceWith}, new {id = Model.Id}))
                 {
                     @Html.AntiForgeryToken()
-                    <button type="submit" class="btn btn-success">Vote</button>
+                    <button type="submit" class="btn btn-success pull-right">Vote</button>
                 }
             }
         </h3>
-        <span>Author: @Model.Author</span><br />
-        <span>Posted on: @Html.DisplayFor(m => m.PostedOn)</span><br />
-        <span>Total participations: @Model.ContestsCount</span><br />
-        <span>Total votes: @Model.VotesCount</span><br />
+        <span>Author: @Model.Author</span><br/>
+        <span>Posted on: @Html.DisplayFor(m => m.PostedOn)</span><br/>
+        <span>Total participations: @Model.ContestsCount</span><br/>
+        <span>Total votes: @Model.VotesCount</span><br/>
     </div>
 </div>
