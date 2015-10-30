@@ -12,12 +12,6 @@
         @Html.AntiForgeryToken()
         <h1>Edit contest</h1>
         <hr/>
-        if (Model.VotingType == VotingType.Closed)
-        {
-            <div class="col-md-offset-1">
-                @Html.ActionLink("Manage Jury", "Jury", "Contests", new { @class = "btn btn-primary" })
-            </div>
-        }
         <div class="col-md-offset-1" style="margin-bottom: 3%;">
             @Html.ActionLink("Manage Participants", "Participants", "Contests", new { @class = "btn btn-primary" })
         </div>
@@ -33,23 +27,6 @@
         </div>
         @Html.ValidationMessage("Description")
 
-        @Html.LabelFor(m => m.DeadlineType, new {@class = "col-md-4 control-label"})
-        <div class="col-md-8">
-            @Html.EnumDropDownListFor(m => m.DeadlineType, new {@class = "form-control"})
-        </div>
-        @Html.ValidationMessage("DeadlineType")
-
-        
-        @Html.LabelFor(m => m.VotingType, new {@class = "col-md-4 control-label"})
-        <div class="col-md-8">
-            @Html.EnumDropDownListFor(m => m.VotingType, new {@class = "form-control"})
-        </div>
-        @Html.ValidationMessage("VotingType")
-
-        @Html.LabelFor(m => m.ParticipationType, new {@class = "col-md-4 control-label"})
-        <div class="col-md-8">
-            @Html.EnumDropDownListFor(m => m.ParticipationType, new {@class = "form-control"})
-        </div>
         @Html.ValidationMessage("ParticipationType")
 
         @Html.LabelFor(m => m.StartDate, new {@class = "col-md-4 control-label"})
@@ -63,6 +40,26 @@
             <input type="date" name="EndDate" value="@Model.EndDate.ToString("yyyy-MM-dd")" class="form-control"/>
         </div>
         @Html.ValidationMessage("EndDate")
+
+        @Html.LabelFor(m => m.Status, new { @class = "col-md-4 control-label" })
+        <div class="col-md-8">
+            <input type="text" name="EndDate" value="@Model.Status" disabled="disabled" class="form-control"/>
+        </div>
+
+        @Html.LabelFor(m => m.ParticipationType, new { @class = "col-md-4 control-label" })
+        <div class="col-md-8">
+            <input type="text" name="EndDate" value="@Model.ParticipationType" disabled="disabled" class="form-control"/>
+        </div>
+
+        @Html.LabelFor(m => m.VotingType, new { @class = "col-md-4 control-label" })
+        <div class="col-md-8">
+            <input type="text" name="EndDate" value="@Model.VotingType" disabled="disabled" class="form-control" />
+        </div>
+
+        @Html.LabelFor(m => m.DeadlineType, new { @class = "col-md-4 control-label" })
+        <div class="col-md-8">
+            <input type="text" name="EndDate" value="@Model.DeadlineType" disabled="disabled" class="form-control" />
+        </div>
 
         <div class="form-group">
             @Html.LabelFor(m => m.Thumbnail, new {@class = "col-md-4 control-label"})
