@@ -34,3 +34,12 @@ textarea {
 .full-image {
     max-width: 600px;
 }
+
+.system-message {
+    text-align: center;
+    color: black;
+    text-decoration:none;
+    background-color: lightgray;
+    border-radius: 5px;
+    padding: 5px;
+}

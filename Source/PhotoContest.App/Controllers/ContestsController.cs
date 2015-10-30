@@ -119,13 +119,27 @@
                 contest.CanParticipate = true;
             }
 
-            return this.View(contest);
+
+            ICollection<ContestWinnerViewModel> contestWinners = null;
+            if (dbContest.Status == ContestStatus.Finished)
+            {
+                this.GetContestWinners(dbContest);
+            }
+
+            var fullContestModel = new FullContestViewModel()
+            {
+                ContestSummary = contest,
+                Winners = contestWinners,
+            };
+
+            return this.View(fullContestModel);
         }
 
         // GET: Contests/{contestId}/Manage
         [HttpGet]
         public ActionResult Manage(int id)
         {
+            var dbContest = this.Data.Contests.Find(id);
             var contest = this.Data.Contests.All()
                 .Where(c => c.Id == id).ProjectTo<EditContestBindingModel>().FirstOrDefault();
 
@@ -134,7 +148,7 @@
                 throw new ArgumentException("Contest not found!");
             }
 
-            if (contest.Owner.Id != this.User.Identity.GetUserId())
+            if (dbContest.OwnerId != this.User.Identity.GetUserId())
             {
                 return this.RedirectToAction("Contests", "Me");
             }
@@ -149,11 +163,6 @@
             if (model == null)
             {
                 throw new ArgumentException("Contest not found!");
-            }
-
-            if (model.Owner.Id != this.User.Identity.GetUserId())
-            {
-                return this.RedirectToAction("Contests", "Me");
             }
 
             var contest = this.Data.Contests.Find(id);
@@ -578,7 +587,8 @@
 
             if (contest.Pictures.Any(p => p.Id == picture.Id))
             {
-                throw new InvalidOperationException("You have already added this picture to the contest.");
+                this.TempData["message"] = "You have already added this picture to the contest.";
+                return this.RedirectToAction("GetContestById", new { id = contestId });
             }
 
             if (contest.ParticipationType == ParticipationType.Closed &&
@@ -674,5 +684,33 @@
 
             return this.Content(string.Empty);
         }
+
+        private IEnumerable<ContestWinnerViewModel> GetContestWinners(Contest contest)
+        {
+            List<ContestWinnerViewModel> winners = new List<ContestWinnerViewModel>();
+            int winnersCount = contest.Prizes.Count() <= contest.Pictures.Count ? 
+                contest.Prizes.Count() : contest.Pictures.Count;
+
+            var winningPictures = contest.Pictures
+                .OrderByDescending(p => p.Votes.Where(v => v.ContestId == contest.Id).Count())
+                .Take(winnersCount)
+                .ToList();
+            for (int i = 0; i < winningPictures.Count; i++)
+            {
+                var contestWinner = new ContestWinnerViewModel()
+                {
+                    PictureId = winningPictures[i].Id,
+                    ContestId = contest.Id,
+                    WinnerName = winningPictures[i].Author.Name,
+                    WinnerUsername = winningPictures[i].Author.UserName,
+                    PrizeName = contest.Prizes[i].Name,
+                    Picture = Mapper.Map<SummaryPictureViewModel>(winningPictures[i])
+                };
+                winners.Add(contestWinner);
+            }
+
+            return winners;
+        }
+
     }
 }

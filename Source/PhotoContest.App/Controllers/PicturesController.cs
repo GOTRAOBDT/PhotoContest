@@ -79,6 +79,11 @@
                 return false;
             }
 
+            if (dbContest.OwnerId == user.Id)
+            {
+                return false;
+            }
+
             if (dbPicture.Votes.Any(v => v.VoterId == user.Id))
             {
                 return false;

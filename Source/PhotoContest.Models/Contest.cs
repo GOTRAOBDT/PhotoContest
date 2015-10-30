@@ -8,7 +8,7 @@
 
     public class Contest
     {
-        private ICollection<Prize> prizes;
+        private List<Prize> prizes;
         private ICollection<Picture> pictures;
 
         private ICollection<User> invitees;
@@ -19,7 +19,7 @@
 
         public Contest()
         {
-            this.prizes = new HashSet<Prize>();
+            this.prizes = new List<Prize>();
             this.pictures = new HashSet<Picture>();
             this.participants = new HashSet<User>();
             this.invitees = new HashSet<User>();
@@ -63,7 +63,7 @@
         
         public string Thumbnail { get; set; }
 
-        public virtual ICollection<Prize> Prizes
+        public virtual List<Prize> Prizes
         {
             get
             {

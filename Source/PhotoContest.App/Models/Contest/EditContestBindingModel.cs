@@ -30,9 +30,6 @@
         public DateTime EndDate { get; set; }
 
         [Required]
-        public virtual User Owner { get; set; }
-
-        [Required]
         public VotingType VotingType { get; set; }
 
         [Required]
