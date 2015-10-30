@@ -8,5 +8,5 @@
     <td>@Html.DisplayFor(d => d.StartDate)</td>
     <td>@Html.DisplayFor(d => d.EndDate)</td>
     <td>@Model.Status</td>
-    <td><a href="@Url.Action("Details", "Contests", new { id = Model.Id} )" class="btn btn-primary">Details</a></td>
+    <td><a href="@Url.Action("GetContestById", "Contests", new { id = Model.Id} )" class="btn btn-primary">Details</a></td>
 </tr>

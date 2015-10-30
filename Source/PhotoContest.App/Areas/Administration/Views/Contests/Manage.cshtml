@@ -1,0 +1,39 @@
+﻿@model PhotoContest.App.Models.Contest.EditContestBindingModel
+@{
+    ViewBag.Title = "Manage";
+    Layout = "~/Areas/Administration/Views/Shared/_Layout.cshtml";
+}
+
+<div class="col-md-6 col-md-offset-1">
+    @Html.Partial("_EditContest", Model)
+</div>
+
+<script>
+    function getImage () {
+        $('#pictureSelector').click()
+            .on('change', function () {
+                var file = this.files[0];
+                if (file.type.match(/image\/.*/)) {
+                    var reader = new FileReader();
+                    reader.onload = function () {
+                        $('#picturePreview')
+                            .text(file.name)
+                            .attr('src', reader.result);
+                        $('#pictureContainer')
+                            .attr('value', reader.result);
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                }
+            });
+    };
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+
+
+
+

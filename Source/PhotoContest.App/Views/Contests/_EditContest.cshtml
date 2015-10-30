@@ -1,0 +1,89 @@
+﻿@using PhotoContest.Models.Enumerations
+@model PhotoContest.App.Models.Contest.EditContestBindingModel
+@using (Html.BeginForm("Manage", "Contests", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h1>Edit contest</h1>
+        <hr />
+        <div class="row">
+            @if (Model.ParticipationType == ParticipationType.Closed)
+            {
+                @Html.ActionLink("Manage Candidates", "Candidates", "Contests", new { @class = "btn btn-success" })
+            }
+            @Html.ActionLink("Manage Participants", "Participants", "Contests", new { @class = "btn btn-success" })
+            @Html.ActionLink("Pause Contest", "", "", null, new { @class = "btn btn-warning" })
+            @Html.ActionLink("Dismiss Contest", "", "", null, new { @class = "btn btn-danger" })
+        </div>
+        <br />
+        @Html.LabelFor(m => m.Title, new { @class = "col-md-4 control-label" })
+        <div class="col-md-8">
+            @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+        </div>
+        @Html.ValidationMessage("Title")
+
+        @Html.LabelFor(m => m.Description, new { @class = "col-md-4 control-label" })
+        <div class="col-md-8">
+            @Html.TextAreaFor(m => m.Description, new { @class = "form-control" })
+        </div>
+        @Html.ValidationMessage("Description")
+
+        @Html.ValidationMessage("ParticipationType")
+
+        @Html.LabelFor(m => m.StartDate, new { @class = "col-md-4 control-label" })
+        <div class="col-md-8">
+            <input type="date" name="StartDate" value="@Model.StartDate.ToString("yyyy-MM-dd")" class="form-control" />
+        </div>
+        @Html.ValidationMessage("StartDate")
+
+        @Html.LabelFor(m => m.EndDate, new { @class = "col-md-4 control-label" })
+        <div class="col-md-8">
+            <input type="date" name="EndDate" value="@Model.EndDate.ToString("yyyy-MM-dd")" class="form-control" />
+        </div>
+        @Html.ValidationMessage("EndDate")
+
+        @Html.LabelFor(m => m.Status, new { @class = "col-md-4 control-label" })
+        <div class="col-md-8">
+            <input type="text" name="EndDate" value="@Model.Status" disabled="disabled" class="form-control" />
+        </div>
+
+        @Html.LabelFor(m => m.ParticipationType, new { @class = "col-md-4 control-label" })
+        <div class="col-md-8">
+            <input type="text" name="EndDate" value="@Model.ParticipationType" disabled="disabled" class="form-control" />
+        </div>
+
+        @Html.LabelFor(m => m.VotingType, new { @class = "col-md-4 control-label" })
+        <div class="col-md-8">
+            <input type="text" name="EndDate" value="@Model.VotingType" disabled="disabled" class="form-control" />
+        </div>
+
+        @Html.LabelFor(m => m.DeadlineType, new { @class = "col-md-4 control-label" })
+        <div class="col-md-8">
+            <input type="text" name="EndDate" value="@Model.DeadlineType" disabled="disabled" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.Thumbnail, new { @class = "col-md-4 control-label" })
+            <div class="col-md-8">
+                <img class="img-thumbnail profile-picture-preview" id="picturePreview" alt="Select picture." src="@Model.Thumbnail"><br />
+                @Html.ValidationMessage("Thumbnail")
+                <br />
+                <p class="label label-info">Allowed format: .jpg, Limit: 1mb</p>
+                <br /><br />
+                @Html.HiddenFor(m => m.Thumbnail, new { style = "display:none", id = "pictureContainer" })
+                <input type="file" id="pictureSelector" style="display: none;" />
+                <button class="btn btn-default" onclick="getImage(); return false;">Choose</button>
+
+            </div>
+        </div>
+
+        <h4>Prizes:</h4>
+        @Html.EditorFor(m => m.Prizes)
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" class="btn btn-default" value="Save Changes" />
+                    @Html.ActionLink("Cancel", "GetContestById", "Contests", null, new { @class = "btn btn-primary" })
+                </div>
+            </div>
+        </div>
+}

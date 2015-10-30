@@ -276,7 +276,8 @@
     <Content Include="Areas\Administration\Views\Manage\Contests.cshtml" />
     <Content Include="Areas\Administration\Views\Shared\DisplayTemplates\SummaryContestViewModel.cshtml" />
     <Content Include="Areas\Administration\Views\Manage\Users.cshtml" />
-    <Content Include="Areas\Administration\Views\Contests\Details.cshtml" />
+    <Content Include="Areas\Administration\Views\Contests\GetContestById.cshtml" />
+    <Content Include="Areas\Administration\Views\Contests\Manage.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
@@ -358,6 +359,7 @@
     <Content Include="Views\Shared\DisplayTemplates\CandidatesViewModel.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Contests\_PictureInfo.cshtml" />
+    <Content Include="Views\Contests\_EditContest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Notifications\Index.cshtml" />

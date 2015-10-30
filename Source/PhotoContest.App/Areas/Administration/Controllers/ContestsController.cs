@@ -14,9 +14,14 @@ namespace PhotoContest.App.Areas.Administration.Controllers
         }
 
         // GET: Administration/Contests/{id}/Details
-        public ActionResult Details(int id)
+        public new ActionResult GetContestById(int id)
         {
-            return this.GetContestById(id);
+            return base.GetContestById(id);
+        }
+
+        public new ActionResult Manage(int id)
+        {
+            return base.Manage(id);
         }
     }
 }

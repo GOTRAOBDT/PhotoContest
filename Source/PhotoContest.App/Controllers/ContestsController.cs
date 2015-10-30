@@ -153,7 +153,7 @@
                 throw new ArgumentException("Contest not found!");
             }
 
-            if (contest.OwnerId != this.User.Identity.GetUserId())
+            if (contest.OwnerId != this.User.Identity.GetUserId() && !this.User.IsInRole("Administrator"))
             {
                 return this.RedirectToAction("Contests", "Me");
             }
