@@ -796,6 +796,93 @@
             return this.View(prizes);
         }
 
+        [HttpGet]
+        public ActionResult Pause(int contestId)
+        {
+            var contest = this.Data.Contests.Find(contestId);
+            if (contest == null)
+            {
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            }
+
+            if (contest.OwnerId != this.User.Identity.GetUserId() && !this.User.IsInRole("Administrator"))
+            {
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            }
+
+            if (contest.Status != ContestStatus.Active)
+            {
+                this.TempData["message"] = "Contest cannot be paused.";
+                return this.RedirectToAction("GetContestById", new { id = contestId });
+            }
+
+            contest.Status = ContestStatus.Inactive;
+            this.Data.SaveChanges();
+
+            this.TempData["message"] = "Contest was paused.";
+            return this.RedirectToAction("GetContestById", new { id= contestId });
+        }
+
+        [HttpGet]
+        public ActionResult Restart(int contestId)
+        {
+            var contest = this.Data.Contests.Find(contestId);
+            if (contest == null)
+            {
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            }
+
+            if (contest.OwnerId != this.User.Identity.GetUserId() && !this.User.IsInRole("Administrator"))
+            {
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            }
+
+            if (contest.Status != ContestStatus.Inactive)
+            {
+                this.TempData["message"] = "Contest cannot be restarted.";
+                return this.RedirectToAction("GetContestById", new { id = contestId });
+            }
+
+            if (contest.Status == ContestStatus.Inactive && contest.StartDate > DateTime.Now)
+            {
+                this.TempData["message"] = "Contest will start on its designated Start Date.";
+                return this.RedirectToAction("GetContestById", new { id = contestId });
+            }
+
+            contest.Status = ContestStatus.Active;
+            this.Data.SaveChanges();
+
+            this.TempData["message"] = "Contest was restarted.";
+            return this.RedirectToAction("GetContestById", new { id = contestId });
+        }
+
+        [HttpGet]
+        public ActionResult Dismiss(int contestId)
+        {
+            var contest = this.Data.Contests.Find(contestId);
+            if (contest == null)
+            {
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            }
+
+            if (contest.OwnerId != this.User.Identity.GetUserId() && !this.User.IsInRole("Administrator"))
+            {
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            }
+
+            if (contest.Status == ContestStatus.Dismissed)
+            {
+                this.TempData["message"] = "Contest is already dismissed.";
+                return this.RedirectToAction("GetContestById", new { id = contestId });
+            }
+
+            contest.Status = ContestStatus.Dismissed;
+            this.Data.SaveChanges();
+
+            this.TempData["message"] = "Contest was dismissed.";
+            return this.RedirectToAction("GetContestById", new { id = contestId });
+        }
+
         private IEnumerable<ContestWinnerViewModel> GetContestWinners(Contest contest)
         {
             List<ContestWinnerViewModel> winners = new List<ContestWinnerViewModel>();

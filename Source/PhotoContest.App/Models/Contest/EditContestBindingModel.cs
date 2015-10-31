@@ -15,6 +15,8 @@
             this.Prizes = new HashSet<PrizeViewModel>();
         }
 
+        public int Id { get; set; }
+
         [Required]
         public string OwnerId { get; set; }
 

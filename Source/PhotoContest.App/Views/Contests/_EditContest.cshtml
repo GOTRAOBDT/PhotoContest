@@ -4,15 +4,22 @@
 {
     @Html.AntiForgeryToken()
     <h1>Edit contest</h1>
-        <hr />
+    <hr />
         <div class="row">
             @if (Model.ParticipationType == ParticipationType.Closed)
             {
                 @Html.ActionLink("Manage Candidates", "Candidates", "Contests", new { @class = "btn btn-success" })
             }
             @Html.ActionLink("Manage Participants", "Participants", "Contests", new { @class = "btn btn-success" })
-            @Html.ActionLink("Pause Contest", "", "", null, new { @class = "btn btn-warning" })
-            @Html.ActionLink("Dismiss Contest", "", "", null, new { @class = "btn btn-danger" })
+            @if(Model.Status == ContestStatus.Active)
+            {
+                @Html.ActionLink("Pause Contest", "Pause", "Contests", new { contestId = Model.Id }, new { @class = "btn btn-warning" })
+            }
+            @if (Model.Status == ContestStatus.Inactive)
+            {
+                @Html.ActionLink("Restart Contest", "Restart", "Contests", new { contestId = Model.Id}, new { @class = "btn btn-warning" })
+            }
+            @Html.ActionLink("Dismiss Contest", "Dismiss", "Contests", new { contestId = Model.Id }, new { @class = "btn btn-danger" })
         </div>
         <br />
         @Html.LabelFor(m => m.Title, new { @class = "col-md-4 control-label" })
@@ -72,7 +79,6 @@
                 @Html.HiddenFor(m => m.Thumbnail, new { style = "display:none", id = "pictureContainer" })
                 <input type="file" id="pictureSelector" style="display: none;" />
                 <button class="btn btn-default" onclick="getImage(); return false;">Choose</button>
-
             </div>
         </div>
 
