@@ -613,7 +613,7 @@
         }
 
         [HttpGet]
-        public ActionResult Pictures(int id, int? page)
+        public virtual ActionResult Pictures(int id, int? page)
         {
             IPagedList<SummaryPictureViewModel> pictures = null;
             var contest = this.Data.Contests.Find(id);
@@ -636,7 +636,7 @@
 
             this.ViewData["ContestTitle"] = contest.Title;
 
-            return View(pictures);
+            return this.View(pictures);
         }
 
         [HttpGet]

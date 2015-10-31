@@ -56,5 +56,12 @@
         {
             return base.Jury(id);
         }
+
+        // GET: Administration/Contests/{id}/Participants
+        [HttpGet]
+        public override ActionResult Pictures(int id, int? page)
+        {
+            return base.Pictures(id, page);
+        }
     }
 }

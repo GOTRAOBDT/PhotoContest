@@ -24,7 +24,7 @@
 
         // GET: Pictures/{pictureId}
         // Returned model type: DetailsPictureViewModel
-        public ActionResult Index(int id, int? contestId)
+        public virtual ActionResult Index(int id, int? contestId)
         {
             var dbPicture = this.Data.Pictures.Find(id);
             var picture = Mapper.Map<DetailsPictureViewModel>(dbPicture);
@@ -98,7 +98,7 @@
             return true;
         }
 
-        [System.Web.Mvc.HttpGet]
+        [HttpGet]
         public ActionResult Delete(int id)
         {
             var picture = this.Data.Pictures.Find(id);
@@ -110,7 +110,7 @@
 
             var user = this.Data.Users.Find(this.User.Identity.GetUserId());
 
-            if (picture.Author.Id != user.Id)
+            if (picture.Author.Id != user.Id && !this.User.IsInRole("Administrator"))
             {
                 throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
             }
@@ -130,7 +130,7 @@
             this.Data.Pictures.Delete(picture);
             this.Data.SaveChanges();
 
-            return RedirectToAction("Pictures", "Me");
+            return this.RedirectToAction("Pictures", "Me");
         }
     }
 }

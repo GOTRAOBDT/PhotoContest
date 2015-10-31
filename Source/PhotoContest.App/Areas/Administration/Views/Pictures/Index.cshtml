@@ -1,0 +1,28 @@
+﻿@model PhotoContest.App.Models.Pictures.DetailsPictureViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Administration/Views/Shared/_Layout.cshtml";
+}
+
+<div class="col-md-7 col-md-offset-1">
+    <h1>
+        Title:
+        @if (Model.Title == null)
+        {
+            <span>(not available)</span>
+        }
+        else
+        {
+            <span>@Model.Title</span>
+        }
+    </h1>
+    <div class="row">
+        @Html.DisplayForModel()
+    </div>
+</div>
+
+@section scripts
+{
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+}
+

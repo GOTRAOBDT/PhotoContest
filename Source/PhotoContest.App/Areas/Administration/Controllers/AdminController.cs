@@ -5,17 +5,14 @@
     using System.Web.Mvc;
 
     using App.Controllers;
-
+    using App.Models.Contest;
     using AutoMapper.QueryableExtensions;
 
     using Common;
     using Data.Contracts;
 
+    using Models;
     using PagedList;
-
-    using PhotoContest.App.Areas.Administration.Models;
-    using PhotoContest.App.Models.Account;
-    using PhotoContest.App.Models.Contest;
 
     [Authorize(Roles = ("Administrator"))]
     public class AdminController : BaseController
@@ -25,7 +22,6 @@
         public AdminController(IPhotoContestData data)
             : base(data)
         {
-            
         }
 
         // GET: Administration/Manage
