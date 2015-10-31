@@ -208,7 +208,7 @@
         // GET: Contests/{contestId}/Jury
         // Returned model type: BasicUserInfoViewModel
         [HttpGet]
-        public ActionResult Jury(int id)
+        public virtual ActionResult Jury(int id)
         {
             var contest = this.Data.Contests.All()
                 .FirstOrDefault(c => c.Id == id);
@@ -332,7 +332,7 @@
                 throw new ArgumentException("Contest not found!");
             }
 
-            if (this.User.Identity.GetUserId() != contest.OwnerId)
+            if (this.User.Identity.GetUserId() != contest.OwnerId && !this.User.IsInRole("Administrator"))
             {
                 throw new HttpRequestException("Not authorized!");
             }

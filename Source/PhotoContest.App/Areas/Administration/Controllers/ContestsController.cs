@@ -1,5 +1,4 @@
-﻿
-namespace PhotoContest.App.Areas.Administration.Controllers
+﻿namespace PhotoContest.App.Areas.Administration.Controllers
 {
     using System.Web.Mvc;
     
@@ -49,6 +48,13 @@ namespace PhotoContest.App.Areas.Administration.Controllers
         public override ActionResult Participants(int id, int? page)
         {
             return base.Participants(id, page);
+        }
+
+        // GET: Administration/Contests/{id}/Participants
+        [HttpGet]
+        public override ActionResult Jury(int id)
+        {
+            return base.Jury(id);
         }
     }
 }

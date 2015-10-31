@@ -281,6 +281,7 @@
     <Content Include="Areas\Administration\Views\Contests\Manage.cshtml" />
     <Content Include="Areas\Administration\Views\Contests\Candidates.cshtml" />
     <Content Include="Areas\Administration\Views\Contests\Participants.cshtml" />
+    <Content Include="Areas\Administration\Views\Contests\Jury.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
