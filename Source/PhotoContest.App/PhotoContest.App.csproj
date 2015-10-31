@@ -211,8 +211,10 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\Administration\AdministrationAreaRegistration.cs" />
-    <Compile Include="Areas\Administration\Controllers\ContestsController.cs" />
     <Compile Include="Areas\Administration\Controllers\ManageController.cs" />
+    <Compile Include="Areas\Administration\Controllers\ContestsController.cs" />
+    <Compile Include="Areas\Administration\Controllers\AdminController.cs" />
+    <Compile Include="Areas\Administration\Models\UserViewModel.cs" />
     <Compile Include="CommonFunctions\PagedListConverter.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -273,15 +275,16 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Areas\Administration\Views\web.config" />
     <Content Include="Areas\Administration\Views\Shared\_Layout.cshtml" />
-    <Content Include="Areas\Administration\Views\Manage\Index.cshtml" />
-    <Content Include="Areas\Administration\Views\Manage\Contests.cshtml" />
+    <Content Include="Areas\Administration\Views\Admin\Index.cshtml" />
+    <Content Include="Areas\Administration\Views\Admin\Contests.cshtml" />
     <Content Include="Areas\Administration\Views\Shared\DisplayTemplates\SummaryContestViewModel.cshtml" />
-    <Content Include="Areas\Administration\Views\Manage\Users.cshtml" />
+    <Content Include="Areas\Administration\Views\Admin\Users.cshtml" />
     <Content Include="Areas\Administration\Views\Contests\GetContestById.cshtml" />
     <Content Include="Areas\Administration\Views\Contests\Manage.cshtml" />
     <Content Include="Areas\Administration\Views\Contests\Candidates.cshtml" />
     <Content Include="Areas\Administration\Views\Contests\Participants.cshtml" />
     <Content Include="Areas\Administration\Views\Contests\Jury.cshtml" />
+    <Content Include="Areas\Administration\Views\Shared\DisplayTemplates\UserViewModel.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
@@ -371,7 +374,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Administration\Models\" />
+    <Folder Include="Areas\Administration\Views\Manage\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

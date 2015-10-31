@@ -1,0 +1,20 @@
+﻿@using PhotoContest.App.Areas.Administration.Models
+@model UserViewModel
+
+<tr>
+    <td>@Model.UserName</td>
+    <td>@Model.Name</td>
+    <td>
+        @if (Model.BirthDate == null)
+        {
+            @:(no birthdate)
+        }
+        else
+        {
+            @Html.DisplayFor(m => m.BirthDate)
+        }
+    </td>
+    <td>@Model.Gender</td>
+    <td>@Model.Email</td>
+    <td><a href="@Url.Action("GetUserById", "Users", new { id = Model.UserName })" class="btn btn-primary">Details</a></td>
+</tr>

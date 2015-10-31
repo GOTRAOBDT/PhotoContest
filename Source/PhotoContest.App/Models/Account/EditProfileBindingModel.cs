@@ -2,13 +2,12 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
-    using System.Web;
+
+    using Bookmarks.Common.Mappings;
 
     using PhotoContest.Models;
     using PhotoContest.Models.Enumerations;
-    using Bookmarks.Common.Mappings;
     
-
     public class EditProfileBindingModel : IMapFrom<User>, IHaveCustomMappings
     {
         [Required]
@@ -27,7 +26,7 @@
         [EnumDataType(typeof(UserGender), ErrorMessage = "Invalid Gender value.")]
         public UserGender Gender { get; set; }
 
-        [Display(Name ="Picture")]
+        [Display(Name = "Picture")]
         [StringLength(174762, ErrorMessage = "The picture exceeds the allowed limit of 128kb.", MinimumLength = 3)]
         public string ProfilePicture { get; set; }
 

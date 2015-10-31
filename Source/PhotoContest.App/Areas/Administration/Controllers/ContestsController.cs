@@ -4,7 +4,7 @@
     
     using Data.Contracts;
 
-    using Models.Contest;
+    using PhotoContest.App.Models.Contest;
 
     [Authorize(Roles = ("Administrator"))]
     public class ContestsController : App.Controllers.ContestsController
