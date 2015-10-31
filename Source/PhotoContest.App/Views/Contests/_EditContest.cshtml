@@ -5,22 +5,29 @@
     @Html.AntiForgeryToken()
     <h1>Edit contest</h1>
     <hr />
-        <div class="row">
-            @if (Model.ParticipationType == ParticipationType.Closed)
-            {
-                @Html.ActionLink("Manage Candidates", "Candidates", "Contests", new { @class = "btn btn-success" })
-            }
-            @Html.ActionLink("Manage Participants", "Participants", "Contests", new { @class = "btn btn-success" })
-            @if(Model.Status == ContestStatus.Active)
-            {
-                @Html.ActionLink("Pause Contest", "Pause", "Contests", new { contestId = Model.Id }, new { @class = "btn btn-warning" })
-            }
-            @if (Model.Status == ContestStatus.Inactive)
-            {
-                @Html.ActionLink("Restart Contest", "Restart", "Contests", new { contestId = Model.Id}, new { @class = "btn btn-warning" })
-            }
-            @Html.ActionLink("Dismiss Contest", "Dismiss", "Contests", new { contestId = Model.Id }, new { @class = "btn btn-danger" })
-        </div>
+    <div class="row">
+        @if (Model.ParticipationType == ParticipationType.Closed)
+        {
+            @Html.ActionLink("Manage Candidates", "Candidates", "Contests", new { @class = "btn btn-success" })
+        }
+        @Html.ActionLink("Manage Participants", "Participants", "Contests", new { @class = "btn btn-success" })
+        @if (Model.VotingType == VotingType.Closed)
+        {
+            @Html.ActionLink("Manage Jury", "Jury", "Contests", new { @class = "btn btn-success" })
+        }
+    </div>
+    <br/>
+    <div class="row">
+        @if (Model.Status == ContestStatus.Active)
+        {
+            @Html.ActionLink("Pause Contest", "Pause", "Contests", new { contestId = Model.Id }, new { @class = "btn btn-warning" })
+        }
+        @if (Model.Status == ContestStatus.Inactive)
+        {
+            @Html.ActionLink("Restart Contest", "Restart", "Contests", new { contestId = Model.Id }, new { @class = "btn btn-warning" })
+        }
+        @Html.ActionLink("Dismiss Contest", "Dismiss", "Contests", new { contestId = Model.Id }, new { @class = "btn btn-danger" })
+    </div>
         <br />
         @Html.LabelFor(m => m.Title, new { @class = "col-md-4 control-label" })
         <div class="col-md-8">

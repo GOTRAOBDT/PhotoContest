@@ -126,11 +126,11 @@
 
         // POST: Me/Profile
         [System.Web.Mvc.HttpPost]
-        public ActionResult Profile(EditProfileBindingModel model)
+        public virtual ActionResult Profile(EditProfileBindingModel model)
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                return RedirectToAction("Index");
+                return this.View(model);
             }
 
             var userId = User.Identity.GetUserId();
@@ -138,7 +138,7 @@
 
             if (user == null)
             {
-                RedirectToAction("Index", "Home");
+                this.RedirectToAction("Index", "Home");
             }
 
             user.Name = model.Name;

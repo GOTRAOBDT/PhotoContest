@@ -99,7 +99,7 @@
         // Returned model type: DetailsContestViewModel
         [HttpGet]
         [AllowAnonymous]
-        public ActionResult GetContestById(int id)
+        public virtual ActionResult GetContestById(int id)
         {
             var dbContest = this.Data.Contests.Find(id);
             var contest = Mapper.Map<DetailsContestViewModel>(dbContest);
@@ -161,7 +161,7 @@
 
         // GET: Contests/{contestId}/Manage
         [HttpGet]
-        public ActionResult Manage(int id)
+        public virtual ActionResult Manage(int id)
         {
             var contest = this.Data.Contests.All()
                 .Where(c => c.Id == id).ProjectTo<EditContestBindingModel>().FirstOrDefault();
@@ -182,7 +182,7 @@
         // POST: Contests/{contestId}/Manage
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Manage(int id, EditContestBindingModel model)
+        public virtual ActionResult Manage(int id, EditContestBindingModel model)
         {
             if (model == null)
             {
@@ -202,13 +202,13 @@
                 contest.Prizes.ElementAt(i).Description = model.Prizes.ElementAt(i).Description;
             }
             this.Data.SaveChanges();
-            return this.RedirectToAction("contests", "Me");
+            return this.RedirectToAction("GetContestById", "Contests", new { id = id });
         }
 
         // GET: Contests/{contestId}/Jury
         // Returned model type: BasicUserInfoViewModel
         [HttpGet]
-        public ActionResult Jury(int id)
+        public virtual ActionResult Jury(int id)
         {
             var contest = this.Data.Contests.All()
                 .FirstOrDefault(c => c.Id == id);
@@ -332,7 +332,7 @@
                 throw new ArgumentException("Contest not found!");
             }
 
-            if (this.User.Identity.GetUserId() != contest.OwnerId)
+            if (this.User.Identity.GetUserId() != contest.OwnerId && !this.User.IsInRole("Administrator"))
             {
                 throw new HttpRequestException("Not authorized!");
             }
@@ -394,14 +394,14 @@
         // GET: Contests/{contestId}/Candidates
         // Returned model type: BasicUserInfoViewModel
         [HttpGet]
-        public ActionResult Candidates(int id, int? page)
+        public virtual ActionResult Candidates(int id, int? page)
         {
             var contestOwnerId = this.Data.Contests.All()
                 .Where(c => c.Id == id)
                 .Select(c => c.OwnerId)
                 .FirstOrDefault();
 
-            if (this.User.Identity.GetUserId() != contestOwnerId)
+            if (this.User.Identity.GetUserId() != contestOwnerId && !this.User.IsInRole("Administrator"))
             {
                 throw new HttpRequestException("Not authorized!");
             }
@@ -453,7 +453,7 @@
                 throw new ArgumentException("Contest not exists!");
             }
 
-            if (contest.OwnerId != loggedUserId)
+            if (contest.OwnerId != loggedUserId && !this.User.IsInRole("Administrator"))
             {
                 throw new HttpRequestException("Not authorized!");
             }
@@ -490,7 +490,7 @@
                 throw new ArgumentException("Contest not exists!");
             }
 
-            if (contest.OwnerId != loggedUserId)
+            if (contest.OwnerId != loggedUserId && !this.User.IsInRole("Administrator"))
             {
                 throw new HttpRequestException("Not authorized!");
             }
@@ -503,7 +503,7 @@
 
         // GET: Contests/{contestId}/Participants
         [HttpGet]
-        public ActionResult Participants(int id, int? page)
+        public virtual ActionResult Participants(int id, int? page)
         {
             var loggedUserId = this.User.Identity.GetUserId();
             var contestOwnerId = this.Data.Contests.All()
@@ -529,7 +529,7 @@
                 Participants = pagedParticipants
             };
 
-            if (loggedUserId == contestOwnerId)
+            if (loggedUserId == contestOwnerId || this.User.IsInRole("Administrator"))
             {
                 participantsViewModel.IsContestOwner = true;
             }
@@ -549,6 +549,17 @@
             if (!this.Request.IsAjaxRequest())
             {
                 throw new InvalidOperationException("Invalid operation!");
+            }
+
+            var loggedUserId = this.User.Identity.GetUserId();
+            var contestOwnerId = this.Data.Contests.All()
+                .Where(c => c.Id == id)
+                .Select(c => c.OwnerId)
+                .FirstOrDefault();
+
+            if (contestOwnerId != loggedUserId && !this.User.IsInRole("Administrator"))
+            {
+                throw new HttpRequestException("Not authorized!");
             }
 
             var user = this.Data.Users.All().FirstOrDefault(u => u.UserName == username);

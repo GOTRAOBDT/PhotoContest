@@ -10,17 +10,19 @@
 
     using Common;
     using Data.Contracts;
-    
-    using Models.Contest;
 
     using PagedList;
 
+    using PhotoContest.App.Areas.Administration.Models;
+    using PhotoContest.App.Models.Account;
+    using PhotoContest.App.Models.Contest;
+
     [Authorize(Roles = ("Administrator"))]
-    public class ManageController : BaseController
+    public class AdminController : BaseController
     {
         private const int DefaultPageSize = 7;
 
-        public ManageController(IPhotoContestData data)
+        public AdminController(IPhotoContestData data)
             : base(data)
         {
             
@@ -33,10 +35,15 @@
         }
 
         // GET: Administration/Manage/Users
-        public ActionResult Users()
+        public ActionResult Users(int? page)
         {
+            var usersViewModel = this.Data.Users.All()
+                .OrderBy(u => u.UserName)
+                .ProjectTo<UserViewModel>()
+                .ToPagedList(page ?? GlobalConstants.DefaultStartPage, DefaultPageSize);
+
             this.ViewBag.Manage = "Users";
-            return this.View();
+            return this.View(usersViewModel);
         }
 
         // GET: Administration/Manage/Contests

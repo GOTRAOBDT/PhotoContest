@@ -1,0 +1,30 @@
+﻿@model PhotoContest.App.Models.Account.EditProfileBindingModel
+@{
+    ViewBag.Title = "Edit Profile";
+    Layout = "~/Areas/Administration/Views/Shared/_Layout.cshtml";
+}
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+<div class="col-md-7">
+    <div class="row">
+        <h3>Edit your profile info.</h3>
+        <hr />
+        <div>
+            @using (Html.BeginForm("Profile", "Users", FormMethod.Post, new { @class = "form-vertical", role = "form" }))
+            {
+                @Html.EditorForModel()
+                ;
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" class="btn btn-default" value="Save Changes" />
+                        @Html.ActionLink("Cancel", "Users", "Admin", null, new { @class = "btn btn-primary" })
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
