@@ -109,6 +109,13 @@
                 return this.HttpNotFound();
             }
 
+            if ((contest.Status == ContestStatus.Active || contest.Status == ContestStatus.Inactive) &&
+                contest.EndDate.AddDays(1.0) < DateTime.Now)
+            {
+                contest.Status = ContestStatus.Finished;
+                this.Data.SaveChanges();
+            }
+
             var userId = this.User.Identity.GetUserId();
             var user = this.Data.Users.Find(userId);
 
