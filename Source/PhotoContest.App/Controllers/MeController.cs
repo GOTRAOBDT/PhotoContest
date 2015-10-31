@@ -128,6 +128,12 @@
         [System.Web.Mvc.HttpPost]
         public virtual ActionResult Profile(EditProfileBindingModel model)
         {
+            if (this.User.IsInRole("Administrator"))
+            {
+                this.TempData["message"] = "Admin profile can not be edited!";
+                return this.RedirectToAction("Index", "Home");
+            }
+
             if (!this.ModelState.IsValid)
             {
                 return this.View(model);
