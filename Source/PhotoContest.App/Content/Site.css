@@ -28,17 +28,22 @@ textarea {
 }
 
 .contest-list:hover {
-    text-decoration: none
+    text-decoration: none;
 }
 
 .full-image {
     max-width: 600px;
 }
 
+.gallery-image {
+    max-width: 900px !important;
+    max-height: 500px !important;
+}
+
 .system-message {
     text-align: center;
     color: black;
-    text-decoration:none;
+    text-decoration: none;
     background-color: lightgray;
     border-radius: 5px;
     padding: 5px;
@@ -46,4 +51,9 @@ textarea {
 
 #admin-link {
     color: #CD3333;
+}
+
+.centerBlock {
+    display: table;
+    margin: 0 auto;
 }

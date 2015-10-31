@@ -17,7 +17,7 @@
             @Html.ActionLink("Add Picture", "SelectPictures", "Contests", new { id = Model.Id }, new { @class = "btn btn-info" })
         }
         @Html.ActionLink("Browse Pictures", "Pictures", "Contests", new { id = Model.Id }, new { @class = "btn btn-danger" })
-        @Html.ActionLink("View Gallery", "", "", new { id = Model.Id }, new { @class = "btn btn-primary" })
+        @Html.ActionLink("View Gallery", "Gallery", "Contests", new { id = Model.Id }, new { @class = "btn btn-primary" })
         <h2>@Model.Title</h2>
         <span>@Model.Description</span><br />
         <div class="row">

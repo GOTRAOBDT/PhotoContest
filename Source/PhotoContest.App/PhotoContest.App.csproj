@@ -362,6 +362,9 @@
     <Content Include="Views\Contests\_PictureInfo.cshtml" />
     <Content Include="Views\Contests\_EditContest.cshtml" />
     <Content Include="Views\Contests\Prizes.cshtml" />
+    <Content Include="Views\Contests\Gallery.cshtml" />
+    <Content Include="Views\Shared\_LayoutGallery.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\_GalleryPictureViewModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Notifications\Index.cshtml" />
