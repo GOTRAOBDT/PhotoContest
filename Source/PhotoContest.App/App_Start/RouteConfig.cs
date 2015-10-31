@@ -25,7 +25,7 @@
 
             routes.MapRoute(
                 "Users",
-                "{controller}/{username}",
+                "Users/{username}",
                 new { controller = "Users", action = "Index" },
                 null,
                 namespaces: new[] { "PhotoContest.App.Controllers" });
