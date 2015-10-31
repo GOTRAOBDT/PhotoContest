@@ -655,6 +655,10 @@
             }
 
             contest.Pictures.Add(picture);
+            if (!contest.Participants.Any(p => p.Id == userId))
+            {
+                contest.Participants.Add(this.Data.Users.Find(userId));
+            }
             this.Data.SaveChanges();
 
             return this.RedirectToAction("GetContestById", new { id = contestId});
