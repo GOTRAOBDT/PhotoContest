@@ -33,6 +33,8 @@
         
         public string DeadlineType { get; set; }
 
+        public int? ParticipationLimit { get; set; }
+
         public int PicturesCount { get; set; }
 
         public int ParticipantsCount { get; set; }

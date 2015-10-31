@@ -44,6 +44,10 @@ namespace PhotoContest.App.Models.Contest
         [Display(Name = "Deadline Type")]
         public DeadlineType DeadlineType { get; set; }
 
+        [Range(1, 1000000)]
+        [Display(Name = "Participation Limit")]
+        public int? ParticipationLimit { get; set; }
+
         [Required]
         [Display(Name = "Contest Picture")]
         [StringLength(1398102, ErrorMessage = "The picture exceeds the allowed limit of 1mb.", MinimumLength = 3)]

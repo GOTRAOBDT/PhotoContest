@@ -60,7 +60,9 @@
 
         [Required]
         public DeadlineType DeadlineType { get; set; }
-        
+
+        public int? ParticipationLimit { get; set; }
+
         public string Thumbnail { get; set; }
 
         public virtual List<Prize> Prizes

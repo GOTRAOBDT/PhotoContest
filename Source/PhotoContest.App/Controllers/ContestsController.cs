@@ -64,6 +64,11 @@
                 Status = model.StartDate < DateTime.Now ? ContestStatus.Active : ContestStatus.Inactive,
             };
 
+            if (contest.DeadlineType == DeadlineType.ParticipationLimit)
+            {
+                contest.ParticipationLimit = model.ParticipationLimit;
+            }
+
             this.Data.Contests.Add(contest);
             this.Data.SaveChanges();
 
@@ -660,6 +665,7 @@
                 contest.Participants.Add(this.Data.Users.Find(userId));
             }
             this.Data.SaveChanges();
+            this.CheckContestEndingCondition(contest);
 
             return this.RedirectToAction("GetContestById", new { id = contestId});
         }
@@ -914,5 +920,18 @@
             return winners;
         }
 
+        private void CheckContestEndingCondition(Contest contest)
+        {
+            if (contest.DeadlineType != DeadlineType.EndDate)
+            {
+                return;
+            }
+
+            if (contest.Pictures.Count == contest.ParticipationLimit)
+            {
+                contest.Status = ContestStatus.Finished;
+                this.Data.SaveChanges();
+            }
+        }
     }
 }

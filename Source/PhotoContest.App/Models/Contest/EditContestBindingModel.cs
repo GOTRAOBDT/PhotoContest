@@ -49,6 +49,10 @@
         [Display(Name = "Deadline Type")]
         public DeadlineType DeadlineType { get; set; }
 
+        [Range(1, 1000000)]
+        [Display(Name ="Participation Limit")]
+        public int? ParticipationLimit { get; set; }
+
         [Required]
         public string Thumbnail { get; set; }
         
@@ -56,7 +60,6 @@
 
         public void CreateMappings(IConfiguration configuration)
         {
-            
         }
     }
 }

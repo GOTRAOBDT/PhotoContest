@@ -34,8 +34,6 @@
         </div>
         @Html.ValidationMessage("Description")
 
-        @Html.ValidationMessage("ParticipationType")
-
         @Html.LabelFor(m => m.StartDate, new { @class = "col-md-4 control-label" })
         <div class="col-md-8">
             <input type="date" name="StartDate" value="@Model.StartDate.ToString("yyyy-MM-dd")" class="form-control" />
@@ -67,6 +65,12 @@
         <div class="col-md-8">
             <input type="text" name="EndDate" value="@Model.DeadlineType" disabled="disabled" class="form-control" />
         </div>
+
+        @Html.LabelFor(m => m.ParticipationLimit, new { @class = "col-md-4 control-label" })
+        <div class="col-md-8">
+            <input type="number" name="ParticipationLimit" value="@Model.ParticipationLimit" class="form-control" />
+        </div>
+        @Html.ValidationMessage("ParticipationLimit")
 
         <div class="form-group">
             @Html.LabelFor(m => m.Thumbnail, new { @class = "col-md-4 control-label" })

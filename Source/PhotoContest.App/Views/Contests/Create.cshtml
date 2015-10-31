@@ -32,7 +32,13 @@
             <div class="col-md-8">
                 @Html.EnumDropDownListFor(m => m.VotingType, new { @class = "form-control" })
             </div>
-            @Html.ValidationMessage("VotingType")
+            @Html.ValidationMessage("DeadlineType")
+
+            @Html.LabelFor(m => m.ParticipationLimit, new { @class = "col-md-4 control-label" })
+            <div class="col-md-8">
+                @Html.TextBoxFor(m => m.ParticipationLimit, new { @class = "form-control", @type="number"})
+            </div>
+            @Html.ValidationMessage("ParticipationLimit")
 
             @Html.LabelFor(m => m.ParticipationType, new { @class = "col-md-4 control-label" })
             <div class="col-md-8">
