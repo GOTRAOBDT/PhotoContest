@@ -99,7 +99,7 @@
         // Returned model type: DetailsContestViewModel
         [HttpGet]
         [AllowAnonymous]
-        public ActionResult GetContestById(int id)
+        public virtual ActionResult GetContestById(int id)
         {
             var dbContest = this.Data.Contests.Find(id);
             var contest = Mapper.Map<DetailsContestViewModel>(dbContest);
@@ -161,7 +161,7 @@
 
         // GET: Contests/{contestId}/Manage
         [HttpGet]
-        public ActionResult Manage(int id)
+        public virtual ActionResult Manage(int id)
         {
             var contest = this.Data.Contests.All()
                 .Where(c => c.Id == id).ProjectTo<EditContestBindingModel>().FirstOrDefault();
@@ -182,7 +182,7 @@
         // POST: Contests/{contestId}/Manage
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Manage(int id, EditContestBindingModel model)
+        public virtual ActionResult Manage(int id, EditContestBindingModel model)
         {
             if (model == null)
             {
@@ -202,7 +202,7 @@
                 contest.Prizes.ElementAt(i).Description = model.Prizes.ElementAt(i).Description;
             }
             this.Data.SaveChanges();
-            return this.RedirectToAction("contests", "Me");
+            return this.RedirectToAction("GetContestById", "Contests", new { id = id });
         }
 
         // GET: Contests/{contestId}/Jury

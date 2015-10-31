@@ -5,6 +5,8 @@ namespace PhotoContest.App.Areas.Administration.Controllers
     
     using Data.Contracts;
 
+    using Models.Contest;
+
     [Authorize(Roles = ("Administrator"))]
     public class ContestsController : App.Controllers.ContestsController
     {
@@ -14,14 +16,25 @@ namespace PhotoContest.App.Areas.Administration.Controllers
         }
 
         // GET: Administration/Contests/{id}/Details
-        public new ActionResult GetContestById(int id)
+        [HttpGet]
+        public override ActionResult GetContestById(int id)
         {
             return base.GetContestById(id);
         }
 
-        public new ActionResult Manage(int id)
+        // GET: Administration/Contests/{id}/Manage
+        [HttpGet]
+        public override ActionResult Manage(int id)
         {
             return base.Manage(id);
+        }
+
+        // POST: Administration/Contests/{id}/Manage
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public override ActionResult Manage(int id, EditContestBindingModel model)
+        {
+            return base.Manage(id, model);
         }
     }
 }
