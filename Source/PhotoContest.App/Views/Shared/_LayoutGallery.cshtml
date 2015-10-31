@@ -31,7 +31,7 @@
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                     @if (this.User.IsInRole("Administrator"))
                     {
-                        <li>@Html.ActionLink("Administration", "Index", "Admin", new { area = "Administration" }, new { id = "admin-link" })</li>
+                        <li>@Html.ActionLink("Administration", "Index", "Manage", new { area = "Administration" }, new { id = "admin-link" })</li>
                     }
                 </ul>
                 @Html.Partial("_LoginPartial")
@@ -46,30 +46,9 @@
             }
         </div>
         <div class="row" id="sidebar">
-            <div class="col-md-3">
-                <ul class="nav nav-pills nav-stacked">
-                    <li role="presentation" class="disabled"><a href="#"><h4>Contests</h4></a></li>
-                    <li role="presentation" @((ViewBag.sortBy == "MostPopular" || ViewBag.sortBy == null) ? "class=active" : "")><a href="@Url.Action("Index", "Home", new { sortBy = "MostPopular" })">Most Popular</a></li>
-                    <li role="presentation" @((ViewBag.sortBy == "Latest") ? "class=active" : "")><a href="@Url.Action("Index", "Home", new { sortBy = "Latest" })">Latest</a></li>
-                    <li role="presentation" @((ViewBag.sortBy == "EndingSoon") ? "class=active" : "")><a href="@Url.Action("Index", "Home", new { sortBy = "EndingSoon" })">Ending soon</a></li>
-                    <li role="presentation" @((ViewBag.sortBy == "ComingSoon") ? "class=active" : "")><a href="@Url.Action("Index", "Home", new { sortBy = "ComingSoon" })">Coming soon</a></li>
-                    <li role="presentation" @((ViewBag.sortBy == "Archive") ? "class=active" : "")><a href="@Url.Action("Index", "Home", new { sortBy = "Archive" })">Archive</a></li>
-                </ul>
-                @if (this.User.Identity.GetUserId() != null)
-                {
-                    <br />
-                    <ul class="nav nav-pills nav-stacked">
-                        <li role="presentation" class="disabled"><a href="#"><h4>My menu</h4></a></li>
-                        <li role="presentation"><a href="@Url.Action("Contests", "Me")">My contests</a></li>
-                        <li role="presentation"><a href="@Url.Action("Create", "Contests")">Create contest</a></li>
-                        <li role="presentation"><a href="@Url.Action("Pictures", "Me")">My pictures</a></li>
-                        <li role="presentation"><a href="@Url.Action("UploadPicture", "Me")">Upload picture</a></li>
-                    </ul>
-                }
-            </div>
             @RenderBody()
         </div>
-        <hr/>
+        <hr />
         <footer>
             <p>&copy; @DateTime.Now.Year - 300mm by GOTRAOBDT</p>
         </footer>

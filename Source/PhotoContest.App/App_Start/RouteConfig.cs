@@ -24,6 +24,13 @@
                 namespaces: new[] { "PhotoContest.App.Controllers" });
 
             routes.MapRoute(
+                "Users",
+                "{controller}/{username}",
+                new { controller = "Users", action = "Index" },
+                null,
+                namespaces: new[] { "PhotoContest.App.Controllers" });
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional },

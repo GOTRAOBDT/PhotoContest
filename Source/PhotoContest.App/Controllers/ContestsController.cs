@@ -605,11 +605,58 @@
         [HttpGet]
         public ActionResult Gallery(int id, int? pictureId)
         {
+            var contest = this.Data.Contests.Find(id);
+            if (contest == null)
+            {
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            }
+
+            if (contest.Pictures.Count() == 0)
+            {
+                return this.View(new GalleryViewModel() { CurrentPicture = null });
+            }
+
             if (pictureId == null)
             {
-
+                pictureId = contest.Pictures.FirstOrDefault().Id;
             }
-            return this.View();
+
+            var picture = contest.Pictures.FirstOrDefault(p => p.Id == pictureId);
+            if (picture == null)
+            {
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            }
+            var pictureModel = Mapper.Map<DetailsPictureViewModel>(picture);
+
+            var user = this.Data.Users.Find(this.User.Identity.GetUserId());
+
+            pictureModel.IsAuthor = PictureUtills.IsAuthor(user, picture);
+            pictureModel.HasVoted = PictureUtills.HasVotedForPicture(user, picture, contest);
+            pictureModel.CanVote = PictureUtills.CanVoteForPicture(user, picture, contest);
+
+            var idList = contest.Pictures.OrderBy(p => p.Id).Select(p => p.Id).ToList();
+            int? previousPictureId = null;
+            int? nextPictureId = null;
+
+            for (int i = 0; i < idList.Count; i++)
+            {
+                if (idList[i] == pictureId)
+                {
+                    previousPictureId = i == 0 ? (int?)null : idList[i - 1];
+                    nextPictureId = i == idList.Count - 1 ? (int?)null : idList[i + 1];
+                    break;
+                }
+            }
+
+            var galleryModel = new GalleryViewModel()
+            {
+                ContestId = contest.Id,
+                PreviousPictureId = previousPictureId,
+                NextPictureId = nextPictureId,
+                CurrentPicture = pictureModel,
+            };
+
+            return this.View(galleryModel);
         }
 
         [HttpGet]

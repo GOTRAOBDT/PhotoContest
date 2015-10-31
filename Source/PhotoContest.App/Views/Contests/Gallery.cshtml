@@ -1,0 +1,60 @@
+﻿@model PhotoContest.App.Models.Contest.GalleryViewModel
+@{
+    Layout = "~/Views/Shared/_LayoutGallery.cshtml";
+    ViewBag.Title = "Gallery";
+}
+
+@if (Model.CurrentPicture != null)
+{
+    <div class="col-md-12 center-block">
+        <div class="centerBlock">
+            <div class="row">
+                @Html.DisplayFor(m => m.CurrentPicture, "_GalleryPictureViewModel")
+            </div>
+        </div>
+        <div class="row">
+            <div class="caption centerBlock">
+                <br />
+                @if (Model.PreviousPictureId != null)
+                {
+                    @Html.ActionLink("Previous", "Gallery", "Contests", new { id = Model.ContestId, pictureId = Model.PreviousPictureId }, new { @class = "btn btn-success", @id="left" })
+
+                }
+                @if (Model.NextPictureId != null)
+                {
+                    @Html.ActionLink("Next", "Gallery", "Contests", new { id = Model.ContestId, pictureId = Model.NextPictureId }, new { @class = "btn btn-success", @id="right" })
+                }
+            </div>
+        </div>
+
+    </div>
+}
+else
+{
+    <h3>The gallery is empty.</h3>
+}
+
+@section scripts
+{
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script>
+            $(document).keydown(function (e) {
+                switch (e.which) {
+                    case 37: // left
+                        if ($('#left').length) {
+                            window.location.href = $('#left').attr('href');
+                        }
+                        break;
+                        break;
+                    case 39: // right
+                        if ($('#right').length) {
+                            window.location.href = $('#right').attr('href');
+                        }
+                        break;
+                    default: return; // exit this handler for other keys
+                }
+                e.preventDefault(); // prevent the default action (scroll / move caret)
+            });
+    </script>
+}
+
