@@ -453,7 +453,7 @@
                 throw new ArgumentException("Contest not exists!");
             }
 
-            if (contest.OwnerId != loggedUserId)
+            if (contest.OwnerId != loggedUserId && !this.User.IsInRole("Administrator"))
             {
                 throw new HttpRequestException("Not authorized!");
             }
@@ -490,7 +490,7 @@
                 throw new ArgumentException("Contest not exists!");
             }
 
-            if (contest.OwnerId != loggedUserId)
+            if (contest.OwnerId != loggedUserId && !this.User.IsInRole("Administrator"))
             {
                 throw new HttpRequestException("Not authorized!");
             }
