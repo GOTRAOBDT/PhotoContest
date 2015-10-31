@@ -238,6 +238,7 @@
     <Compile Include="Models\Contest\DetailsContestViewModel.cs" />
     <Compile Include="Models\Contest\EditContestBindingModel.cs" />
     <Compile Include="Models\Contest\FullContestViewModel.cs" />
+    <Compile Include="Models\Contest\GalleryViewModel.cs" />
     <Compile Include="Models\Contest\JuryViewModel.cs" />
     <Compile Include="Models\Contest\ParticipantsViewModel.cs" />
     <Compile Include="Models\Contest\PrizeViewModel.cs" />

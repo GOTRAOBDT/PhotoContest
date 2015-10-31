@@ -113,6 +113,12 @@
                 contest.EndDate.AddDays(1.0) < DateTime.Now)
             {
                 contest.Status = ContestStatus.Finished;
+                //var notification = new Notification()
+                //{
+                //    Content = 
+                //    Recipient = dbContest.Owner,
+                //    CreatedOn = DateTime.Now,
+                //};
                 this.Data.SaveChanges();
             }
 
@@ -586,8 +592,12 @@
         // GET: Contests/{contestId}/Gallery/{pictureId}
         // Returned model type: DetailsPictureViewModel
         [HttpGet]
-        public ActionResult Gallery(int contestId, int pictureId)
+        public ActionResult Gallery(int id, int? pictureId)
         {
+            if (pictureId == null)
+            {
+
+            }
             return this.View();
         }
 
