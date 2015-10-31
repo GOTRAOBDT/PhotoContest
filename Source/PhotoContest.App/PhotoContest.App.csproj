@@ -211,7 +211,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\Administration\AdministrationAreaRegistration.cs" />
-    <Compile Include="Areas\Administration\Controllers\ManageController.cs" />
+    <Compile Include="Areas\Administration\Controllers\UsersController.cs" />
     <Compile Include="Areas\Administration\Controllers\ContestsController.cs" />
     <Compile Include="Areas\Administration\Controllers\AdminController.cs" />
     <Compile Include="Areas\Administration\Models\UserViewModel.cs" />
@@ -285,6 +285,7 @@
     <Content Include="Areas\Administration\Views\Contests\Participants.cshtml" />
     <Content Include="Areas\Administration\Views\Contests\Jury.cshtml" />
     <Content Include="Areas\Administration\Views\Shared\DisplayTemplates\UserViewModel.cshtml" />
+    <Content Include="Areas\Administration\Views\Users\GetUserById.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
@@ -374,7 +375,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Administration\Views\Manage\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
