@@ -43,5 +43,12 @@ namespace PhotoContest.App.Areas.Administration.Controllers
         {
             return base.Candidates(id, page);
         }
+
+        // GET: Administration/Contests/{id}/Participants
+        [HttpGet]
+        public override ActionResult Participants(int id, int? page)
+        {
+            return base.Participants(id, page);
+        }
     }
 }

@@ -503,7 +503,7 @@
 
         // GET: Contests/{contestId}/Participants
         [HttpGet]
-        public ActionResult Participants(int id, int? page)
+        public virtual ActionResult Participants(int id, int? page)
         {
             var loggedUserId = this.User.Identity.GetUserId();
             var contestOwnerId = this.Data.Contests.All()
@@ -529,7 +529,7 @@
                 Participants = pagedParticipants
             };
 
-            if (loggedUserId == contestOwnerId)
+            if (loggedUserId == contestOwnerId || this.User.IsInRole("Administrator"))
             {
                 participantsViewModel.IsContestOwner = true;
             }
@@ -549,6 +549,17 @@
             if (!this.Request.IsAjaxRequest())
             {
                 throw new InvalidOperationException("Invalid operation!");
+            }
+
+            var loggedUserId = this.User.Identity.GetUserId();
+            var contestOwnerId = this.Data.Contests.All()
+                .Where(c => c.Id == id)
+                .Select(c => c.OwnerId)
+                .FirstOrDefault();
+
+            if (contestOwnerId != loggedUserId && !this.User.IsInRole("Administrator"))
+            {
+                throw new HttpRequestException("Not authorized!");
             }
 
             var user = this.Data.Users.All().FirstOrDefault(u => u.UserName == username);
