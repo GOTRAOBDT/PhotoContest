@@ -394,14 +394,14 @@
         // GET: Contests/{contestId}/Candidates
         // Returned model type: BasicUserInfoViewModel
         [HttpGet]
-        public ActionResult Candidates(int id, int? page)
+        public virtual ActionResult Candidates(int id, int? page)
         {
             var contestOwnerId = this.Data.Contests.All()
                 .Where(c => c.Id == id)
                 .Select(c => c.OwnerId)
                 .FirstOrDefault();
 
-            if (this.User.Identity.GetUserId() != contestOwnerId)
+            if (this.User.Identity.GetUserId() != contestOwnerId && !this.User.IsInRole("Administrator"))
             {
                 throw new HttpRequestException("Not authorized!");
             }

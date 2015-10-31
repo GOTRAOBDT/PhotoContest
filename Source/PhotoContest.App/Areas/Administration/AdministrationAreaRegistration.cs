@@ -17,6 +17,7 @@
             context.MapRoute(
                 "AdminManage",
                 "Administration/{controller}/{id}/{action}",
+                new { id = UrlParameter.Optional },
                 new { id = @"\d+" }, 
                 namespaces: new[] { "PhotoContest.App.Areas.Administration.Controllers" });
 
