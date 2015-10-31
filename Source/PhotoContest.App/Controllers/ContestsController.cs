@@ -734,8 +734,8 @@
         }
 
         // POST: Contests/{contestId}/Vote/{pictureId}
-        [ValidateAntiForgeryToken]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult UnVote(int id, int pictureId)
         {
             if (!this.Request.IsAjaxRequest())
@@ -778,6 +778,22 @@
             picture.ContestId = id;
 
             return this.PartialView("_PictureInfo", picture);
+        }
+
+        [HttpGet]
+        public ActionResult Prizes(int contestId)
+        {
+            var prizes = this.Data.Prizes.All()
+                .AsQueryable()
+                .Where(p => p.ContestId == contestId)
+                .ProjectTo<PrizeViewModel>()
+                .ToList();
+
+            if (prizes == null)
+            {
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            }
+            return this.View(prizes);
         }
 
         private IEnumerable<ContestWinnerViewModel> GetContestWinners(Contest contest)

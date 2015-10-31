@@ -360,6 +360,7 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Contests\_PictureInfo.cshtml" />
     <Content Include="Views\Contests\_EditContest.cshtml" />
+    <Content Include="Views\Contests\Prizes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Notifications\Index.cshtml" />

@@ -69,7 +69,7 @@
                     {
                         foreach (var prize in Model.Prizes)
                         {
-                            @Html.ActionLink(prize.Name, "Prizes", new { id = prize.Id }) @: / 
+                            @Html.ActionLink(prize.Name, "Prizes", new { contestId = Model.Id }) @: / 
                         }
                     }
                 </span>
