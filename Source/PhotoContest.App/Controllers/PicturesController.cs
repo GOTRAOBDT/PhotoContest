@@ -1,5 +1,6 @@
 ﻿namespace PhotoContest.App.Controllers
 {
+    using System;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
@@ -13,7 +14,6 @@
     using Models.Pictures;
     using AutoMapper;
     using PhotoContest.Models;
-    using System;
 
     public class PicturesController : BaseController
     {
@@ -131,6 +131,41 @@
             this.Data.SaveChanges();
 
             return this.RedirectToAction("Pictures", "Me");
+        }
+
+        public ActionResult Remove(int id, int contestId)
+        {
+            var picture = this.Data.Pictures.Find(id);
+            if (picture == null)
+            {
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            }
+
+            var contest = this.Data.Contests.Find(contestId);
+            if (contest == null)
+            {
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            }
+
+
+            var user = this.Data.Users.Find(this.User.Identity.GetUserId());
+
+            if (picture.Author.Id != user.Id && !this.User.IsInRole("Administrator"))
+            {
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            }
+
+            var votesForPictureInContest = picture.Votes.Where(v => v.ContestId == contestId).ToList();
+            foreach (var vote in votesForPictureInContest)
+            {
+                picture.Votes.Remove(vote);
+            }
+            this.Data.SaveChanges();
+
+            contest.Pictures.Remove(picture);
+            this.Data.SaveChanges();
+
+            return this.RedirectToAction("Pictures", "Contests", new { id = contestId });
         }
     }
 }
