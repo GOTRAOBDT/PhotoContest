@@ -74,4 +74,8 @@ textarea {
 .contest-description {
     color: lightgoldenrodyellow;
     margin-bottom: 10px;
-}жсшг
+}
+
+#hub-message a {
+    color: red;
+}
