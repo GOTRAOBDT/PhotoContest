@@ -22,7 +22,7 @@
         <span>@Model.Description</span><br />
         <div class="row">
             <div class="col-md-4">
-                <span><strong>Moderator: </strong>@Model.Owner</span><br />
+                <span><strong>Moderator: </strong>@Html.ActionLink(@Model.Owner, "Index", "Users", new { username = Model.OwnerUsername }, null)</span><br />
                 <span><strong>Start Date: </strong>@Html.DisplayFor(m => m.StartDate)</span><br />
                 <span><strong>End Date: </strong>@Html.DisplayFor(m => m.EndDate)</span><br />
             </div>

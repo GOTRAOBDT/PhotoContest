@@ -16,7 +16,7 @@
                     }
                 </div>
                 <div class="col-md-8">
-                    <h3>@m.UserName</h3>
+                    <h3>@Html.ActionLink(@m.UserName, "Index", "Users", new { username = m.UserName }, null)</h3>
                 </div>
             </div>
             <div class="row">
@@ -59,7 +59,7 @@
                                         <h4 class="modal-title">Reject contest candidate confirmation</h4>
                                     </div>
                                     <div class="modal-body">
-                                        <p>You are about to reject "@m.UserName" as contest candidate. Are you sure?</p>
+                                        <p>You are about to reject "@Html.ActionLink(@m.UserName, "Index", "Users", new { username = m.UserName }, null)" as contest candidate. Are you sure?</p>
                                     </div>
                                     <div class="modal-footer">
                                         @using (Ajax.BeginForm("RejectCandidate", "Contests", new { id = Model.ContestId, username = m.UserName }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "container-" + @m.UserName, InsertionMode = InsertionMode.ReplaceWith }))

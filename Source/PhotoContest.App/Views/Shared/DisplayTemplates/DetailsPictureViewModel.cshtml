@@ -31,7 +31,7 @@
                 }
             }
         </h3>
-        <span>Author: @Model.Author</span><br/>
+        <span>Author: @Html.ActionLink(@Model.AuthorUsername, "Index", "Users", new { username = Model.AuthorUsername }, null)</span><br/>
         <span>Posted on: @Html.DisplayFor(m => m.PostedOn)</span><br/>
         <span>Total participations: @Model.ContestsCount</span><br/>
         <span>Total votes: @Model.VotesCount</span><br/>

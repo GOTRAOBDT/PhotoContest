@@ -1,7 +1,10 @@
 ﻿namespace PhotoContest.App.Controllers
 {
     using System;
+    using System.Linq;
     using System.Web.Mvc;
+
+    using Microsoft.AspNet.Identity;
 
     using Data.Contracts;
 
@@ -12,6 +15,7 @@
         public BaseController(IPhotoContestData data)
         {
             this.data = data;
+            //this.ViewData["UnreadCount"] = this.GetUnreadNotificationsCount();
         }
 
         protected IPhotoContestData Data
@@ -35,6 +39,19 @@
                     filterContext.RouteData.Values["action"].ToString()));
 
             filterContext.Result = result;
+        }
+
+        private int GetUnreadNotificationsCount()
+        {
+            var userId = this.User.Identity.GetUserId();
+            if (userId != null)
+            {
+                return this.data.Notifications.All()
+                .Where(n => n.RecipientId == userId && n.IsRead == false)
+                .Count();
+            }
+
+            return 0;
         }
     }
 }

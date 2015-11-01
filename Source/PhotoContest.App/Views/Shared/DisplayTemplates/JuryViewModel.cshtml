@@ -13,7 +13,7 @@
                 <img class="thumbnail" src="~/Content/img/no-photo.png" alt="@m.UserName" />
             }
             <div class="caption">
-                <h3>@m.UserName</h3>
+                <h3>@Html.ActionLink(@m.UserName, "Index", "Users", new { username = m.UserName }, null)</h3>
                 @if (Model.IsContestOwner || this.User.IsInRole("Administrator"))
                 {
                     <p>

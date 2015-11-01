@@ -1,12 +1,11 @@
 ﻿namespace PhotoContest.App.Controllers
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using System.Web;
     using System.Web.Mvc;
 
     using Microsoft.AspNet.Identity;
+    using AutoMapper.QueryableExtensions;
 
     using Data.Contracts;
     using Models.Notification;
@@ -27,7 +26,7 @@
             var notifications = user.Notifications
                 .AsQueryable()
                 .OrderByDescending(n => n.CreatedOn)
-                .Select(NotificationViewModel.Create)
+                .ProjectTo<NotificationViewModel>()
                 .ToList();
 
             return View(notifications);

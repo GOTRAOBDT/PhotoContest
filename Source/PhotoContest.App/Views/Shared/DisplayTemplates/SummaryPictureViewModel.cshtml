@@ -5,7 +5,7 @@
             <img src="@Model.ThumbnailImageData" alt="Title: @Model.Title">
             <div class="caption">
                 <h3>@Model.Title</h3>
-                <span>Author: @Model.Author</span><br />
+                <span>Author: @Html.ActionLink(Model.AuthorUsername, "Index", "Users", new { username = Model.AuthorUsername }, null)</span><br />
                 <span>Total participations: @Model.ContestsCount</span><br />
                 <span>Total votes: @Model.VotesCount</span><br />
                 @if (this.TempData.ContainsKey("SelectPicture"))

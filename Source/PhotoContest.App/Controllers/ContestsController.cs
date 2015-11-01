@@ -803,12 +803,12 @@
 
             var notification = new Notification
             {
-                ContestId = id,
-                PictureId = pictureId,
+                Content = string.Format("{0} has voted for your picture titled '{1}' in contest '{2}'.",
+                    this.Data.Users.Find(loggedUserId).UserName,
+                    dbPicture.Title ?? "(no title)",
+                    contest.Title),
                 CreatedOn = DateTime.Now,
                 IsRead = false,
-                NotificationType = NotificationType.Vote,
-                SenderId = loggedUserId,
                 RecipientId = dbPicture.AuthorId,
             };
 

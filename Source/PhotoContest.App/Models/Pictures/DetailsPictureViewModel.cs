@@ -16,6 +16,8 @@
 
         public string Author { get; set; }
 
+        public string AuthorUsername { get; set; }
+
         public bool IsAuthor { get; set; }
 
         public bool CanVote { get; set; }
@@ -36,6 +38,7 @@
         {
             configuration.CreateMap<Picture, DetailsPictureViewModel>()
                 .ForMember(p => p.Author, cfg => cfg.MapFrom(p => p.Author.Name))
+                .ForMember(p => p.AuthorUsername, cfg => cfg.MapFrom(p => p.Author.UserName))
                 .ForMember(p => p.ContestsCount, cfg => cfg.MapFrom(p => p.Contests.Count))
                 .ForMember(p => p.VotesCount, cfg => cfg.MapFrom(p => p.Votes.Count));
         }

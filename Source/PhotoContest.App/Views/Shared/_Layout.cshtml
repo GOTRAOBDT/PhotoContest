@@ -26,7 +26,7 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li><a href="/Notifications/Index">Notifications <span class="badge">@ViewData["UnreadCount"]</span></a></li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                     @if (this.User.IsInRole("Administrator"))
