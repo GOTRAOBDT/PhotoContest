@@ -56,6 +56,11 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+    @Scripts.Render("~/bundles/signalr")
+    <script src="/signalr/hubs"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/Scripts/contest-hub.js"></script>
+
+@RenderSection("scripts", required: false)
 </body>
 </html>

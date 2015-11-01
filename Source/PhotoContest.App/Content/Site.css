@@ -57,3 +57,7 @@ textarea {
     display: table;
     margin: 0 auto;
 }
+
+#hub-message a {
+    color: red;
+}

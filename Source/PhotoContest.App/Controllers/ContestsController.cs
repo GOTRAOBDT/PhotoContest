@@ -16,17 +16,19 @@
     using Data.Contracts;
 
     using Microsoft.AspNet.Identity;
+    using Microsoft.AspNet.SignalR;
 
     using Models.Account;
     using Models.Contest;
 
     using Models.Pictures;
     using PagedList;
-    
+
+    using PhotoContest.App.Hubs;
     using PhotoContest.Models;
     using PhotoContest.Models.Enumerations;
 
-    [Authorize]
+    [System.Web.Mvc.Authorize]
     public class ContestsController : BaseController
     {
         public ContestsController(IPhotoContestData data)
@@ -49,6 +51,11 @@
         [ValidateAntiForgeryToken]
         public ActionResult Create(CreateContestBindingModel model)
         {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+            
             var loggedUserId = this.User.Identity.GetUserId();
             var contest = new Contest()
             {
@@ -106,8 +113,25 @@
                 this.Data.Notifications.Add(notification);
             }
             this.Data.SaveChanges();
+            
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ContestsHub>();
+            hubContext.Clients.All.receiveMessage(contest.Id);
 
             return this.RedirectToAction("Contests", "Me");
+        }
+
+        [HttpGet]
+        public ActionResult GetContestHubMessagePartial(int id)
+        {
+            if (!this.Request.IsAjaxRequest())
+            {
+                throw new HttpRequestException("Inavlid request!");
+            }
+
+            var dbContest = this.Data.Contests.Find(id);
+            var contest = Mapper.Map<ContestsHubNotificationViewModel>(dbContest);
+
+            return this.PartialView("_ContestHubNotification", contest);
         }
 
         // GET: Contests/{contestId}
