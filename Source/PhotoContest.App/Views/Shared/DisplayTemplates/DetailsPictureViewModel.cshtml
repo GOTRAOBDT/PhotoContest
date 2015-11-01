@@ -9,6 +9,7 @@
             @if (Model.IsAuthor && this.TempData.ContainsKey("IsAdminArea") == false)
             {
                 @Html.ActionLink("Delete", "Delete", "Pictures", new { id = Model.Id }, new { @class = "btn btn-danger" })
+                @Html.ActionLink("Remove", "Remove", "Pictures", new { id = Model.Id, contestId = Model.ContestId }, new { @class = "btn btn-warning" })
             }
             @if (this.User.IsInRole("Administrator"))
             {

@@ -393,6 +393,7 @@
     <Content Include="Views\Shared\DisplayTemplates\_GalleryPictureViewModel.cshtml" />
     <Content Include="Views\Users\Index.cshtml" />
     <Content Include="Views\Shared\_ContestHubNotification.cshtml" />
+    <Content Include="Views\Home\Rules.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Notifications\Index.cshtml" />
