@@ -30,6 +30,8 @@ namespace PhotoContest.Data
 
         public virtual IDbSet<Notification> Notifications { get; set; }
 
+        public virtual IDbSet<MaintanceLog> MaintanceLogs { get; set; }
+
         public static PhotoContestContext Create()
         {
             return new PhotoContestContext();

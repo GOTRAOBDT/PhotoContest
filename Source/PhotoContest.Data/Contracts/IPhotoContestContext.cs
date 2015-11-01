@@ -16,6 +16,10 @@
 
         IDbSet<VotingCommittee> VotingCommittees { get; set; }
 
+        IDbSet<Notification> Notifications { get; set; }
+
+        IDbSet<MaintanceLog> MaintanceLogs { get; set; }
+
         int SaveChanges();
     }
 }

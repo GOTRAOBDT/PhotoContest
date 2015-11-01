@@ -1,0 +1,6 @@
+﻿@model PhotoContest.App.Models.Contest.ContestsHubNotificationViewModel
+
+<h3 class="system-message">
+    @Html.ActionLink(Model.Owner, "Index", "Users", new { username = Model.Owner }, null)
+    created new contest: @Html.ActionLink(Model.Title, "GetContestById", "Contests", new { id = Model.Id }, null)
+</h3>
