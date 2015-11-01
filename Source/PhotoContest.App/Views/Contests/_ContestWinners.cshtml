@@ -1,6 +1,11 @@
 ﻿@model IList<PhotoContest.App.Models.Contest.ContestWinnerViewModel>
 @using System.Collections.Generic;
 
+<h2>Winners</h2>
+@if (Model.Count == 0)
+{
+    <p>The contest has no prizes and winners.</p>
+}
 @for (int i = 0; i < Model.Count; i++)
 {
     <div class="col-md-6">
@@ -8,9 +13,10 @@
             <div class="thumbnail">
                 <img src="@Model[i].Picture.ThumbnailImageData" alt="Title: @Model[i].Picture.Title">
                 <div class="caption">
-                    <h2>#@i Place</h2>
+                    <h2>#@(i + 1) Place</h2>
+                    <p><strong>Winner of: </strong>@Model[i].PrizeName</p>
                     <h3>@Model[i].Picture.Title</h3>
-                    <span>By: @Model[i].WinnerName</span><br />
+                    <span>By: @Html.ActionLink(@Model[i].WinnerUsername, "Index", "Users", new { username = Model[i].WinnerUsername }, null)</span><br />
                     <span>Votes: @Model[i].Picture.VotesCount</span><br />
                 </div>
             </div>

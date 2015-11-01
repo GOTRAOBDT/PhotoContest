@@ -8,7 +8,7 @@
         {
             @Html.ActionLink("Apply", "Apply", "Contests", new { contestId = Model.Id}, new { @class = "btn btn-success" })
         }
-        @if (Model.IsOwner || this.User.IsInRole("Administrator"))
+        @if ((Model.IsOwner || this.User.IsInRole("Administrator")) && Model.Status != ContestStatus.Finished)
         {
             @Html.ActionLink("Manage Contest", "Manage", "Contests", new { id = Model.Id }, new { @class = "btn btn-warning" })
         }

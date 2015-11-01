@@ -124,10 +124,16 @@
                 return this.HttpNotFound();
             }
 
+            ICollection<ContestWinnerViewModel> contestWinners = null;
+            if (dbContest.Status == ContestStatus.Finished)
+            {
+                contestWinners = this.GetContestWinners(dbContest);
+            }
+
             if ((contest.Status == ContestStatus.Active || contest.Status == ContestStatus.Inactive) &&
                 contest.EndDate.AddDays(1.0) < DateTime.Now)
             {
-                contest.Status = ContestStatus.Finished;
+                dbContest.Status = ContestStatus.Finished;
                 var notification = new Notification()
                 {
                     Content = string.Format("Your contest titled '{0}' has finished. Please, prepare to deliver the prizes.",
@@ -136,6 +142,23 @@
                     CreatedOn = DateTime.Now,
                     IsRead = false,
                 };
+                this.Data.Notifications.Add(notification);
+                this.Data.SaveChanges();
+
+                foreach (var winner in contestWinners)
+                {
+                    var noty = new Notification()
+                    {
+                        Content = string.Format("Your picture titled {0} has won a prize ({1} in the contest '{2}'. Go get it!)",
+                            winner.Picture.Title,
+                            winner.PrizeName,
+                            contest.Title),
+                        RecipientId = winner.WinnerId,
+                        CreatedOn = DateTime.Now,
+                        IsRead = false,
+                    };
+                    this.Data.Notifications.Add(notification);
+                }
                 this.Data.SaveChanges();
             }
 
@@ -159,28 +182,6 @@
             {
                 contest.CanApply = true;
             }
-
-
-            ICollection<ContestWinnerViewModel> contestWinners = null;
-            if (dbContest.Status == ContestStatus.Finished)
-            {
-                this.GetContestWinners(dbContest);
-            }
-
-            foreach (var winner in contestWinners)
-            {
-                var notification = new Notification()
-                {
-                    Content = string.Format("Your picture titled {0} has won a prize ({1} in the contest '{2}'. Go get it!)",
-                        winner.Picture.Title, 
-                        winner.PrizeName,
-                        contest.Title),
-                    RecipientId = dbContest.Owner.Id,
-                    CreatedOn = DateTime.Now,
-                    IsRead = false,
-                };
-            }
-            this.Data.SaveChanges();
 
             var fullContestModel = new FullContestViewModel()
             {
@@ -1024,7 +1025,7 @@
             return this.RedirectToAction("GetContestById", new { id = contestId });
         }
 
-        private IEnumerable<ContestWinnerViewModel> GetContestWinners(Contest contest)
+        private ICollection<ContestWinnerViewModel> GetContestWinners(Contest contest)
         {
             List<ContestWinnerViewModel> winners = new List<ContestWinnerViewModel>();
             int winnersCount = contest.Prizes.Count() <= contest.Pictures.Count ? 
