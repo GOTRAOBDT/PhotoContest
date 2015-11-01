@@ -20,6 +20,9 @@
                     <strong>Username: </strong> @Model.UserName <br />
                     <strong>Gender:</strong> @Model.Gender <br />
                     <strong>Birthday:</strong> @(Model.BirthDate == null ? "(not available)" : Model.BirthDate.ToString()) <br />
+                    <strong>Has:</strong> @Model.TotalPictures pictures <br />
+                    <strong>Participates in:</strong> @Model.TotalContests contests<br />
+                    <strong>Has won:</strong> @Model.TotalVotes votes<br />
                 </div>
             </div>
         </div>

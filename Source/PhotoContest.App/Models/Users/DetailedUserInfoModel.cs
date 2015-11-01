@@ -23,6 +23,12 @@
 
         public string ProfilePicture { get; set; }
 
+        public int TotalPictures { get; set; }
+
+        public int TotalContests { get; set; }
+
+        public int TotalVotes { get; set; }
+
         public void CreateMappings(IConfiguration configuration)
         {
         }
