@@ -12,6 +12,8 @@
 
         public string WinnerUsername { get; set; }
 
+        public string WinnerId { get; set; }
+
         public string PrizeName { get; set; }
 
         public SummaryPictureViewModel Picture { get; set; }

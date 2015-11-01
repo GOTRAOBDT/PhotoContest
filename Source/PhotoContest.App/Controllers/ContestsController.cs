@@ -92,6 +92,21 @@
 
             this.Data.SaveChanges();
 
+            var members = this.Data.Users.All().ToList();
+            foreach (var member in members)
+            {
+                var notification = new Notification()
+                {
+                    RecipientId = member.Id,
+                    Content = string.Format("There is a new contest titled '{0} starting on {1}'",
+                    contest.Title, contest.StartDate),
+                    CreatedOn = DateTime.Now,
+                    IsRead = false,
+                };
+                this.Data.Notifications.Add(notification);
+            }
+            this.Data.SaveChanges();
+
             return this.RedirectToAction("Contests", "Me");
         }
 
@@ -113,12 +128,14 @@
                 contest.EndDate.AddDays(1.0) < DateTime.Now)
             {
                 contest.Status = ContestStatus.Finished;
-                //var notification = new Notification()
-                //{
-                //    Content = 
-                //    Recipient = dbContest.Owner,
-                //    CreatedOn = DateTime.Now,
-                //};
+                var notification = new Notification()
+                {
+                    Content = string.Format("Your contest titled '{0}' has finished. Please, prepare to deliver the prizes.",
+                        contest.Title),
+                    RecipientId = dbContest.Owner.Id,
+                    CreatedOn = DateTime.Now,
+                    IsRead = false,
+                };
                 this.Data.SaveChanges();
             }
 
@@ -149,6 +166,21 @@
             {
                 this.GetContestWinners(dbContest);
             }
+
+            foreach (var winner in contestWinners)
+            {
+                var notification = new Notification()
+                {
+                    Content = string.Format("Your picture titled {0} has won a prize ({1} in the contest '{2}'. Go get it!)",
+                        winner.Picture.Title, 
+                        winner.PrizeName,
+                        contest.Title),
+                    RecipientId = dbContest.Owner.Id,
+                    CreatedOn = DateTime.Now,
+                    IsRead = false,
+                };
+            }
+            this.Data.SaveChanges();
 
             var fullContestModel = new FullContestViewModel()
             {
@@ -986,6 +1018,7 @@
                     ContestId = contest.Id,
                     WinnerName = winningPictures[i].Author.Name,
                     WinnerUsername = winningPictures[i].Author.UserName,
+                    WinnerId = winningPictures[i].Author.Id,
                     PrizeName = contest.Prizes[i].Name,
                     Picture = Mapper.Map<SummaryPictureViewModel>(winningPictures[i])
                 };
