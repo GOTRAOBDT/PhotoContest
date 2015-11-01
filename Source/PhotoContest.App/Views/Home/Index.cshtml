@@ -4,11 +4,11 @@
 @model IPagedList<SummaryContestViewModel>
 
 @{
-    ViewBag.Title = "Photo Contests";
+    ViewBag.Title = "300mm";
 }
 
 <div class="col-md-7 col-md-offset-1">
-    <h1>Welcome to Photo Contests!</h1>
+    <h1>Welcome to @ViewBag.Title!</h1>
     <div class="row">
         @Html.DisplayForModel()
     </div>
