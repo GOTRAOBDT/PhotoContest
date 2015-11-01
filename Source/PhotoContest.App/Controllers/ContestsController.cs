@@ -934,6 +934,14 @@
             }
 
             contest.Status = ContestStatus.Inactive;
+            var notification = new Notification()
+            {
+                CreatedOn = DateTime.Now,
+                IsRead = false,
+                Content = string.Format("You contest, titled '{0} was paused.'", contest.Title),
+                RecipientId = contest.OwnerId,
+            };
+            this.Data.Notifications.Add(notification);
             this.Data.SaveChanges();
 
             this.TempData["message"] = "Contest was paused.";
@@ -967,6 +975,14 @@
             }
 
             contest.Status = ContestStatus.Active;
+            var notification = new Notification()
+            {
+                CreatedOn = DateTime.Now,
+                IsRead = false,
+                Content = string.Format("You contest, titled '{0} was restarted.'", contest.Title),
+                RecipientId = contest.OwnerId,
+            };
+            this.Data.Notifications.Add(notification);
             this.Data.SaveChanges();
 
             this.TempData["message"] = "Contest was restarted.";
@@ -994,6 +1010,14 @@
             }
 
             contest.Status = ContestStatus.Dismissed;
+            var notification = new Notification()
+            {
+                CreatedOn = DateTime.Now,
+                IsRead = false,
+                Content = string.Format("You contest, titled '{0} was dismissed.'", contest.Title),
+                RecipientId = contest.OwnerId,
+            };
+            this.Data.Notifications.Add(notification);
             this.Data.SaveChanges();
 
             this.TempData["message"] = "Contest was dismissed.";
