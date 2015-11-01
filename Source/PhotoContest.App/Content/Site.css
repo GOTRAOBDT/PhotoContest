@@ -57,3 +57,21 @@ textarea {
     display: table;
     margin: 0 auto;
 }
+
+.thumbnail-image-container {
+    overflow: hidden;
+    max-height: 200px;
+}
+
+.thumbnail-image-size {
+    max-width: 100%;
+}
+
+.contest-title {
+    color: coral;
+}
+
+.contest-description {
+    color: lightgoldenrodyellow;
+    margin-bottom: 10px;
+}жсшг

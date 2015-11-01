@@ -4,7 +4,9 @@
 <div class="col-md-6">
     <a href="@(Url.RouteUrl("ContestDetails", new { id = @Model.Id }))" class="contest-list">
         <div class="thumbnail">
-            <img src="@Model.Thumbnail" alt="@Model.Title">
+            <div class="thumbnail-image-container">
+                <img src="@Model.Thumbnail" alt="@Model.Title" class="thumbnail-image-size">
+            </div>
             <div class="caption">
                 <h3>@Model.Title</h3>
                 <span>Owner: @Html.ActionLink(@Model.Owner, "Index", "Users", new { username = Model.Owner }, null)</span><br/>

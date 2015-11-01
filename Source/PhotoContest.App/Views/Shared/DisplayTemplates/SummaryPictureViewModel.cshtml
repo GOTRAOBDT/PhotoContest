@@ -2,7 +2,9 @@
 <div class="col-md-6">
     <a href="@(Url.Action("Index", "Pictures", new { id = @Model.Id, contestId = Model.ContestId }))" class="contest-list">
         <div class="thumbnail">
-            <img src="@Model.ThumbnailImageData" alt="Title: @Model.Title">
+            <div class="thumbnail-image-container">
+                <img src="@Model.ThumbnailImageData" alt="Title: @Model.Title" class="thumbnail-image-size">
+            </div>
             <div class="caption">
                 <h3>@Model.Title</h3>
                 <span>Author: @Html.ActionLink(Model.AuthorUsername, "Index", "Users", new { username = Model.AuthorUsername }, null)</span><br />

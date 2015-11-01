@@ -10,7 +10,7 @@
         }
         @if ((Model.IsOwner || this.User.IsInRole("Administrator")) && Model.Status != ContestStatus.Finished)
         {
-            @Html.ActionLink("Manage Contest", "Manage", "Contests", new { id = Model.Id }, new { @class = "btn btn-warning" })
+            @Html.ActionLink("Manage", "Manage", "Contests", new { id = Model.Id }, new { @class = "btn btn-warning" })
         }
         @if (Model.CanParticipate && !Model.IsOwner)
         {
@@ -18,8 +18,8 @@
         }
         @Html.ActionLink("Browse Pictures", "Pictures", "Contests", new { id = Model.Id }, new { @class = "btn btn-danger" })
         @Html.ActionLink("View Gallery", "Gallery", "Contests", new { id = Model.Id }, new { @class = "btn btn-primary" })
-        <h2>@Model.Title</h2>
-        <span>@Model.Description</span><br />
+        <h2 class="contest-title">@Model.Title</h2>
+        <p class="contest-description">@Model.Description</p><br />
         <div class="row">
             <div class="col-md-4">
                 <span><strong>Moderator: </strong>@Html.ActionLink(@Model.Owner, "Index", "Users", new { username = Model.OwnerUsername }, null)</span><br />
