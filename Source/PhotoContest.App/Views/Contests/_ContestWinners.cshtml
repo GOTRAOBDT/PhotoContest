@@ -11,11 +11,13 @@
     <div class="col-md-6">
         <a href="@(Url.Action("Index", "Pictures", new { id = @Model[i].PictureId, contestId = Model[i].ContestId }))" class="contest-list">
             <div class="thumbnail">
-                <img src="@Model[i].Picture.ThumbnailImageData" alt="Title: @Model[i].Picture.Title">
+                <div class="thumbnail-image-container">
+                    <img src="@Model[i].Picture.ThumbnailImageData" alt="Title: @Model[i].Picture.Title" class="thumbnail-image-size">
+                </div>
                 <div class="caption">
                     <h2>#@(i + 1) Place</h2>
                     <p><strong>Winner of: </strong>@Model[i].PrizeName</p>
-                    <h3>@Model[i].Picture.Title</h3>
+                    <h3>@(Model[i].Picture.Title ?? "(no title)")</h3>
                     <span>By: @Html.ActionLink(@Model[i].WinnerUsername, "Index", "Users", new { username = Model[i].WinnerUsername }, null)</span><br />
                     <span>Votes: @Model[i].Picture.VotesCount</span><br />
                 </div>
