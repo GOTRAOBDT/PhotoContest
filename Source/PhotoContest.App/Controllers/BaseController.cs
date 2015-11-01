@@ -4,9 +4,8 @@
     using System.Linq;
     using System.Web.Mvc;
 
-    using Microsoft.AspNet.Identity;
-
     using Data.Contracts;
+    using Microsoft.AspNet.Identity;
 
     public class BaseController : Controller
     {
@@ -47,8 +46,7 @@
             if (userId != null)
             {
                 return this.data.Notifications.All()
-                .Where(n => n.RecipientId == userId && n.IsRead == false)
-                .Count();
+                .Count(n => n.RecipientId == userId && n.IsRead == false);
             }
 
             return 0;

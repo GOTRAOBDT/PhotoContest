@@ -105,8 +105,10 @@
                 var notification = new Notification()
                 {
                     RecipientId = member.Id,
-                    Content = string.Format("There is a new contest titled '{0} starting on {1}'",
-                    contest.Title, contest.StartDate),
+                    Content = string.Format(
+                        "There is a new contest titled '{0} starting on {1}'",
+                        contest.Title,
+                        contest.StartDate),
                     CreatedOn = DateTime.Now,
                     IsRead = false,
                 };
@@ -160,7 +162,8 @@
                 dbContest.Status = ContestStatus.Finished;
                 var notification = new Notification()
                 {
-                    Content = string.Format("Your contest titled '{0}' has finished. Please, prepare to deliver the prizes.",
+                    Content = string.Format(
+                        "Your contest titled '{0}' has finished. Please, prepare to deliver the prizes.",
                         contest.Title),
                     RecipientId = dbContest.Owner.Id,
                     CreatedOn = DateTime.Now,
@@ -175,7 +178,8 @@
                 {
                     var noty = new Notification()
                     {
-                        Content = string.Format("Your picture titled {0} has won a prize ({1} in the contest '{2}'. Go get it!)",
+                        Content = string.Format(
+                            "Your picture titled {0} has won a prize ({1} in the contest '{2}'. Go get it!)",
                             winner.Picture.Title,
                             winner.PrizeName,
                             contest.Title),
@@ -862,7 +866,8 @@
 
             var notification = new Notification
             {
-                Content = string.Format("{0} has voted for your picture titled '{1}' in contest '{2}'.",
+                Content = string.Format(
+                    "{0} has voted for your picture titled '{1}' in contest '{2}'.",
                     this.Data.Users.Find(loggedUserId).UserName,
                     dbPicture.Title ?? "(no title)",
                     contest.Title),

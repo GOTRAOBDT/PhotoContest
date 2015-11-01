@@ -2,29 +2,25 @@
 {
     using System;
     using System.Linq;
-    using System.Net.Http;
-    using System.Net;
-    using System.Web.Http;
     using System.Web.Mvc;
-
-    using Microsoft.AspNet.Identity;
 
     using AutoMapper.QueryableExtensions;
 
-    using PagedList;
+    using Common;
 
     using Data.Contracts;
 
-    using Common;
+    using Microsoft.AspNet.Identity;
 
     using Models.Account;
     using Models.Contest;
     using Models.Pictures;
 
+    using PagedList;
 
     using PhotoContest.Models;
 
-    [System.Web.Mvc.Authorize]
+    [Authorize]
     public class MeController : BaseController
     {
         public MeController(IPhotoContestData data)
@@ -34,7 +30,7 @@
 
         // GET: Me/Contests
         // Returned model type: SummaryContestViewModel
-        [System.Web.Mvc.HttpGet]
+        [HttpGet]
         public ActionResult Contests(int? page)
         {
             var loggedUserId = this.User.Identity.GetUserId();
@@ -49,7 +45,7 @@
         
         // GET: Me/Pictures
         // Returned model type: SummaryPictureViewModel
-        [System.Web.Mvc.HttpGet]
+        [HttpGet]
         public ActionResult Pictures(int? page)
         {
             IPagedList<SummaryPictureViewModel> pictures = null;
@@ -62,32 +58,32 @@
                     .ProjectTo<SummaryPictureViewModel>()
                     .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
 
-            return View(pictures);
+            return this.View(pictures);
         }
 
         // GET: Me/UploadPicture
-        [System.Web.Mvc.HttpGet]
+        [HttpGet]
         public ActionResult UploadPicture()
         {
-            return View(new UploadPictureBindingModel());
+            return this.View(new UploadPictureBindingModel());
         }
 
         // Post: Me/UploadPicture
-        [System.Web.Mvc.HttpPost]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult UploadPicture(UploadPictureBindingModel model)
         {
-            if (!ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                return View(model);
+                return this.View(model);
             }
 
-            var userId = User.Identity.GetUserId();
+            var userId = this.User.Identity.GetUserId();
             var user = this.Data.Users.Find(userId);
 
             if (user == null)
             {
-                RedirectToAction("Index", "Home");
+                this.RedirectToAction("Index", "Home");
             }
 
             var picture = new Picture()
@@ -101,14 +97,14 @@
             this.Data.Pictures.Add(picture);
             this.Data.SaveChanges();
 
-            return RedirectToAction("Pictures");
+            return this.RedirectToAction("Pictures");
         }
 
         // GET: Me/Profile
-        [System.Web.Mvc.HttpGet]
+        [HttpGet]
         public ActionResult Profile()
         {
-            var userId = User.Identity.GetUserId();
+            var userId = this.User.Identity.GetUserId();
             var user = this.Data.Users.Find(userId);
 
             if (user == null)
@@ -121,11 +117,11 @@
                 .ProjectTo<EditProfileBindingModel>()
                 .FirstOrDefault();
 
-            return View(editProfileModel);
+            return this.View(editProfileModel);
         }
 
         // POST: Me/Profile
-        [System.Web.Mvc.HttpPost]
+        [HttpPost]
         public virtual ActionResult Profile(EditProfileBindingModel model)
         {
             if (this.User.IsInRole("Administrator"))
@@ -159,7 +155,7 @@
             user.Gender = model.Gender;
             this.Data.SaveChanges();
 
-            return RedirectToAction("Index", "Home");
+            return this.RedirectToAction("Index", "Home");
         }
     }
 }
