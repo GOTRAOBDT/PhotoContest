@@ -52,6 +52,11 @@
             get { return this.GetRepository<Notification>(); }
         }
 
+        public IRepository<MaintanceLog> MaintanceLogs
+        {
+            get { return this.GetRepository<MaintanceLog>(); }
+        }
+
         public int SaveChanges()
         {
             return this.context.SaveChanges();

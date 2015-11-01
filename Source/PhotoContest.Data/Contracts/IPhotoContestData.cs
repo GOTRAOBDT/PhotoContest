@@ -18,6 +18,7 @@
 
         IRepository<Notification> Notifications { get; }
 
+        IRepository<MaintanceLog> MaintanceLogs { get; }
 
         int SaveChanges();
     }
