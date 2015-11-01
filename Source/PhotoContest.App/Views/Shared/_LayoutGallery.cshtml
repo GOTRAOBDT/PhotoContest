@@ -22,7 +22,10 @@
                         <span class="icon-bar"></span>
                     }
                 </button>
-                @Html.ActionLink("300mm", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @*@Html.ActionLink("300mm", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
+                <a class="navbar-brand" href="/home/index">
+                    <img src="~/Content/img/300mm_logo.png" alt="300mm logo" />
+                </a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
