@@ -42,7 +42,7 @@
         <div class="row" id="hub-message">
             @if (this.TempData.ContainsKey("message"))
             {
-                <h3 class="system-message">@this.TempData["message"]</h3>
+                <h3 id="system-messages-container" class="system-message">@this.TempData["message"]</h3>
             }
         </div>
         <div class="row" id="sidebar">
@@ -83,5 +83,11 @@
     <script src="~/Scripts/contest-hub.js"></script>
 
     @RenderSection("scripts", required: false)
+
+    <script>
+        $('#system-messages-container').click(function () {
+            $('#system-messages-container').remove();
+        });
+    </script>
 </body>
 </html>

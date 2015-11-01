@@ -179,8 +179,8 @@
                     var noty = new Notification()
                     {
                         Content = string.Format(
-                            "Your picture titled {0} has won a prize ({1} in the contest '{2}'. Go get it!)",
-                            winner.Picture.Title,
+                            "Your picture titled {0} has won a prize ({1}) in the contest '{2}'. Go get it!)",
+                            winner.Picture.Title ?? "(not available)",
                             winner.PrizeName,
                             contest.Title),
                         RecipientId = winner.WinnerId,
