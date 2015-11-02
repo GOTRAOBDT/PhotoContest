@@ -164,6 +164,7 @@
             this.Data.SaveChanges();
 
             contest.Pictures.Remove(picture);
+
             this.Data.SaveChanges();
 
             return this.RedirectToAction("Pictures", "Contests", new { id = contestId });
