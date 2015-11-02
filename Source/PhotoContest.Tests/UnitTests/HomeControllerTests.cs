@@ -8,6 +8,8 @@
     using App.Controllers;
     using App.Models.Contest;
 
+    using AutoMapper.QueryableExtensions;
+
     using Common;
     using Data.Contracts;
 
@@ -68,6 +70,7 @@
                 .OrderByDescending(c => c.Pictures.Count)
                 .ThenByDescending(c => c.Votes.Count)
                 .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
+                .ProjectTo<SummaryContestViewModel>()
                 .ToList();
 
             Assert.AreEqual(fakeContestsList.Count(), actualModelList.Count());
@@ -89,6 +92,7 @@
                 .OrderByDescending(c => c.Pictures.Count)
                 .ThenByDescending(c => c.Votes.Count)
                 .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
+                .ProjectTo<SummaryContestViewModel>()
                 .ToList();
 
             Assert.AreEqual(fakeContestsList.Count(), actualModelList.Count());
@@ -108,6 +112,7 @@
             var fakeContestsList = this.fakeContests
                 .Where(c => c.Status == ContestStatus.Active)
                 .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
+                .ProjectTo<SummaryContestViewModel>()
                 .ToList();
 
             Assert.AreEqual(fakeContestsList.Count(), actualModelList.Count());
@@ -127,6 +132,7 @@
             var fakeContestsList = this.fakeContests
                 .Where(c => c.Status == ContestStatus.Inactive)
                 .OrderByDescending(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
+                .ProjectTo<SummaryContestViewModel>()
                 .ToList();
 
             Assert.AreEqual(fakeContestsList.Count(), actualModelList.Count());
@@ -147,6 +153,7 @@
             var fakeContestsList = this.fakeContests
                 .Where(c => c.Status == ContestStatus.Active)
                 .OrderByDescending(c => TestableDbFunctions.DiffMinutes(c.EndDate, DateTime.Now))
+                .ProjectTo<SummaryContestViewModel>()
                 .ToList();
 
             Assert.AreEqual(fakeContestsList.Count(), actualModelList.Count());
@@ -167,6 +174,7 @@
                 .Where(c => c.Status == ContestStatus.Finished)
                 .OrderByDescending(c => c.Pictures.Count)
                 .ThenByDescending(c => c.Votes.Count)
+                .ProjectTo<SummaryContestViewModel>()
                 .ToList();
 
             Assert.AreEqual(fakeContestsList.Count(), actualModelList.Count());
@@ -175,6 +183,20 @@
             {
                 Assert.AreEqual(fakeContestsList[i].Id, actualModelList[i].Id);
             }
+        }
+
+        [TestMethod]
+        public void HomeContactShouldReturnViewResult()
+        {
+            var result = this.homeController.Contact();
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+        }
+
+        [TestMethod]
+        public void HomeRulesShouldReturnViewResult()
+        {
+            var result = this.homeController.Rules();
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
         }
 
         //TODO Add more test for other orderBy and filterBy cases.
