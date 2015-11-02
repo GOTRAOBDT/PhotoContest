@@ -29,12 +29,15 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="/Notifications/Index">Notifications <span class="badge">@ViewData["UnreadCount"]</span></a></li>
+                    @if (this.User.Identity.IsAuthenticated)
+                    {
+                        <li><a href="/Notifications/Index">Notifications <span class="badge">@ViewData["UnreadCount"]</span></a></li>
+                    }
                     <li>@Html.ActionLink("Rules of Engagement", "Rules", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                     @if (this.User.IsInRole("Administrator"))
                     {
-                        <li>@Html.ActionLink("Administration", "Index", "Admin", new { area = "Administration" }, new { id = "admin-link" })</li>
+                        <li>@Html.ActionLink("Administration", "Index", "Admin", new {area = "Administration"}, new {id = "admin-link"})</li>
                     }
                 </ul>
                 @Html.Partial("_LoginPartial")
