@@ -1,0 +1,19 @@
+﻿@model PhotoContest.Models.SearchResultsRepository
+@{
+    ViewBag.Title = "Search";
+}
+
+<div class="col-md-7 col-md-offset-1">
+    <h2>Search Results</h2>
+
+    <div class="list-group">
+        <a href="#" class="list-group-item active">
+            Search Results
+        </a>
+
+        @foreach (var result in Model.Results)
+        {
+            <a href="@result.ResultUrl()" class="list-group-item">@result.ResultText()</a>
+        }
+    </div>
+</div>
