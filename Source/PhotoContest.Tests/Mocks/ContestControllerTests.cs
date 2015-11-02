@@ -103,7 +103,47 @@
                 .FirstOrDefault(c => c.Title == "Title 1");
 
             Assert.IsNull(dbContest);
+        }
 
+        [TestMethod]
+        public void ContestGetById_WithInvalidInfo_ReturnNull()
+        {
+            Assert.AreEqual(this.data.Contests.All().Count(), 0);
+
+            var result = this.contestsController.GetContestById(12);
+
+            Assert.IsInstanceOfType(result, typeof(HttpNotFoundResult));
+        }
+
+        [TestMethod]
+        public void ContestGetById_WithVaidInfo_ReturnContestView()
+        {
+            Assert.AreEqual(this.data.Contests.All().Count(), 0);
+
+            LoginMock();
+
+            var contest = new CreateContestBindingModel
+            {
+                VotingType = VotingType.Open,
+                Description = null,
+                Prizes = new HashSet<Prize>(),
+                DeadlineType = DeadlineType.EndDate,
+                ParticipationType = ParticipationType.Open,
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now,
+                ParticipationLimit = 1
+            };
+
+
+            Assert.AreEqual(this.data.Contests.All().Count(), 0);
+
+            this.contestsController.Create(contest);
+
+            Assert.AreEqual(this.data.Contests.All().Count(), 1);
+
+            //var result = this.contestsController.GetContestById(1);
+
+            //Assert.IsInstanceOfType(result, typeof(HttpNotFoundResult));
         }
 
         private void LoginMock()
