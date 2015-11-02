@@ -1,26 +1,30 @@
 ﻿namespace PhotoContest.Tests.UnitTests
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Security.Claims;
+    using System.Security.Principal;
     using System.Web;
     using System.Web.Mvc;
 
     using App.Controllers;
+    using App.Models.Account;
     using App.Models.Contest;
-    using Data.Contracts;
+    using App.Models.Pictures;
 
+    using AutoMapper.QueryableExtensions;
+
+    using Common;
+
+    using Data.Contracts;
+    
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     using Models;
 
     using Moq;
 
-    using PhotoContest.App.Models.Account;
-    using PhotoContest.App.Models.Pictures;
-    using PhotoContest.Common;
-    using PhotoContest.Models.Enumerations;
+    using PagedList;
 
     [TestClass]
     public class MeControllerTests
@@ -28,6 +32,7 @@
         private MockContainer mock;
         private IQueryable<Contest> fakeContests;
         private IQueryable<Picture> fakePictures;
+        private IQueryable<MaintanceLog> fakeMaintanceLogs;
         private IQueryable<User> fakeUsers;
         private Mock<IPhotoContestData> mockContext;
         private MeController meController;
@@ -40,6 +45,7 @@
             this.mock.PrepareMocks();
             this.fakeContests = this.mock.ContestsRepositoryMock.Object.All();
             this.fakePictures = this.mock.PictureRepositoryMock.Object.All();
+            this.fakeMaintanceLogs = this.mock.MaintanceLogRepositoryMock.Object.All();
             this.fakeUsers = this.mock.UsersRepositoryMock.Object.All();
             this.user = this.fakeUsers.FirstOrDefault();
             this.mockContext = new Mock<IPhotoContestData>();
@@ -47,111 +53,46 @@
                 .Returns(this.fakeContests);
             this.mockContext.Setup(c => c.Pictures.All())
                 .Returns(this.fakePictures);
+            this.mockContext.Setup(c => c.MaintanceLogs.All())
+                .Returns(this.fakeMaintanceLogs);
+            this.mockContext.Setup(c => c.Users.All())
+                .Returns(this.fakeUsers);
+            this.mockContext.Setup(c => c.Users.Find(It.IsAny<string>()))
+                .Returns((string id) =>
+                {
+                    return this.fakeUsers.FirstOrDefault(n => n.Id == id);
+                });
+            this.mockContext.Setup(c => c.Pictures.Add(It.IsAny<Picture>()))
+                .Callback((Picture picture) =>
+                {
+                    this.mock.PictureRepositoryMock.Object.Add(picture);
+                });
 
             this.meController = new MeController(this.mockContext.Object);
         }
 
         [TestMethod]
-        public void CallingIndexActionShouldReturnViewResultAndIEnumerableOfSummuryContestViewModel()
+        public void CallingContestsActionShouldReturnViewResultAndIPagedListOfSummuryContestViewModel()
         {
+            this.LoginMock(true);
             var result = this.meController.Contests(null);
             Assert.IsInstanceOfType(result, typeof(ViewResult));
 
             var viewResult = result as ViewResult;
-            Assert.IsInstanceOfType(viewResult.Model, typeof(IEnumerable<SummaryContestViewModel>));
+            Assert.IsInstanceOfType(viewResult.Model, typeof(IPagedList<SummaryContestViewModel>));
         }
 
         [TestMethod]
-        public void CallingIndexActionWithNoSortByAndFilterByOptionsShouldReturnByDefaultActiveEntitiesOrderdByPicturesCountAndThenByVotesCount()
+        public void CallingContestsActionShouldReturnByDefaultActiveEntitiesOrderdByPicturesCountAndThenByVotesCount()
         {
             this.LoginMock(true);
             var result = this.meController.Contests(null);
             var viewResult = result as ViewResult;
-            var actualModelList = viewResult.Model as List<SummaryContestViewModel>;
+            var actualModelList = viewResult.Model as IPagedList<SummaryContestViewModel>;
             var fakeContestsList = this.fakeContests
-                .Where(c => c.Status == ContestStatus.Active && c.OwnerId == this.user.Id)
-                .OrderByDescending(c => c.Pictures.Count)
-                .ThenByDescending(c => c.Votes.Count)
-                .ToList();
-
-            Assert.AreEqual(fakeContestsList.Count(), actualModelList.Count());
-
-            for (int i = 0; i < fakeContestsList.Count; i++)
-            {
-                Assert.AreEqual(fakeContestsList[i].Id, actualModelList[i].Id);
-            }
-        }
-
-        [TestMethod]
-        public void CallingIndexActionWithNoSortByAndFilterByComingSoonOptionsShouldReturnCorectEntities()
-        {
-            var result = this.meController.Contests(null);
-            var viewResult = result as ViewResult;
-            var actualModelList = viewResult.Model as List<SummaryContestViewModel>;
-            var fakeContestsList = this.fakeContests
-                .Where(c => c.Status == ContestStatus.Inactive && c.OwnerId == this.user.Id)
-                .OrderByDescending(c => c.Pictures.Count)
-                .ThenByDescending(c => c.Votes.Count)
-                .ToList();
-
-            Assert.AreEqual(fakeContestsList.Count(), actualModelList.Count());
-
-            for (int i = 0; i < fakeContestsList.Count; i++)
-            {
-                Assert.AreEqual(fakeContestsList[i].Id, actualModelList[i].Id);
-            }
-        }
-
-        [TestMethod]
-        public void CallingIndexActionWithNoSortByAndFilterByFinishedOptionsShouldReturnCorectEntities()
-        {
-            var result = this.meController.Contests(null);
-            var viewResult = result as ViewResult;
-            var actualModelList = viewResult.Model as List<SummaryContestViewModel>;
-            var fakeContestsList = this.fakeContests
-                .Where(c => c.Status == ContestStatus.Finished && c.OwnerId == this.user.Id)
-                .OrderByDescending(c => c.Pictures.Count)
-                .ThenByDescending(c => c.Votes.Count)
-                .ToList();
-
-            Assert.AreEqual(fakeContestsList.Count(), actualModelList.Count());
-
-            for (int i = 0; i < fakeContestsList.Count; i++)
-            {
-                Assert.AreEqual(fakeContestsList[i].Id, actualModelList[i].Id);
-            }
-        }
-
-        [TestMethod]
-        public void CallingIndexActionWithNoSortByAndFilterByInvalidCriterionOptionsShouldReturnActiveEntitiesByDefault()
-        {
-            var result = this.meController.Contests(null);
-            var viewResult = result as ViewResult;
-            var actualModelList = viewResult.Model as List<SummaryContestViewModel>;
-            var fakeContestsList = this.fakeContests
-                .Where(c => c.Status == ContestStatus.Active && c.OwnerId == this.user.Id)
-                .OrderByDescending(c => c.Pictures.Count)
-                .ThenByDescending(c => c.Votes.Count)
-                .ToList();
-
-            Assert.AreEqual(fakeContestsList.Count(), actualModelList.Count());
-
-            for (int i = 0; i < fakeContestsList.Count; i++)
-            {
-                Assert.AreEqual(fakeContestsList[i].Id, actualModelList[i].Id);
-            }
-        }
-
-
-        [TestMethod]
-        public void CallingIndexActionWithSortByNewestAndNoFilterByOptionsShouldReturnActiveEntitiesOrderedByNewestOpened()
-        {
-            var result = this.meController.Contests(null);
-            var viewResult = result as ViewResult;
-            var actualModelList = viewResult.Model as List<SummaryContestViewModel>;
-            var fakeContestsList = this.fakeContests
-                .Where(c => c.Status == ContestStatus.Active && c.OwnerId == this.user.Id)
+                .Where(c => c.OwnerId == this.user.Id)
                 .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
+                .ProjectTo<SummaryContestViewModel>()
                 .ToList();
 
             Assert.AreEqual(fakeContestsList.Count(), actualModelList.Count());
@@ -163,93 +104,27 @@
         }
 
         [TestMethod]
-        public void CallingIndexActionWithSortByInvalidSortCriterionAndNoFilterByOptionsShouldReturnByDefaultActiveEntitiesOrderedByPicturesCountAndThenByVotesCount()
-        {
-            var result = this.meController.Contests(null);
-            var viewResult = result as ViewResult;
-            var actualModelList = viewResult.Model as List<SummaryContestViewModel>;
-            var fakeContestsList = this.fakeContests
-                .Where(c => c.Status == ContestStatus.Active && c.OwnerId == this.user.Id)
-                .OrderByDescending(c => c.Pictures.Count)
-                .ThenByDescending(c => c.Votes.Count)
-                .ToList();
-
-            Assert.AreEqual(fakeContestsList.Count(), actualModelList.Count());
-
-            for (int i = 0; i < fakeContestsList.Count; i++)
-            {
-                Assert.AreEqual(fakeContestsList[i].Id, actualModelList[i].Id);
-            }
-        }
-
-        [TestMethod]
-        public void CallingIndexActionWithSortByNewestAndFilterByFinishedOptionsShouldReturnCorrectEntities()
-        {
-            var result = this.meController.Contests(null);
-            var viewResult = result as ViewResult;
-            var actualModelList = viewResult.Model as List<SummaryContestViewModel>;
-            var fakeContestsList = this.fakeContests
-                .Where(c => c.Status == ContestStatus.Finished && c.OwnerId == this.user.Id)
-                .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
-                .ToList();
-
-            Assert.AreEqual(fakeContestsList.Count(), actualModelList.Count());
-
-            for (int i = 0; i < fakeContestsList.Count; i++)
-            {
-                Assert.AreEqual(fakeContestsList[i].Id, actualModelList[i].Id);
-            }
-        }
-
-        [TestMethod]
-        public void CallingContestsActionShouldReturnViewResultAndIEnumerableOfSummaryContestViewModel()
-        {
-            var result = this.meController.Contests(null);
-            Assert.IsInstanceOfType(result, typeof(ViewResult));
-
-            var viewResult = result as ViewResult;
-            Assert.IsInstanceOfType(viewResult.Model, typeof(IEnumerable<SummaryContestViewModel>));
-        }
-
-        [TestMethod]
-        public void CallingContestsActionShouldReturnLoggedUsersActiveSummaryContestViewModelEntitiesOrderedByNewestFirst()
+        public void CallingPicturesActionShouldReturnViewResultAndIPagedListOfSummaryPictureViewModel()
         {
             this.LoginMock(true);
-            var result = this.meController.Contests(null) as ViewResult;
-            var actualModelList = result.Model as List<SummaryContestViewModel>;
-            var fakeContestsList = this.fakeContests
-                .Where(c => c.Status == ContestStatus.Active && c.OwnerId == this.user.Id)
-                .OrderBy(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
-                .ToList();
-
-
-            Assert.AreEqual(fakeContestsList.Count(), actualModelList.Count());
-
-            for (int i = 0; i < fakeContestsList.Count; i++)
-            {
-                Assert.AreEqual(fakeContestsList[i].Id, actualModelList[i].Id);
-            }
-        }
-
-        [TestMethod]
-        public void CallingPicturesActionShouldReturnViewResultAndIEnumerableOfSummaryPictureViewModel()
-        {
-            var result = this.meController.Pictures(null);
+            var result = this.meController.Pictures(null, null);
             Assert.IsInstanceOfType(result, typeof(ViewResult));
 
             var viewResult = result as ViewResult;
-            Assert.IsInstanceOfType(viewResult.Model, typeof(IEnumerable<SummaryPictureViewModel>));
+            Assert.IsInstanceOfType(viewResult.Model, typeof(IPagedList<SummaryPictureViewModel>));
         }
 
         [TestMethod]
         public void CallingPicturesActionShouldReturnLoggedUsersUploadedPicturesOrderedByNewestFirst()
         {
             this.LoginMock(true);
-            var result = this.meController.Pictures(null) as ViewResult;
-            var actualModelList = result.Model as List<SummaryPictureViewModel>;
+            var result = this.meController.Pictures(null, null) as ViewResult;
+            var actualModelList = result.Model as IPagedList<SummaryPictureViewModel>;
             var fakePicturesList = this.fakePictures
-                .Where(c => c.AuthorId == this.user.Id)
-                .OrderBy(c => TestableDbFunctions.DiffMinutes(c.PostedOn, DateTime.Now))
+                .Where(p => p.Author.Id == this.user.Id)
+                .OrderByDescending(p => p.PostedOn)
+                .ThenByDescending(c => c.Contests.Count())
+                .ProjectTo<SummaryPictureViewModel>()
                 .ToList();
             
             Assert.AreEqual(fakePicturesList.Count(), actualModelList.Count());
@@ -261,28 +136,45 @@
         }
 
         [TestMethod]
-        public void CallingUploadPictureActionWithoutModelShouldReturnViewResultWithoutModel()
+        public void CallingUploadPictureActionWithInocrrectModelShouldReturnViewResultWithModel()
         {
-            var result = this.meController.UploadPicture();
+            this.LoginMock(true);
+            var incorrectNewPicture = new UploadPictureBindingModel
+            {
+                PictureData = null,
+                Title = "Title"
+            };
+
+            this.meController.ModelState.AddModelError("PictureData", "Current value: null");
+
+            var result = this.meController.UploadPicture(incorrectNewPicture);
             Assert.IsInstanceOfType(result, typeof(ViewResult));
 
             var viewResult = result as ViewResult;
-            Assert.IsNull(viewResult.Model);
+            Assert.IsInstanceOfType(viewResult.Model, typeof(UploadPictureBindingModel));
         }
 
-        //[TestMethod]
-        //public void CallingUploadPictureActionWithCorrectUploadPictureBindingModelShouldShouldAddPicture()
-        //{
-        //    var result = this.meController.UploadPicture();
-        //    Assert.IsInstanceOfType(result, typeof(ViewResult));
+        [TestMethod]
+        public void CallingUploadPictureActionWithCorrectUploadPictureBindingModelShouldShouldAddPicture()
+        {
+            this.LoginMock(true);
+            var fakePicturesCountBeforeAdding = this.fakePictures.Count();
+            var newPicture = new UploadPictureBindingModel { PictureData = "base64", Title = "newPicture" };
+            var result = this.meController.UploadPicture(newPicture);
 
-        //    var viewResult = result as ViewResult;
-        //    Assert.IsNull(viewResult.Model);
-        //}
+            Assert.IsInstanceOfType(result, typeof(RedirectToRouteResult));
+
+            var routeResult = result as RedirectToRouteResult;
+            Assert.AreEqual(routeResult.RouteValues["action"], "Pictures");
+
+            var fakePicturesCountAfterAdding = this.mock.PictureRepositoryMock.Object.All().Count();
+            Assert.AreEqual(fakePicturesCountBeforeAdding + 1, fakePicturesCountAfterAdding);
+        }
 
         [TestMethod]
         public void CallingEditProfileActionWithoutModelShouldReturnViewResultWithEditProfileBindingModel()
         {
+            this.LoginMock(true);
             var result = this.meController.Profile();
             Assert.IsInstanceOfType(result, typeof(ViewResult));
 
@@ -297,7 +189,6 @@
             var editProfileBindingModel = new EditProfileBindingModel
             {
                 Name = "Edited Name",
-                Email = "edited@mail.com",
                 BirthDate = DateTime.Now
             };
             var result = this.meController.Profile(editProfileBindingModel);
@@ -310,8 +201,31 @@
 
             var fakeUser = this.fakeUsers.FirstOrDefault();
             Assert.AreEqual(editProfileBindingModel.Name, fakeUser.Name);
-            Assert.AreEqual(editProfileBindingModel.Name, fakeUser.Email);
-            Assert.AreEqual(editProfileBindingModel.Name, fakeUser.BirthDate);
+            Assert.AreEqual(editProfileBindingModel.BirthDate, fakeUser.BirthDate);
+        }
+
+        [TestMethod]
+        public void CallingEditProfileActionWithCorrectModelAndProfilePictureShouldSuccesfullyEditUserProfileAndRedirectsToHomeIndex()
+        {
+            this.LoginMock(true);
+            var editProfileBindingModel = new EditProfileBindingModel
+            {
+                Name = "Edited Name",
+                BirthDate = DateTime.Now,
+                ProfilePicture = "someBase64string"
+            };
+            var result = this.meController.Profile(editProfileBindingModel);
+
+            Assert.IsInstanceOfType(result, typeof(RedirectToRouteResult));
+
+            var routeResult = result as RedirectToRouteResult;
+            Assert.AreEqual(routeResult.RouteValues["controller"], "Home");
+            Assert.AreEqual(routeResult.RouteValues["action"], "Index");
+
+            var fakeUser = this.fakeUsers.FirstOrDefault();
+            Assert.AreEqual(editProfileBindingModel.Name, fakeUser.Name);
+            Assert.AreEqual(editProfileBindingModel.BirthDate, fakeUser.BirthDate);
+            Assert.AreEqual(editProfileBindingModel.ProfilePicture, fakeUser.ProfilePicture);
         }
 
         [TestMethod]
@@ -321,7 +235,6 @@
             var editProfileBindingModel = new EditProfileBindingModel
             {
                 Name = null,
-                Email = "edited@mail.com",
                 BirthDate = DateTime.Now
             };
 
@@ -334,18 +247,14 @@
 
             var fakeUser = this.fakeUsers.FirstOrDefault();
             Assert.AreNotEqual(editProfileBindingModel.Name, fakeUser.Name);
-            Assert.AreNotEqual(editProfileBindingModel.Name, fakeUser.Email);
-            Assert.AreNotEqual(editProfileBindingModel.Name, fakeUser.BirthDate);
+            Assert.AreNotEqual(editProfileBindingModel.BirthDate, fakeUser.BirthDate);
         }
-
-        //TODO Add more tests
 
         private void LoginMock(bool isAuthenticated)
         {
-            var claim = new Claim("Id", this.user.Id);
-            var mockIdentity =
-                Mock.Of<ClaimsIdentity>(ci => ci.FindFirst(It.IsAny<string>()) == claim);
-            var principal = new ClaimsPrincipal(mockIdentity);
+            var identity = new GenericIdentity(this.user.UserName);
+            identity.AddClaim(new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", this.user.Id));
+            var principal = new GenericPrincipal(identity, new[] { "user" });
 
             var controllerContext = new Mock<ControllerContext>();
 
@@ -359,5 +268,7 @@
 
             this.meController.ControllerContext = controllerContext.Object;
         }
+
+        //TODO Add more tests
     }
 }

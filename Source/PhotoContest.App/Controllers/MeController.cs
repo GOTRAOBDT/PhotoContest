@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Web.Mvc;
 
+    using AutoMapper;
     using AutoMapper.QueryableExtensions;
 
     using Common;
@@ -26,6 +27,9 @@
         public MeController(IPhotoContestData data)
             : base(data)
         {
+            Mapper.CreateMap<Contest, SummaryContestViewModel>();
+            Mapper.CreateMap<Picture, SummaryPictureViewModel>();
+            Mapper.CreateMap<User, EditProfileBindingModel>();
         }
 
         // GET: Me/Contests
