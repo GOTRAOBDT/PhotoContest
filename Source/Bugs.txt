@@ -1,1 +1,2 @@
 Excetion on delete picture from contest. Relation error. Votes should be deleted first when deleing picture.
+After dismiss the dismiss button is still there. Need to be checked in the view if it is already dismised :)
