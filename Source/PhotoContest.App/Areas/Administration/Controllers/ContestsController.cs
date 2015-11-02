@@ -50,14 +50,14 @@
             return base.Participants(id, page);
         }
 
-        // GET: Administration/Contests/{id}/Participants
+        // GET: Administration/Contests/{id}/Jury
         [HttpGet]
         public override ActionResult Jury(int id)
         {
             return base.Jury(id);
         }
 
-        // GET: Administration/Contests/{id}/Participants
+        // GET: Administration/Contests/{id}/Pictures
         [HttpGet]
         public override ActionResult Pictures(int id, int? page)
         {

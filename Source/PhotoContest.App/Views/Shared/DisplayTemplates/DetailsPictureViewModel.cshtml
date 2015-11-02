@@ -6,7 +6,7 @@
     <div class="caption">
         @Model.Title
         <div>
-            @if ((Model.IsAuthor || this.User.IsInRole("Administrator")) && this.TempData.ContainsKey("IsAdminArea") == false)
+            @if ((Model.IsAuthor || this.User.IsInRole("Administrator")))
             {
                 @Html.ActionLink("Delete", "Delete", "Pictures", new { id = Model.Id }, new { @class = "btn btn-danger" })
                 @Html.ActionLink("Remove", "Remove", "Pictures", new { id = Model.Id, contestId = Model.ContestId }, new { @class = "btn btn-warning" })
