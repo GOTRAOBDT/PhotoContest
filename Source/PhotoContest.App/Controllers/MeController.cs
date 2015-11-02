@@ -46,7 +46,7 @@
         // GET: Me/Pictures
         // Returned model type: SummaryPictureViewModel
         [HttpGet]
-        public ActionResult Pictures(int? page)
+        public ActionResult Pictures(int? page, int? contestId)
         {
             IPagedList<SummaryPictureViewModel> pictures = null;
             var userId = this.User.Identity.GetUserId();
@@ -57,6 +57,13 @@
                     .ThenByDescending(c => c.Contests.Count())
                     .ProjectTo<SummaryPictureViewModel>()
                     .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
+            if (contestId != null)
+            {
+                for (int i = 0; i < pictures.Count; i++)
+                {
+                    pictures[i].ContestId = contestId;
+                }
+            }
 
             return this.View(pictures);
         }

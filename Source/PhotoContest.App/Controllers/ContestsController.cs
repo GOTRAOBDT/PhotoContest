@@ -757,7 +757,7 @@
             this.TempData["SelectPicture"] = true;
             this.TempData["contestId"] = id;
 
-            return this.RedirectToAction("Pictures", "Me");
+            return this.RedirectToAction("Pictures", "Me", new { contestId = id});
         }
 
         [HttpGet]
