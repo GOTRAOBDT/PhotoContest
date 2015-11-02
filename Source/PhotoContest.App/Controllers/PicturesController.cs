@@ -52,6 +52,7 @@
                 picture.ContestId = contestId;
                 picture.CanVote = this.CanVote(user, dbPicture, dbContest);
                 picture.HasVoted = this.HasVoted(user, dbPicture, dbContest);
+                picture.VotesCount = dbPicture.Votes.Where(v => v.ContestId == contestId).Count();
             }
 
             return this.View(picture);

@@ -18,34 +18,38 @@
 
         public static void Main()
         {
-            AddSomeUsers();
-            Console.WriteLine(dbContext.Users.Count());
-
-            CreateContest();
-            Console.WriteLine(dbContext.Contests.Count());
-
-            AddPicture();
-            Console.WriteLine(dbContext.Pictures.Count());
-
-            var contest = dbContext.Contests.First();
-            var picture = dbContext.Pictures.First();
-            var participant = dbContext.Users.First();
-            var voter = dbContext.Users.Where(u => u.UserName == "asya").FirstOrDefault();
-
-            contest.Participants.Add(participant);
-            contest.Pictures.Add(picture);
-            var vote = new Vote()
-            {
-                Contest = contest,
-                Voter = voter,
-                Picture = picture
-            };
-
-            contest.Votes.Add(vote);
+            var vote = dbContext.Votes.Where(v => v.ContestId == 22 && v.PictureId == 46).FirstOrDefault();
+            dbContext.Votes.Remove(vote);
             dbContext.SaveChanges();
 
-            Console.WriteLine(contest.Pictures.Count());
-            Console.WriteLine(contest.Votes.Count());
+            //AddSomeUsers();
+            //Console.WriteLine(dbContext.Users.Count());
+
+            //CreateContest();
+            //Console.WriteLine(dbContext.Contests.Count());
+
+            //AddPicture();
+            //Console.WriteLine(dbContext.Pictures.Count());
+
+            //var contest = dbContext.Contests.First();
+            //var picture = dbContext.Pictures.First();
+            //var participant = dbContext.Users.First();
+            //var voter = dbContext.Users.Where(u => u.UserName == "asya").FirstOrDefault();
+
+            //contest.Participants.Add(participant);
+            //contest.Pictures.Add(picture);
+            //var vote = new Vote()
+            //{
+            //    Contest = contest,
+            //    Voter = voter,
+            //    Picture = picture
+            //};
+
+            //contest.Votes.Add(vote);
+            //dbContext.SaveChanges();
+
+            //Console.WriteLine(contest.Pictures.Count());
+            //Console.WriteLine(contest.Votes.Count());
         }
 
         private static void AddPicture()
