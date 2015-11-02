@@ -17,7 +17,12 @@
             @Html.ActionLink("Add Picture", "SelectPictures", "Contests", new { id = Model.Id }, new { @class = "btn btn-info" })
         }
         @Html.ActionLink("Browse Pictures", "Pictures", "Contests", new { id = Model.Id }, new { @class = "btn btn-danger" })
-        @Html.ActionLink("View Gallery", "Gallery", "Contests", new { id = Model.Id }, new { @class = "btn btn-primary" })
+
+        @if (ViewContext.RouteData.DataTokens["area"] == null)
+        {
+            @Html.ActionLink("View Gallery", "Gallery", "Contests", new { id = Model.Id }, new { @class = "btn btn-primary" })
+        }
+        
         <h2 class="contest-title">@Model.Title</h2>
         <p class="contest-description">@Model.Description</p><br />
         <div class="row">
