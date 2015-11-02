@@ -86,7 +86,6 @@
                 contest.Jury.ContestId = contest.Id;
             }
 
-
             foreach (var prize in model.Prizes)
             {
                 var dbPrize = new Prize()

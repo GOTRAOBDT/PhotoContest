@@ -46,16 +46,6 @@ namespace PhotoContest.Tests.UnitTests
         }
 
         [TestMethod]
-        public void ContestCreate_ShouldReturnViewResult()
-        {
-            var result = this.contestController.Create();
-            Assert.IsInstanceOfType(result, typeof(ViewResult));
-
-            var viewResult = result as ViewResult;
-            Assert.IsNull(viewResult.Model);
-        }
-
-        [TestMethod]
         public void ContestCreate_ShouldAddNewContest()
         {
             var contest = new CreateContestBindingModel
