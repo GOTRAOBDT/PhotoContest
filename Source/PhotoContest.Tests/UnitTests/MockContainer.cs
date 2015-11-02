@@ -22,6 +22,8 @@
         public Mock<IRepository<Vote>> VotesRepositoryMock { get; set; }
 
         public Mock<IRepository<VotingCommittee>> VotingCommitteesRepositoryMock { get; set; }
+        
+        public Mock<IRepository<MaintanceLog>> MaintanceLogRepositoryMock { get; set; }
 
         public void PrepareMocks()
         {
@@ -31,6 +33,7 @@
             this.SetupFakePrizes();
             this.SetupFakeVotes();
             this.SetupFakeVotingCommittees();
+            this.SetupFakeMaintanceLogs();
         }
 
         private void SetupFakeUsers()
@@ -310,6 +313,20 @@
                 {
                     fakePrizes.Remove(prize);
                 });
+        }
+
+        private void SetupFakeMaintanceLogs()
+        {
+            var fakeLogs = new List<MaintanceLog>
+            {
+                new MaintanceLog { Id = 1, CreatedAt = DateTime.Now }
+            };
+
+            this.MaintanceLogRepositoryMock = new Mock<IRepository<MaintanceLog>>();
+            this.MaintanceLogRepositoryMock.Setup(r => r.All())
+                .Returns(fakeLogs.AsQueryable());
+
+
         }
     }
 }

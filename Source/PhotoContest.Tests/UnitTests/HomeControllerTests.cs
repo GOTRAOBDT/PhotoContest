@@ -25,6 +25,7 @@
     {
         private MockContainer mock;
         private IQueryable<Contest> fakeContests;
+        private IQueryable<MaintanceLog> fakeMaintanceLogs;
         private Mock<IPhotoContestData> mockContext;
         private HomeController homeController;
 
@@ -35,9 +36,13 @@
             this.mock.PrepareMocks();
 
             this.fakeContests = this.mock.ContestsRepositoryMock.Object.All();
+            this.fakeMaintanceLogs = this.mock.MaintanceLogRepositoryMock.Object.All();
             this.mockContext = new Mock<IPhotoContestData>();
             this.mockContext.Setup(c => c.Contests.All())
                 .Returns(this.fakeContests);
+
+            this.mockContext.Setup(c => c.MaintanceLogs.All())
+                .Returns(this.fakeMaintanceLogs);
 
             this.homeController = new HomeController(this.mockContext.Object);
         }
