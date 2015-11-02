@@ -1,11 +1,10 @@
-﻿using System.Linq;
-using System.Security.Claims;
-using System.Web;
-using Moq;
-
-namespace PhotoContest.Tests.Mocks
+﻿namespace PhotoContest.Tests.Mocks
 {
     using System;
+    using System.Linq;
+    using System.Security.Claims;
+    using System.Web;
+    using Moq;
     using System.Collections.Generic;
     using PhotoContest.App.Models.Contest;
     using PhotoContest.Models;
@@ -73,6 +72,37 @@ namespace PhotoContest.Tests.Mocks
             Assert.AreEqual(dbContest.Thumbnail, "Thumbnail");
             Assert.AreEqual(dbContest.Prizes.Count, 0);
             Assert.AreEqual(dbContest.Description, "Contest 1");
+
+        }
+
+        [TestMethod]
+        public void ContestCreate_WithInvalidInfo_ShouldNotAdd()
+        {
+            LoginMock();
+
+            var contest = new CreateContestBindingModel
+            {
+                VotingType = VotingType.Open,
+                Description = null,
+                Prizes = new HashSet<Prize>(),
+                DeadlineType = DeadlineType.EndDate,
+                ParticipationType = ParticipationType.Open,
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now,
+                ParticipationLimit = 1
+            };
+
+
+            Assert.AreEqual(this.data.Contests.All().Count(), 0);
+
+            var result = this.contestsController.Create(contest);
+
+            Assert.IsInstanceOfType(result, typeof(RedirectToRouteResult));
+
+            var dbContest = this.data.Contests.All()
+                .FirstOrDefault(c => c.Title == "Title 1");
+
+            Assert.IsNull(dbContest);
 
         }
 
