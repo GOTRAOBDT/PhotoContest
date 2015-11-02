@@ -136,18 +136,17 @@
 
         public ActionResult Remove(int id, int contestId)
         {
-            var picture = this.Data.Pictures.Find(id);
-            if (picture == null)
-            {
-                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
-            }
-
             var contest = this.Data.Contests.Find(contestId);
             if (contest == null)
             {
                 throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
             }
 
+            var picture = contest.Pictures.FirstOrDefault(p => p.Id == id);
+            if (picture == null)
+            {
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            }
 
             var user = this.Data.Users.Find(this.User.Identity.GetUserId());
 
@@ -159,12 +158,15 @@
             var votesForPictureInContest = picture.Votes.Where(v => v.ContestId == contestId).ToList();
             foreach (var vote in votesForPictureInContest)
             {
-                picture.Votes.Remove(vote);
+                this.Data.Votes.Delete(vote);
             }
             this.Data.SaveChanges();
+            if (contest.Pictures.Where(p => p.AuthorId == user.Id).Count() < 2)
+            {
+                contest.Participants.Remove(user);
+            }
 
             contest.Pictures.Remove(picture);
-
             this.Data.SaveChanges();
 
             return this.RedirectToAction("Pictures", "Contests", new { id = contestId });

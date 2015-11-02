@@ -13,12 +13,9 @@
             @if ((Model.IsAuthor || this.User.IsInRole("Administrator")) && this.TempData.ContainsKey("IsAdminArea") == false)
             {
                 @Html.ActionLink("Delete", "Delete", "Pictures", new { id = Model.Id }, new { @class = "btn btn-danger" })
-                @*@Html.ActionLink("Remove", "Remove", "Pictures", new { id = Model.Id, contestId = Model.ContestId }, new { @class = "btn btn-warning" })*@
+                @Html.ActionLink("Remove", "Remove", "Pictures", new { id = Model.Id, contestId = Model.ContestId }, new { @class = "btn btn-warning" })
             }
-            @*@if (Model.IsAuthor)
-            {
-                @Html.ActionLink("Delete", "Delete", "Pictures", new { id = Model.Id }, new { @class = "btn btn-danger" })
-            }*@
+           
             @Ajax.ActionLink("Vote", "GalleryVote", "Contests", new { contestId = Model.ContestId, pictureId = Model.Id, vote = true }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "votes-container", InsertionMode = InsertionMode.Replace }, new { @class = "btn btn-success" })
             @Ajax.ActionLink("Unvote", "GalleryVote", "Contests", new { contestId = Model.ContestId, pictureId = Model.Id, vote = false }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "votes-container", InsertionMode = InsertionMode.Replace }, new { @class = "btn btn-info" })
         </div>
