@@ -79,3 +79,14 @@ textarea {
 #hub-message a {
     color: red;
 }
+
+.logo-container {
+    line-height: 30px;
+    padding: 3px !important;
+}
+
+.logo-image {
+    margin: auto;
+    vertical-align: middle;
+    display: inline-block;
+}

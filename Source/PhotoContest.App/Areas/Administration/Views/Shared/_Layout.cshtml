@@ -16,7 +16,10 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Photo Contests", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @*@Html.ActionLink("Photo Contests", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
+                <a class="navbar-brand logo-container" href="/home/index">
+                    <img src="~/Content/img/300mm_logo_white.png" alt="300mm logo" class="logo-image" />
+                </a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -31,7 +34,7 @@
         <div class="row">
             @if (this.TempData.ContainsKey("message"))
             {
-                <h3 class="system-message">@this.TempData["message"]</h3>
+                <h3 id="system-messages-container" class="system-message">@this.TempData["message"]</h3>
             }
         </div>
         <div class="row" id="sidebar">
@@ -44,7 +47,7 @@
             </div>
             @RenderBody()
         </div>
-        <hr/>
+        <hr />
         <footer>
             <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
         </footer>
@@ -53,5 +56,11 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+
+    <script>
+        $('#system-messages-container').click(function () {
+            $('#system-messages-container').remove();
+        });
+    </script>
 </body>
 </html>
