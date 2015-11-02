@@ -1,4 +1,6 @@
-﻿@model IEnumerable<PhotoContest.App.Models.Notification.NotificationViewModel>
+﻿@using PagedList.Mvc
+@using PagedList
+@model IPagedList<PhotoContest.App.Models.Notification.NotificationViewModel>
 @{
     ViewBag.Title = "Notifications";
 }
@@ -21,6 +23,7 @@ else
         }
         <hr />
         @Html.DisplayForModel()
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
     </div>
 }
 
@@ -29,8 +32,10 @@ else
         var notifications = $('#notifications > DIV');
 
         for (var i = 0; i < notifications.length; i++) {
-            notifications.eq(i).removeAttr("class");
-            notifications.eq(i).attr("class", "row thumbnailRead");
+            if (notifications.eq(i).attr('class') !== 'pagination-container') {
+                notifications.eq(i).removeAttr("class");
+                notifications.eq(i).attr("class", "row thumbnailRead");
+            }
         }
     }
 </script>

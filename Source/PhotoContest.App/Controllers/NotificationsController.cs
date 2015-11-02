@@ -4,11 +4,14 @@
     using System.Linq;
     using System.Web.Mvc;
 
+
     using Microsoft.AspNet.Identity;
     using AutoMapper.QueryableExtensions;
 
+    using Common;
     using Data.Contracts;
     using Models.Notification;
+    using PagedList;
 
     [Authorize]
     public class NotificationsController : BaseController
@@ -18,7 +21,7 @@
         {
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
             var userId = this.User.Identity.GetUserId();
             var user = this.Data.Users.Find(userId);
@@ -27,7 +30,8 @@
                 .AsQueryable()
                 .OrderByDescending(n => n.CreatedOn)
                 .ProjectTo<NotificationViewModel>()
-                .ToList();
+                .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
+
 
             return View(notifications);
         }
