@@ -27,6 +27,7 @@
     using PhotoContest.App.Hubs;
     using PhotoContest.Models;
     using PhotoContest.Models.Enumerations;
+    using Data;
 
     [System.Web.Mvc.Authorize]
     public class ContestsController : BaseController
@@ -697,6 +698,7 @@
             pictureModel.HasVoted = PictureUtills.HasVotedForPicture(user, picture, contest);
             pictureModel.CanVote = PictureUtills.CanVoteForPicture(user, picture, contest);
             pictureModel.ContestId = id;
+            pictureModel.VotesCount = picture.Votes.Where(v => v.ContestId == id).Count();
 
             var idList = contest.Pictures.OrderBy(p => p.Id).Select(p => p.Id).ToList();
             int? previousPictureId = null;
@@ -819,66 +821,14 @@
                 throw new InvalidOperationException("Invalid operation!");
             }
 
-            var loggedUserId = this.User.Identity.GetUserId();
-            var contest = this.Data.Contests.Find(id);
-
-            if (contest == null)
-            {
-                throw new ArgumentException("Contest not found!");
-            }
-
-            if (contest.VotingType == VotingType.Closed)
-            {
-                if (!contest.Jury.Members.Any(m => m.Id == loggedUserId))
-                {
-                    throw new ArgumentException("You are not allowed to vote only jury members can!");
-                }
-            }
-
-            if (loggedUserId == contest.OwnerId)
-            {
-                throw new ArgumentException("You are not allowed to vote in your own contest!");
-            }
-
-            if (this.Data.Votes.All()
-                .Any(
-                v => v.PictureId == pictureId &&
-                loggedUserId == v.VoterId &&
-                id == contest.Id))
-            {
-                throw new ArgumentException("You are not allowed to vote more than one time each picture!");
-            }
-
-            this.Data.Votes.Add(new Vote
-            {
-                ContestId = id,
-                PictureId = pictureId,
-                VoterId = loggedUserId
-            });
-
-            this.Data.SaveChanges();
+            int votesCount = this.Vote(pictureId, id, true);
 
             var dbPicture = this.Data.Pictures.Find(pictureId);
             var picture = Mapper.Map<DetailsPictureViewModel>(dbPicture);
-
+            picture.VotesCount = votesCount;
             picture.HasVoted = true;
             picture.CanVote = false;
             picture.ContestId = id;
-
-            var notification = new Notification
-            {
-                Content = string.Format(
-                    "{0} has voted for your picture titled '{1}' in contest '{2}'.",
-                    this.Data.Users.Find(loggedUserId).UserName,
-                    dbPicture.Title ?? "(no title)",
-                    contest.Title),
-                CreatedOn = DateTime.Now,
-                IsRead = false,
-                RecipientId = dbPicture.AuthorId,
-            };
-
-            this.Data.Notifications.Add(notification);
-            this.Data.SaveChanges();
 
             return this.PartialView("_PictureInfo", picture);
         }
@@ -893,36 +843,11 @@
                 throw new InvalidOperationException("Invalid operation!");
             }
 
-            var loggedUserId = this.User.Identity.GetUserId();
-            var contest = this.Data.Contests.Find(id);
-
-            if (contest == null)
-            {
-                throw new ArgumentException("Contest not found!");
-            }
-
-            if (loggedUserId == contest.OwnerId)
-            {
-                throw new ArgumentException("You are not allowed to vote in your own contest!");
-            }
-
-            var vote = this.Data.Votes.All()
-                .FirstOrDefault(
-                    v => v.PictureId == pictureId &&
-                    v.ContestId == id &&
-                    v.VoterId == loggedUserId);
-
-            if (vote == null)
-            {
-                throw new ArgumentException("You have not voted to this picture in this contest!");
-            }
-
-            this.Data.Votes.Delete(vote);
-            this.Data.SaveChanges();
+            int votesCount = this.Vote(pictureId, id, false);
 
             var dbPicture = this.Data.Pictures.Find(pictureId);
             var picture = Mapper.Map<DetailsPictureViewModel>(dbPicture);
-
+            picture.VotesCount = votesCount;
             picture.HasVoted = false;
             picture.CanVote = true;
             picture.ContestId = id;
@@ -1057,6 +982,21 @@
             return this.RedirectToAction("GetContestById", new { id = contestId });
         }
 
+        [HttpPost]
+        public ActionResult GalleryVote(int pictureId, int contestId, bool vote = true)
+        {
+            int votesCount = 0;
+            if (vote)
+            {
+                votesCount = this.Vote(pictureId, contestId, true);
+            }
+            else
+            {
+                votesCount = this.Vote(pictureId, contestId, false);
+            }
+            return this.Content(string.Format("Total votes: {0}", votesCount));
+        }
+
         private ICollection<ContestWinnerViewModel> GetContestWinners(Contest contest)
         {
             List<ContestWinnerViewModel> winners = new List<ContestWinnerViewModel>();
@@ -1096,6 +1036,88 @@
             {
                 contest.Status = ContestStatus.Finished;
                 this.Data.SaveChanges();
+            }
+        }
+
+        private int Vote(int pictureId, int contestId, bool vote = true)
+        {
+            var picture = this.Data.Pictures.Find(pictureId);
+            if (picture == null)
+            {
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            }
+
+            var contest = this.Data.Contests.Find(contestId);
+            if (contest == null)
+            {
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            }
+
+            int votes = picture.Votes.Where(v => v.ContestId == contestId).Count();
+
+            var userId = this.User.Identity.GetUserId();
+            var user = this.Data.Users.Find(userId);
+
+            if (picture.AuthorId == user.Id)
+            {
+                return votes;
+            }
+
+            if (contest.VotingType == VotingType.Closed)
+            {
+                if (!contest.Jury.Members.Any(m => m.Id == userId))
+                {
+                    return votes;
+                }
+            }
+
+            if (userId == contest.OwnerId)
+            {
+                return votes;
+            }
+
+            if (vote)
+            {
+                if (picture.Votes.Any(v => v.ContestId == contestId && v.VoterId == userId))
+                {
+                    return votes;
+                }
+
+                this.Data.Votes.Add(new Vote
+                {
+                    ContestId = contestId,
+                    PictureId = pictureId,
+                    VoterId = userId
+                });
+
+                var notification = new Notification
+                {
+                    Content = string.Format(
+                    "Member {0} has voted for your picture titled '{1}' in contest '{2}'.",
+                    user.UserName,
+                    picture.Title ?? "(no title)",
+                    contest.Title),
+                    CreatedOn = DateTime.Now,
+                    IsRead = false,
+                    RecipientId = picture.AuthorId,
+                };
+                this.Data.Notifications.Add(notification);
+
+                this.Data.SaveChanges();
+                return ++votes;
+            }
+            else
+            {
+                var dbVote = picture.Votes.FirstOrDefault(v => v.ContestId == contestId && v.VoterId == userId);
+                if (dbVote == null)
+                {
+                    return votes;
+                }
+
+                this.Data.Votes.Delete(dbVote);
+                this.Data.SaveChanges();
+
+                return --votes;
             }
         }
     }
