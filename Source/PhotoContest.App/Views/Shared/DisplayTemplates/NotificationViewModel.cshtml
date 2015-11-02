@@ -1,5 +1,4 @@
-﻿@using PhotoContest.Models.Enumerations
-@model PhotoContest.App.Models.Notification.NotificationViewModel
+﻿@model PhotoContest.App.Models.Notification.NotificationViewModel
 
 @if (Model.IsRead)
 {
@@ -9,7 +8,7 @@ else
 {
     ViewBag.background = "thumbnail";
 }
-<div class="row @ViewBag.background" id="@Model.Id">
+<div class="row @ViewBag.background notification" id="@Model.Id">
     <p><strong>Content: </strong>@Model.Content</p>
     <h5>Date: @Model.CreatedOn.ToString("dd.MM.yyyy hh:mm")</h5>
     @if (!Model.IsRead)
