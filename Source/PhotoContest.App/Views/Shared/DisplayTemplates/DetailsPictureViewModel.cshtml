@@ -4,7 +4,6 @@
 
     <img src="@Model.PictureData" class="img-rounded full-image" alt="Title: @Model.Title">
     <div class="caption">
-        <h3>
             @Model.Title
             <div>
                 @if ((Model.IsAuthor || this.User.IsInRole("Administrator")) && this.TempData.ContainsKey("IsAdminArea") == false)
@@ -14,30 +13,24 @@
                 }
                 @if (Model.HasVoted && !Model.IsAuthor)
                 {
-                    using (Ajax.BeginForm("UnVote", "Contests", new { id = Model.ContestId, pictureId = Model.Id }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "picture-info-container", InsertionMode = InsertionMode.ReplaceWith }, new { id = Model.Id }))
+                    using (Ajax.BeginForm("UnVote", "Contests", new { id = Model.ContestId, pictureId = Model.Id }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "picture-info-container", InsertionMode = InsertionMode.ReplaceWith }))
                     {
                         @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-danger pull-right">Unvote</button>
+                        <input type="submit" class="btn btn-danger pull-right" value="Unvote"/>
                     }
                 }
                 @if (Model.CanVote)
                 {
-                    using (Ajax.BeginForm("Vote", "Contests", new { id = Model.ContestId, pictureId = Model.Id }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "picture-info-container", InsertionMode = InsertionMode.ReplaceWith }, new { id = Model.Id }))
+                    using (Ajax.BeginForm("Vote", "Contests", new { id = Model.ContestId, pictureId = Model.Id }, new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "picture-info-container", InsertionMode = InsertionMode.ReplaceWith }))
                     {
                         @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-success pull-right">Vote</button>
+                        <input type="submit" class="btn btn-success pull-right" value="Vote" />
                     }
                 }
             </div>
-        </h3>
         <span>Author: @Html.ActionLink(@Model.AuthorUsername, "Index", "Users", new { username = Model.AuthorUsername }, null)</span><br />
         <span>Posted on: @Html.DisplayFor(m => m.PostedOn)</span><br />
         <span>Total participations: @Model.ContestsCount</span><br />
         <span>Total votes: @Model.VotesCount</span><br />
     </div>
 </div>
-
-@section scripts
-{
-    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
-}
