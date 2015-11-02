@@ -60,5 +60,25 @@
             return Content(string.Empty);
 
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult MarkAllAsRead()
+        {
+            if (!this.Request.IsAjaxRequest())
+            {
+                throw new InvalidOperationException("Invalid operation!");
+            }
+
+            var loggedUserId = this.User.Identity.GetUserId();
+
+            this.Data.Notifications.All()
+                .Where(n => n.RecipientId == loggedUserId && n.IsRead == false)
+                .ToList().ForEach(n => n.IsRead = true);
+
+            this.Data.SaveChanges();
+
+            return Content(string.Empty);
+        }
     }
 }

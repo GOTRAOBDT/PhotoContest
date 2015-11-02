@@ -12,15 +12,25 @@
 }
 else
 {
-    <div class="col-md-7 col-md-offset-1">
+    <div class="col-md-7 col-md-offset-1" id="notifications">
         <h2>Notifications</h2>
+        @using (Ajax.BeginForm("MarkAllAsRead", "Notifications", new AjaxOptions {HttpMethod = "POST"}))
+        {
+            @Html.AntiForgeryToken()
+            <button type="submit" onclick="changeBackgroundToAll()" class="btn btn-sm btn-primary pull-right">Mark all As Read</button>
+        }
         <hr />
         @Html.DisplayForModel()
     </div>
 }
 
+<script>
+    function changeBackgroundToAll() {
+        var notifications = $('#notifications > DIV');
 
-@section scripts
-{
-    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
-}
+        for (var i = 0; i < notifications.length; i++) {
+            notifications.eq(i).removeAttr("class");
+            notifications.eq(i).attr("class", "row thumbnailRead");
+        }
+    }
+</script>
