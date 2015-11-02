@@ -18,7 +18,6 @@
         [HttpGet]
         public override ActionResult Index(int id, int? contestId)
         {
-            this.TempData["IsAdminArea"] = true;
             return base.Index(id, contestId);
         }
 
