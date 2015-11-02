@@ -8,8 +8,11 @@
         <div>
             @if ((Model.IsAuthor || this.User.IsInRole("Administrator")))
             {
-                @Html.ActionLink("Delete", "Delete", "Pictures", new { id = Model.Id }, new { @class = "btn btn-danger" })
-                @Html.ActionLink("Remove", "Remove", "Pictures", new { id = Model.Id, contestId = Model.ContestId }, new { @class = "btn btn-warning" })
+                <button class="btn btn-danger" role="button" data-toggle="modal" data-target="#confirm-delete-@Model.Id">Delete</button>
+                if (Model.ContestId != null)
+                {
+                    <button class="btn btn-warning" role="button" data-toggle="modal" data-target="#confirm-remove-@Model.Id">Remove</button>
+                }
             }
             @if (Model.HasVoted && !Model.IsAuthor)
             {
@@ -31,6 +34,43 @@
         <span>Author: @Html.ActionLink(@Model.AuthorUsername, "Index", "Users", new { username = Model.AuthorUsername }, null)</span><br />
         <span>Posted on: @Html.DisplayFor(m => m.PostedOn)</span><br />
         <span>Total participations: @Model.ContestsCount</span><br />
-        <span>Total votes: @Model.VotesCount</span><br />
+        <span>Total votes: @Model.VotesCount</span><br/>
+
+        <div class="modal" id="confirm-delete-@Model.Id">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Delete picture confirmation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>You are about to delete picture FROM SITE AT ALL! Are you sure?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        @Html.ActionLink("Delete", "Delete", "Pictures", new { id = Model.Id }, new { @class = "btn btn-danger" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="confirm-remove-@Model.Id">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">Remove picture confirmation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>You are about to remove picture from this contest! Are you sure?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        @Html.ActionLink("Remove", "Remove", "Pictures", new { id = Model.Id, contestId = Model.ContestId }, new { @class = "btn btn-warning" })
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
