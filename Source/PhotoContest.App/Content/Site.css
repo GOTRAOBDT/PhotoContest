@@ -90,3 +90,13 @@ textarea {
     vertical-align: middle;
     display: inline-block;
 }
+
+.fixed-height-thumbnail {
+    height: 370px;
+    width: 100%;
+    background-color: black;
+    border-radius: 5px;
+    padding: 5px;
+    margin-bottom: 15px;
+
+}
