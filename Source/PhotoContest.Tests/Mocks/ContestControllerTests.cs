@@ -237,6 +237,38 @@ namespace PhotoContest.Tests.Mocks
             this.contestsController.Jury(0);
         }
 
+        [TestMethod]
+        public void AddJuryMember_WithValidContestId_ShouldReturnView()
+        {
+            LoginMock();
+
+            AddContestWithJury();
+
+            Assert.AreEqual(this.data.Contests.All().Count(), 1);
+
+            var result = this.contestsController.AddJuryMember(0);
+
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+
+            var viewResult = result as ViewResult;
+
+            Assert.IsNotNull(viewResult);
+            Assert.IsInstanceOfType(viewResult.Model, typeof(AddJuryMemberBindingModel));
+
+            var model = viewResult.Model as AddJuryMemberBindingModel;
+            Assert.IsNotNull(model);
+            Assert.AreEqual(model.ContestId, 0);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(HttpRequestException))]
+        public void GetContestJury_WithNonExistingJury_ShouldThrowHttpRequestException()
+        {
+            LoginMock();
+
+            var result = this.contestsController.AddJuryMember(0);
+        }
+
         private void LoginMock()
         {
             var claim = new Claim("TestUser", "UserId");
