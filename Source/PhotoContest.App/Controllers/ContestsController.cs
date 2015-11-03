@@ -106,7 +106,7 @@
                 {
                     RecipientId = member.Id,
                     Content = string.Format(
-                        "There is a new contest titled '{0} starting on {1}'",
+                        "There is a new contest titled '{0}' starting on {1}'",
                         contest.Title,
                         contest.StartDate),
                     CreatedOn = DateTime.Now,
