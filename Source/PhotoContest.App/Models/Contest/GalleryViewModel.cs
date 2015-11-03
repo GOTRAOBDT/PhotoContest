@@ -7,6 +7,10 @@
     {
         public int ContestId { get; set; }
 
+        public int PicturesCount { get; set; }
+
+        public int CurrentPictureIndex { get; set; }
+
         public int? PreviousPictureId { get; set; }
 
         public int? NextPictureId { get; set; }

@@ -17,12 +17,12 @@
                 <br />
                 @if (Model.PreviousPictureId != null)
                 {
-                    @Html.ActionLink("Previous", "Gallery", "Contests", new { id = Model.ContestId, pictureId = Model.PreviousPictureId }, new { @class = "btn btn-success", @id="left" })
-
+                    <a href="/contests/@Model.ContestId/Gallery?pictureId=@Model.PreviousPictureId" id="left"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span></a>
                 }
+                <span> Picture @(Model.CurrentPictureIndex + 1) from @Model.PicturesCount </span>
                 @if (Model.NextPictureId != null)
                 {
-                    @Html.ActionLink("Next", "Gallery", "Contests", new { id = Model.ContestId, pictureId = Model.NextPictureId }, new { @class = "btn btn-success", @id="right" })
+                    <a href="/contests/@Model.ContestId/Gallery?pictureId=@Model.NextPictureId" id="right"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span></a>
                 }
             </div>
         </div>

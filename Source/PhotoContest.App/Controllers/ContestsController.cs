@@ -703,10 +703,12 @@
             int? previousPictureId = null;
             int? nextPictureId = null;
 
+            int currentPictureIndex = 0;
             for (int i = 0; i < idList.Count; i++)
             {
                 if (idList[i] == pictureId)
                 {
+                    currentPictureIndex = i;
                     previousPictureId = i == 0 ? (int?)null : idList[i - 1];
                     nextPictureId = i == idList.Count - 1 ? (int?)null : idList[i + 1];
                     break;
@@ -716,6 +718,8 @@
             var galleryModel = new GalleryViewModel()
             {
                 ContestId = contest.Id,
+                PicturesCount = idList.Count,
+                CurrentPictureIndex = currentPictureIndex,
                 PreviousPictureId = previousPictureId,
                 NextPictureId = nextPictureId,
                 CurrentPicture = pictureModel,
