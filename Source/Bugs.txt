@@ -1,2 +1,5 @@
 After dismiss the dismiss button is still there. Need to be checked in the view if it is already dismised :)
 On admin view after dismiss the dismiss button is still there
+Delete picture from My Pictures (remove all votes!)
+Fix votes view on preview;
+remove mark as read button on mark as read all 
