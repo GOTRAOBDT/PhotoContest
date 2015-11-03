@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Net.Http;
+using AutoMapper;
 using PagedList;
 using PhotoContest.App.CommonFunctions;
 using PhotoContest.App.Models.Account;
@@ -36,6 +37,8 @@ namespace PhotoContest.Tests.Mocks
             Mapper.CreateMap<User, BasicUserInfoViewModel>();
             Mapper.CreateMap<IPagedList<User>, IPagedList<BasicUserInfoViewModel>>()
                 .ConvertUsing<PagedListConverter>();
+            Mapper.CreateMap<IEnumerable<User>, IEnumerable<BasicUserInfoViewModel>>();
+            Mapper.CreateMap<User, BasicUserInfoViewModel>();
         }
 
         [TestMethod]
@@ -212,6 +215,37 @@ namespace PhotoContest.Tests.Mocks
             Assert.AreEqual(fullModel.ContestSummary.Description, "New Description");
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(HttpRequestException))]
+        public void GetContestJury_WithNotExistingJury_ShouldHttpRequestException()
+        {
+            LoginMock();
+
+            this.contestsController.Jury(321);
+        }
+
+        [TestMethod]
+        public void GetContestJury_WithExistingJury_ShouldReturnView()
+        {
+            LoginMock();
+
+            AddContestWithJury();
+
+            Assert.AreEqual(this.data.Contests.All().Count(), 1);
+
+            this.data.Contests.Find(0).Jury.Members.Add(
+                    new User()
+                    {
+                        UserName = "Pesho",
+                        Id = "123"
+                    }
+                );
+
+            this.data.SaveChanges();
+
+            this.contestsController.Jury(0);
+        }
+
         private void LoginMock()
         {
             var claim = new Claim("TestUser", "UserId");
@@ -241,6 +275,24 @@ namespace PhotoContest.Tests.Mocks
             {
                 Title = "Title 1",
                 VotingType = VotingType.Open,
+                Description = "Description 1",
+                Prizes = new HashSet<Prize>(),
+                DeadlineType = DeadlineType.EndDate,
+                ParticipationType = ParticipationType.Open,
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now,
+                ParticipationLimit = 1,
+                Thumbnail = "Thumbnail",
+            };
+            return this.contestsController.Create(contest);
+        }
+
+        private ActionResult AddContestWithJury()
+        {
+            var contest = new CreateContestBindingModel
+            {
+                Title = "Title 1",
+                VotingType = VotingType.Closed,
                 Description = "Description 1",
                 Prizes = new HashSet<Prize>(),
                 DeadlineType = DeadlineType.EndDate,
