@@ -126,8 +126,8 @@ namespace PhotoContest.Tests.Mocks
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void ManageContest_WhichDoestNotExist_ShouldThrowInvalidOperationException()
+        [ExpectedException(typeof(ArgumentException))]
+        public void ManageContest_WhichDoestNotExist_ShouldArgumentException()
         {
             LoginMock();
 
