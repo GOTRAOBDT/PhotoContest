@@ -20,8 +20,10 @@
         public SearchController(IPhotoContestData data)
             : base(data)
         {
-            Mapper.CreateMap<Contest, ContestSearchResultModel>();
-            Mapper.CreateMap<Picture, PictureSearchResultModel>();
+            Mapper.CreateMap<Contest, ContestSearchResultModel>()
+                .ForMember(c => c.OwnerUsername, cfg => cfg.MapFrom(c => c.Owner.UserName));
+            Mapper.CreateMap<Picture, PictureSearchResultModel>()
+                .ForMember(p => p.AuthorUsername, cfg => cfg.MapFrom(p => p.Author.UserName));
             Mapper.CreateMap<User, UserSearchResultModel>();
         }
 
