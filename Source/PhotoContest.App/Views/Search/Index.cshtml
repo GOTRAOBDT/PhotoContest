@@ -8,7 +8,8 @@
 
     <div class="list-group">
         <a href="#" class="list-group-item active">
-            Searching for <strong><em>"@ViewBag.Keyword"</em></strong> in members, pictures and contests...
+            Searching for <strong><em>"@ViewBag.Keyword"</em></strong> in members, pictures and contests.
+            Found @Model.Results.Count result(s)...
         </a>
 
         @foreach (var result in Model.Results)

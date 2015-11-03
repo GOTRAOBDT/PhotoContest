@@ -1062,6 +1062,11 @@
                 return votes;
             }
 
+            if (contest.Status != ContestStatus.Active)
+            {
+                return votes;
+            }
+
             if (contest.VotingType == VotingType.Closed)
             {
                 if (!contest.Jury.Members.Any(m => m.Id == userId))
