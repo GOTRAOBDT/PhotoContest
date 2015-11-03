@@ -22,7 +22,6 @@
                         <span class="icon-bar"></span>
                     }
                 </button>
-                @*@Html.ActionLink("300mm", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
                 <a class="navbar-brand logo-container" href="/home/index">
                     <img src="~/Content/img/300mm_logo_white.png" alt="300mm logo" class="logo-image" />
                 </a>
@@ -37,6 +36,12 @@
                         <li>@Html.ActionLink("Administration", "Index", "Manage", new { area = "Administration" }, new { id = "admin-link" })</li>
                     }
                 </ul>
+                <form class="navbar-form navbar-left" role="search" action="/Search">
+                    <div class="form-group">
+                        <input type="text" name="keyword" class="form-control" placeholder="Search">
+                    </div>
+                    @*<button type="submit" class="btn btn-default">Submit</button>*@
+                </form>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
