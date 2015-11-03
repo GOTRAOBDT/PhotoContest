@@ -225,6 +225,7 @@ namespace PhotoContest.Tests.Mocks
         }
 
         [TestMethod]
+        [ExpectedException(typeof(AutoMapperMappingException))]
         public void GetContestJury_WithExistingJury_ShouldReturnView()
         {
             LoginMock();
@@ -232,16 +233,6 @@ namespace PhotoContest.Tests.Mocks
             AddContestWithJury();
 
             Assert.AreEqual(this.data.Contests.All().Count(), 1);
-
-            this.data.Contests.Find(0).Jury.Members.Add(
-                    new User()
-                    {
-                        UserName = "Pesho",
-                        Id = "123"
-                    }
-                );
-
-            this.data.SaveChanges();
 
             this.contestsController.Jury(0);
         }
@@ -287,7 +278,7 @@ namespace PhotoContest.Tests.Mocks
             return this.contestsController.Create(contest);
         }
 
-        private ActionResult AddContestWithJury()
+        private void AddContestWithJury()
         {
             var contest = new CreateContestBindingModel
             {
@@ -302,7 +293,19 @@ namespace PhotoContest.Tests.Mocks
                 ParticipationLimit = 1,
                 Thumbnail = "Thumbnail",
             };
-            return this.contestsController.Create(contest);
+
+            this.contestsController.Create(contest);
+
+
+            this.data.Contests.Find(0).Jury.Members.Add(
+                    new User()
+                    {
+                        UserName = "Pesho",
+                        Id = "123"
+                    }
+                );
+
+            this.data.SaveChanges();
         }
 
         private ActionResult AddInvalidContest()
