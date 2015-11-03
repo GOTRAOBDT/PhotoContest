@@ -7,24 +7,16 @@
     using System.IO;
     using System.Text;
 
-    class Program
+    public class DropboxFileSystem
     {
-        //static void Main(string[] args)
-        //{
-        //    var task = Task.Run((Func<Task>)Program.Run);
-        //    task.Wait();
-        //}
+        public DropboxClient dropboxClient;
 
-        static async Task Run()
+        public DropboxFileSystem()
         {
-            using (var dbx = new DropboxClient("YOUR ACCESS TOKEN"))
-            {
-                var full = await dbx.Users.GetCurrentAccountAsync();
-                Console.WriteLine("{0} - {1}", full.Name.DisplayName, full.Email);
-            }
+            this.dropboxClient = new DropboxClient("dropbox-access-token");
         }
-
-        async Task ListRootFolder(DropboxClient dbx)
+        
+        public async Task ListRootFolder(DropboxClient dbx)
         {
             var list = await dbx.Files.ListFolderAsync(string.Empty);
 
@@ -40,15 +32,15 @@
             }
         }
 
-        async Task Download(DropboxClient dbx, string folder, string file)
+        public async Task Download(string folder, string file)
         {
-            using (var response = await dbx.Files.DownloadAsync(folder + "/" + file))
+            using (var response = await dropboxClient.Files.DownloadAsync(folder + "/" + file))
             {
                 Console.WriteLine(await response.GetContentAsStringAsync());
             }
         }
 
-        async Task Upload(DropboxClient dbx, string folder, string file, string content)
+        public async Task Upload(DropboxClient dbx, string folder, string file, string content)
         {
             using (var mem = new MemoryStream(Encoding.UTF8.GetBytes(content)))
             {

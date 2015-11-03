@@ -22,6 +22,8 @@
 
         public int? ContestId { get; set; }
 
+        public bool AddToContest { get; set; }
+
         public int ContestsCount { get; set; }
 
         public int VotesCount { get; set; }

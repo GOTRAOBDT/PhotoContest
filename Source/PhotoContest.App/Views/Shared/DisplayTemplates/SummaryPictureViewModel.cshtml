@@ -1,7 +1,7 @@
 ﻿@model PhotoContest.App.Models.Pictures.SummaryPictureViewModel
 <div class="col-md-6">
     <a href="@(Url.Action("Index", "Pictures", new { id = @Model.Id, contestId = Model.ContestId }))" class="contest-list">
-        <div class="thumbnail">
+        <div class=" fixed-height-thumbnail">
             <div class="thumbnail-image-container">
                 <img src="@Model.ThumbnailImageData" alt="Title: @Model.Title" class="thumbnail-image-size">
             </div>
@@ -12,7 +12,7 @@
                 <span>Total votes: @Model.VotesCount</span><br />
                 @if (this.TempData.ContainsKey("SelectPicture"))
                 {
-                    if (Model.ContestId != null)
+                    if (Model.AddToContest == true)
                     {
                         @Html.ActionLink("Add", "AddPicture", "Contests", new { contestId = Model.ContestId, pictureId = Model.Id }, new { @class = "btn btn-info" })
                     }

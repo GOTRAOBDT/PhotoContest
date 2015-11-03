@@ -50,7 +50,7 @@
         // GET: Me/Pictures
         // Returned model type: SummaryPictureViewModel
         [HttpGet]
-        public ActionResult Pictures(int? page, int? contestId)
+        public ActionResult Pictures(int? page, int? contestId, bool addToContest = false)
         {
             IPagedList<SummaryPictureViewModel> pictures = null;
             var userId = this.User.Identity.GetUserId();
@@ -66,6 +66,7 @@
                 for (int i = 0; i < pictures.Count; i++)
                 {
                     pictures[i].ContestId = contestId;
+                    pictures[i].AddToContest = addToContest;
                 }
             }
 
