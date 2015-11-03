@@ -1,4 +1,9 @@
-﻿namespace PhotoContest.Tests.Mocks
+﻿using AutoMapper;
+using PagedList;
+using PhotoContest.App.CommonFunctions;
+using PhotoContest.App.Models.Account;
+
+namespace PhotoContest.Tests.Mocks
 {
     using System;
     using System.Linq;
@@ -24,6 +29,13 @@
         {
             this.data = new PhotoContestDataMock();
             this.contestsController = new ContestsController(this.data);
+
+            Mapper.CreateMap<Contest, EditContestBindingModel>();
+            Mapper.CreateMap<Contest, DetailsContestViewModel>();
+            Mapper.CreateMap<Prize, PrizeViewModel>();
+            Mapper.CreateMap<User, BasicUserInfoViewModel>();
+            Mapper.CreateMap<IPagedList<User>, IPagedList<BasicUserInfoViewModel>>()
+                .ConvertUsing<PagedListConverter>();
         }
 
         [TestMethod]
@@ -96,9 +108,21 @@
 
             Assert.AreEqual(this.data.Contests.All().Count(), 1);
 
-            //var result = this.contestsController.GetContestById(1);
+            var result = this.contestsController.GetContestById(0);
 
-            //Assert.IsInstanceOfType(result, typeof(HttpNotFoundResult));
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+
+            var viewRezult = result as ViewResult;
+
+            Assert.IsNotNull(viewRezult);
+
+            var model = viewRezult.Model;
+            Assert.IsNotNull(model);
+
+            var fullModel = model as FullContestViewModel;
+            Assert.IsNotNull(fullModel);
+            Assert.AreEqual(fullModel.ContestSummary.Title, "Title 1");
+            Assert.AreEqual(fullModel.ContestSummary.Description, "Description 1");
         }
 
         [TestMethod]
@@ -110,6 +134,69 @@
             Assert.AreEqual(this.data.Contests.All().Count(), 0);
 
             var result = this.contestsController.Manage(1);
+        }
+
+        [TestMethod]
+        public void ManageContest_WithValidData_ShouldReturnView()
+        {
+            LoginMock();
+
+            Assert.AreEqual(this.data.Contests.All().Count(), 0);
+
+            AddContest();
+
+
+            var result = this.contestsController.Manage(0);
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+            var viewResult = result as ViewResult;
+
+            Assert.IsNotNull(viewResult);
+            Assert.IsInstanceOfType(viewResult.Model, typeof(EditContestBindingModel));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ManageContest_WithNullModel_ShouldThrowArgumentException()
+        {
+            LoginMock();
+
+            Assert.AreEqual(this.data.Contests.All().Count(), 0);
+
+            AddContest();
+
+            var result = this.contestsController.Manage(0, null);
+        }
+
+        [TestMethod]
+        public void ManageContest_WithValidData_ShouldUpdate()
+        {
+            LoginMock();
+
+            Assert.AreEqual(this.data.Contests.All().Count(), 0);
+
+            AddContest();
+
+            var result = this.contestsController.Manage(0);
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result, typeof(ViewResult));
+            var viewResult = result as ViewResult;
+
+            Assert.IsNotNull(viewResult);
+            Assert.IsInstanceOfType(viewResult.Model, typeof(EditContestBindingModel));
+
+            var model = viewResult.Model as EditContestBindingModel;
+
+            Assert.IsNotNull(model);
+
+            model.Title = "New Title";
+            model.Description = "New Description";
+
+            result = this.contestsController.Manage(0, model);
+            Assert.IsNotNull(result);
+
         }
 
         private void LoginMock()
