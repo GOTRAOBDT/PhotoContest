@@ -98,5 +98,8 @@ textarea {
     border-radius: 5px;
     padding: 5px;
     margin-bottom: 15px;
+}
 
+.profile-image-container {
+    max-width:300px;
 }
