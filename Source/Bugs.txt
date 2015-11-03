@@ -1,5 +1,2 @@
-Exception on delete picture from contest. Relation error. Votes should be deleted first when deleing picture.
 After dismiss the dismiss button is still there. Need to be checked in the view if it is already dismised :)
-Removing pictures when u are owner of the contest doesnt work.
-On Gallery view fix.
-Contest owner sees Add button on viewing contest pictures instead of delete.
+On admin view after dismiss the dismiss button is still there
