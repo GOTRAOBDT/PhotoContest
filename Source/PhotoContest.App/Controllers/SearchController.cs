@@ -1,12 +1,8 @@
 ﻿namespace PhotoContest.App.Controllers
 {
-    using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using System.Web;
     using System.Web.Mvc;
-
-    using AutoMapper;
+    
     using AutoMapper.QueryableExtensions;
 
     using Data.Contracts;
@@ -22,7 +18,7 @@
 
         // GET: Search
         [HttpGet]
-        public ActionResult Index(string keyword)
+        public virtual ActionResult Index(string keyword)
         {
             var results = new SearchResultsRepository();
 
@@ -45,7 +41,7 @@
             results.Results.AddRange(picturesResults);
 
             this.ViewBag.Keyword = keyword;
-            return View(results);
+            return this.View(results);
         }
     }
 }

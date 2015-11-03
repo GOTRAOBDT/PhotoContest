@@ -21,10 +21,10 @@
 
         // GET: Administration/Users/GetUserByUsername/username
         [HttpGet]
-        public ActionResult GetUserById(string id)
+        public ActionResult GetUserByUsername(string username)
         {
             var userModel = this.Data.Users.All()
-                .Where(u => u.Id == id)
+                .Where(u => u.UserName == username)
                 .ProjectTo<EditProfileBindingModel>()
                 .FirstOrDefault();
 
@@ -35,7 +35,7 @@
         {
             if (!this.ModelState.IsValid)
             {
-                return this.View("GetUserById", model);
+                return this.View("GetUserByUsername", model);
             }
 
             var user = this.Data.Users.All()

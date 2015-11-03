@@ -1,0 +1,27 @@
+﻿@model PhotoContest.Models.SearchResultsRepository
+@{
+    ViewBag.Title = "Search";
+    Layout = "~/Areas/Administration/Views/Shared/_Layout.cshtml";
+}
+
+<div class="col-md-7 col-md-offset-1">
+    <h2>Search Results</h2>
+
+    <div class="list-group">
+        <a href="#" class="list-group-item active">
+            Searching for <strong><em>"@ViewBag.Keyword"</em></strong> in members, pictures and contests.
+            Found @Model.Results.Count result(s)...
+        </a>
+
+        @foreach (var result in Model.Results)
+        {
+            <a href="@result.ResultUrl()" class="list-group-item">@result.ResultText()</a>
+        }
+        @if (Model.Results.Count == 0)
+        {
+            <p style="margin-top:1%">
+                <strong><em>Nothing found...</em></strong>
+            </p>
+        }
+    </div>
+</div>

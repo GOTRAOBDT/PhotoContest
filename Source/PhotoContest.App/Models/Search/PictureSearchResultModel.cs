@@ -24,7 +24,7 @@
             return string.Format("Picture titled '{0}' by {1}, posted on {2}.", this.Title, this.AuthorUsername, this.PostedOn);
         }
 
-        public string ResultUrl()
+        public virtual string ResultUrl()
         {
             return string.Format("/pictures/{0}", this.Id);
         }

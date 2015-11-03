@@ -7,6 +7,7 @@
 
     using Data.Contracts;
 
+    [Authorize(Roles = ("Administrator"))]
     public class PicturesController : App.Controllers.PicturesController
     {
         public PicturesController(IPhotoContestData data)
@@ -22,18 +23,13 @@
         }
 
         [HttpGet]
-        public ActionResult DeletePicture(int id, int contestId)
+        public ActionResult DeletePicture(int id, int? contestId)
         {
-            var picture = this.Data.Pictures.Find(id);
+          var picture = this.Data.Pictures.Find(id);
 
             if (picture == null)
             {
                 throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
-            }
-
-            if (!this.User.IsInRole("Administrator"))
-            {
-                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
             }
 
             picture.Votes.Clear();

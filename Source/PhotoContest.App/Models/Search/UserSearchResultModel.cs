@@ -1,7 +1,5 @@
 ﻿namespace PhotoContest.App.Models.Search
 {
-    using System;
-
     using AutoMapper;
 
     using Bookmarks.Common.Mappings;
@@ -20,7 +18,7 @@
             return string.Format("Username: {0}, Name: {1}", this.UserName, this.Name);
         }
 
-        public string ResultUrl()
+        public virtual string ResultUrl()
         {
             return string.Format("/users/{0}", this.UserName);
         }

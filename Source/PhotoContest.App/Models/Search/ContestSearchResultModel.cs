@@ -31,7 +31,7 @@
                 this.EndDate);
         }
 
-        public string ResultUrl()
+        public virtual string ResultUrl()
         {
             return string.Format("/contests/{0}", this.Id);
         }
