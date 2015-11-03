@@ -4,6 +4,7 @@
 
     using Microsoft.AspNet.Identity;
 
+    [Authorize(Roles = "Administrator")]
     public class AccountController : App.Controllers.AccountController
     {
         // POST: /Account/LogOff

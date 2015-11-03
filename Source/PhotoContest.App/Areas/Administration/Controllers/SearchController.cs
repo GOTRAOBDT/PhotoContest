@@ -7,13 +7,12 @@
     using AutoMapper.QueryableExtensions;
 
     using Data.Contracts;
-
-    using PhotoContest.App.Models.Search;
+    
     using PhotoContest.Models;
 
     using ContestSearchResultModel = Models.Search.ContestSearchResultModel;
     using PictureSearchResultModel = Models.Search.PictureSearchResultModel;
-    using UserSearchResultModel = PhotoContest.App.Areas.Administration.Models.Search.UserSearchResultModel;
+    using UserSearchResultModel = Models.Search.UserSearchResultModel;
 
     [Authorize(Roles = "Administrator")]
     public class SearchController : App.Controllers.SearchController
