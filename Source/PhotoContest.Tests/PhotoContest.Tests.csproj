@@ -118,7 +118,6 @@
     <Compile Include="Mocks\GenericRepositoryMock.cs" />
     <Compile Include="Mocks\GenericUserStoreMock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UnitTests\ContestControllerTests.cs" />
     <Compile Include="UnitTests\HomeControllerTests.cs" />
     <Compile Include="UnitTests\MeControllerTests.cs" />
     <Compile Include="UnitTests\MockContainer.cs" />
