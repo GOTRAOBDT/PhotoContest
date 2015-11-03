@@ -49,77 +49,77 @@ namespace PhotoContest.Data.Migrations
             var result = userManager.Create(user, username + password);
             context.SaveChanges();
 
-            var contests = new List<Contest>
-            {
-                new Contest
-                {
-                    Title = "Nature",
-                    Description = "Photos of nature",
-                    StartDate = DateTime.Now.AddDays(rnd.Next(-100, -15)),
-                    EndDate = DateTime.Now.AddDays(rnd.Next(15, 50)),
-                    OwnerId = user.Id,
-                    Status = ContestStatus.Active,
-                    VotingType = VotingType.Open,
-                    ParticipationType = ParticipationType.Open,
-                    DeadlineType = DeadlineType.ParticipationLimit,
-                },
-                new Contest
-                {
-                    Title = "Portrets",
-                    Description = "Portrets photos",
-                    StartDate = DateTime.Now.AddDays(rnd.Next(-100, -50)),
-                    EndDate = DateTime.Now.AddDays(rnd.Next(-5, -1)),
-                    OwnerId = user.Id,
-                    Status = ContestStatus.Finished,
-                    VotingType = VotingType.Closed,
-                    ParticipationType = ParticipationType.Open,
-                    DeadlineType = DeadlineType.EndDate,
-                },
-                new Contest
-                {
-                    Title = "Street 111",
-                    Description = "Street photography",
-                    StartDate = DateTime.Now.AddDays(rnd.Next(15, 50)),
-                    EndDate = DateTime.Now.AddDays(rnd.Next(100, 150)),
-                    OwnerId = user.Id,
-                    Status = ContestStatus.Inactive,
-                    VotingType = VotingType.Open,
-                    ParticipationType = ParticipationType.Open,
-                    DeadlineType = DeadlineType.EndDate,
-                },
-                new Contest
-                {
-                    Title = "Street 222",
-                    Description = "Street photography",
-                    StartDate = DateTime.Now.AddDays(rnd.Next(15, 50)),
-                    EndDate = DateTime.Now.AddDays(rnd.Next(100, 150)),
-                    OwnerId = user.Id,
-                    Status = ContestStatus.Inactive,
-                    VotingType = VotingType.Open,
-                    ParticipationType = ParticipationType.Open,
-                    DeadlineType = DeadlineType.EndDate,
-                },
-                new Contest
-                {
-                    Title = "Portrets at sunset",
-                    Description = "Portrets at sunset photos",
-                    StartDate = DateTime.Now.AddDays(rnd.Next(-100, -15)),
-                    EndDate = DateTime.Now.AddDays(rnd.Next(15, 50)),
-                    OwnerId = "1",
-                    Status = ContestStatus.Active,
-                    VotingType = VotingType.Closed,
-                    ParticipationType = ParticipationType.Open,
-                    DeadlineType = DeadlineType.EndDate,
-                },
-            };
+            //var contests = new List<Contest>
+            //{
+            //    new Contest
+            //    {
+            //        Title = "Nature",
+            //        Description = "Photos of nature",
+            //        StartDate = DateTime.Now.AddDays(rnd.Next(-100, -15)),
+            //        EndDate = DateTime.Now.AddDays(rnd.Next(15, 50)),
+            //        OwnerId = user.Id,
+            //        Status = ContestStatus.Active,
+            //        VotingType = VotingType.Open,
+            //        ParticipationType = ParticipationType.Open,
+            //        DeadlineType = DeadlineType.ParticipationLimit,
+            //    },
+            //    new Contest
+            //    {
+            //        Title = "Portrets",
+            //        Description = "Portrets photos",
+            //        StartDate = DateTime.Now.AddDays(rnd.Next(-100, -50)),
+            //        EndDate = DateTime.Now.AddDays(rnd.Next(-5, -1)),
+            //        OwnerId = user.Id,
+            //        Status = ContestStatus.Finished,
+            //        VotingType = VotingType.Closed,
+            //        ParticipationType = ParticipationType.Open,
+            //        DeadlineType = DeadlineType.EndDate,
+            //    },
+            //    new Contest
+            //    {
+            //        Title = "Street 111",
+            //        Description = "Street photography",
+            //        StartDate = DateTime.Now.AddDays(rnd.Next(15, 50)),
+            //        EndDate = DateTime.Now.AddDays(rnd.Next(100, 150)),
+            //        OwnerId = user.Id,
+            //        Status = ContestStatus.Inactive,
+            //        VotingType = VotingType.Open,
+            //        ParticipationType = ParticipationType.Open,
+            //        DeadlineType = DeadlineType.EndDate,
+            //    },
+            //    new Contest
+            //    {
+            //        Title = "Street 222",
+            //        Description = "Street photography",
+            //        StartDate = DateTime.Now.AddDays(rnd.Next(15, 50)),
+            //        EndDate = DateTime.Now.AddDays(rnd.Next(100, 150)),
+            //        OwnerId = user.Id,
+            //        Status = ContestStatus.Inactive,
+            //        VotingType = VotingType.Open,
+            //        ParticipationType = ParticipationType.Open,
+            //        DeadlineType = DeadlineType.EndDate,
+            //    },
+            //    new Contest
+            //    {
+            //        Title = "Portrets at sunset",
+            //        Description = "Portrets at sunset photos",
+            //        StartDate = DateTime.Now.AddDays(rnd.Next(-100, -15)),
+            //        EndDate = DateTime.Now.AddDays(rnd.Next(15, 50)),
+            //        OwnerId = "1",
+            //        Status = ContestStatus.Active,
+            //        VotingType = VotingType.Closed,
+            //        ParticipationType = ParticipationType.Open,
+            //        DeadlineType = DeadlineType.EndDate,
+            //    },
+            //};
 
-            foreach (var contest in contests)
-            {
-                context.Contests.Add(contest);
-                user.MyContests.Add(contest);
-            }
+            //foreach (var contest in contests)
+            //{
+            //    context.Contests.Add(contest);
+            //    user.MyContests.Add(contest);
+            //}
 
-            context.SaveChanges();
+            //context.SaveChanges();
         }
 
         private void CreateAdmin(PhotoContestContext context)

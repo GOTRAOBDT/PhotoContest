@@ -341,6 +341,7 @@
     <Content Include="Areas\Administration\Views\Shared\DisplayTemplates\DetailsPictureViewModel.cshtml" />
     <Content Include="Areas\Administration\Views\Search\Index.cshtml" />
     <Content Include="Areas\Administration\Views\Shared\DisplayTemplates\SummaryPictureViewModel.cshtml" />
+    <None Include="Properties\PublishProfiles\300mm.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\contest-hub.js" />
