@@ -44,6 +44,7 @@
                 .ToList();
             results.Results.AddRange(picturesResults);
 
+            this.ViewBag.Keyword = keyword;
             return View(results);
         }
     }

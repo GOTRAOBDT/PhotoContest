@@ -8,12 +8,18 @@
 
     <div class="list-group">
         <a href="#" class="list-group-item active">
-            Search Results
+            Searching for <strong><em>"@ViewBag.Keyword"</em></strong> in members, pictures and contests...
         </a>
 
         @foreach (var result in Model.Results)
         {
             <a href="@result.ResultUrl()" class="list-group-item">@result.ResultText()</a>
+        }
+        @if (Model.Results.Count == 0)
+        {
+            <p style="margin-top:1%">
+                <strong><em>Nothing found...</em></strong>
+            </p>
         }
     </div>
 </div>
