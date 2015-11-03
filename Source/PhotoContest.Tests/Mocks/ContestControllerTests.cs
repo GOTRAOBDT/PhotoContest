@@ -197,6 +197,19 @@ namespace PhotoContest.Tests.Mocks
             result = this.contestsController.Manage(0, model);
             Assert.IsNotNull(result);
 
+            var updatedContestGetResult = this.contestsController.GetContestById(0);
+
+            var viewRezult = updatedContestGetResult as ViewResult;
+
+            Assert.IsNotNull(viewRezult);
+
+            var updatedContestModel = viewRezult.Model;
+            Assert.IsNotNull(model);
+
+            var fullModel = updatedContestModel as FullContestViewModel;
+            Assert.IsNotNull(fullModel);
+            Assert.AreEqual(fullModel.ContestSummary.Title, "New Title");
+            Assert.AreEqual(fullModel.ContestSummary.Description, "New Description");
         }
 
         private void LoginMock()
