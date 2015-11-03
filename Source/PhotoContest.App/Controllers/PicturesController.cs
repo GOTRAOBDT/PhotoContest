@@ -14,6 +14,7 @@
     using Models.Pictures;
     using AutoMapper;
     using PhotoContest.Models;
+    //using DropboxFileSystem;
 
     public class PicturesController : BaseController
     {
@@ -24,9 +25,17 @@
 
         // GET: Pictures/{pictureId}
         // Returned model type: DetailsPictureViewModel
+        
+        //dropbox editions
+        //public async ActionResult Index(int id, int? contestId)
         public virtual ActionResult Index(int id, int? contestId)
         {
             var dbPicture = this.Data.Pictures.Find(id);
+
+            ////get picture link from dropbox here:
+            //var fs = new DropboxFileSystem();
+            //string linkFormDrobbox = fs.Download("pictures", );
+
             var picture = Mapper.Map<DetailsPictureViewModel>(dbPicture);
 
             if (picture == null)

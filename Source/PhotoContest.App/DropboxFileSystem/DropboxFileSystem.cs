@@ -32,11 +32,11 @@
             }
         }
 
-        public async Task Download(string folder, string file)
+        public async Task<string> Download(string folder, string file)
         {
             using (var response = await dropboxClient.Files.DownloadAsync(folder + "/" + file))
             {
-                Console.WriteLine(await response.GetContentAsStringAsync());
+                return(await response.GetContentAsStringAsync());
             }
         }
 
