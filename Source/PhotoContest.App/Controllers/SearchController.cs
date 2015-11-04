@@ -35,7 +35,7 @@
             results.Results.AddRange(contestsResults);
 
             var picturesResults = this.Data.Pictures.All()
-                .Where(p => p.Title.IndexOf(keyword) >= 0)
+                .Where(p => p.IsDeleted == false && p.Title.IndexOf(keyword) >= 0)
                 .ProjectTo<PictureSearchResultModel>()
                 .ToList();
             results.Results.AddRange(picturesResults);

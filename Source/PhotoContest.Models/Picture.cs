@@ -33,6 +33,8 @@
         [Required]
         public DateTime PostedOn { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public virtual ICollection<Contest> Contests
         {
             get

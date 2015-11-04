@@ -1,6 +1,5 @@
 ﻿namespace PhotoContest.App.Controllers
 {
-    using System;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
@@ -8,13 +7,13 @@
 
     using Microsoft.AspNet.Identity;
 
-    using AutoMapper.QueryableExtensions;
+    using AutoMapper;
 
+    using Common;
     using Data.Contracts;
     using Models.Pictures;
-    using AutoMapper;
-    using PhotoContest.Models;
-    using Common;
+    
+    using PhotoContest.Models.Enumerations;
 
     //using DropboxFileSystem;
 
@@ -33,6 +32,11 @@
         public virtual ActionResult Index(int id, int? contestId)
         {
             var dbPicture = this.Data.Pictures.Find(id);
+
+            if (dbPicture.IsDeleted == true)
+            {
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            }
 
             ////get picture link from dropbox here:
             //var fs = new DropboxFileSystem();
@@ -82,23 +86,25 @@
                 throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
             }
 
-            var votes = picture.Votes.ToList();
-            foreach (var vote in votes)
+            var votesInUnfinishedContests = picture.Votes
+                .Where(v => v.Contest.Status != ContestStatus.Finished)
+                .ToList();
+            foreach (var vote in votesInUnfinishedContests)
             {
                 this.Data.Votes.Delete(vote);
             }
             this.Data.SaveChanges();
 
-            var participationContests = this.Data.Contests.All()
-                .Where(c => c.Pictures.Any(p => p.Id == picture.Id))
+            var contestsWherePictureParticipatesExceptFinished = this.Data.Contests.All()
+                .Where(c => c.Status != ContestStatus.Finished &&
+                    c.Pictures.Any(p => p.Id == picture.Id))
                 .ToList();
-            for (int i = 0; i < participationContests.Count(); i++)
+            for (int i = 0; i < contestsWherePictureParticipatesExceptFinished.Count(); i++)
             {
-                participationContests[i].Pictures.Remove(picture);
+                contestsWherePictureParticipatesExceptFinished[i].Pictures.Remove(picture);
             }
-            this.Data.SaveChanges();
 
-            this.Data.Pictures.Delete(picture);
+            picture.IsDeleted = true;
             this.Data.SaveChanges();
 
             return this.RedirectToAction("Pictures", "Me");
