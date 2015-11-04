@@ -61,11 +61,11 @@ namespace PhotoContest.App
             //   appId: "",
             //   appSecret: "");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "283255352071-5ebe763ka645sb3disgfg4fm012990eg.apps.googleusercontent.com",
+                ClientSecret = "muawQWcYZts_os4jPglWpBdU"
+            });
         }
     }
 }
