@@ -37,13 +37,11 @@
             this.commettees = new HashSet<VotingCommittee>();
             this.notifications = new HashSet<Notification>();
         }
-
-        [Required]
+        
         [MinLength(3)]
         [MaxLength(255)]
         public string Name { get; set; }
-
-        [Required]
+        
         public UserGender Gender { get; set; }
 
         public string ProfilePicture { get; set; }
