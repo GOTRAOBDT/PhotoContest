@@ -232,7 +232,12 @@
 
             if (contest == null)
             {
-                throw new ArgumentException("Contest not found!");
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            }
+
+            if (contest.Status == ContestStatus.Finished || contest.Status == ContestStatus.Dismissed)
+            {
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
             }
 
             if (contest.OwnerId != this.User.Identity.GetUserId() && !this.User.IsInRole("Administrator"))
