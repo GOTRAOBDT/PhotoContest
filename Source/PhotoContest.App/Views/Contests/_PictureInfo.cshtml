@@ -8,14 +8,6 @@
             {
             @Html.ActionLink("Delete", "Delete", "Pictures", new { id = Model.Id }, new { @class = "btn btn-danger" })
         }
-        @if (Model.CanBeUnvoted)
-        {
-            using (Ajax.BeginForm("UnVote", "Contests", new { id = Model.ContestId, pictureId = Model.Id }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "picture-info-container", InsertionMode = InsertionMode.ReplaceWith }))
-            {
-                @Html.AntiForgeryToken()
-                <button type="submit" class="btn btn-danger pull-right">Unvote</button>
-            }
-        }
         @if (Model.CanBeVoted)
             {
                 using (Ajax.BeginForm("Vote", "Contests", new { id = Model.ContestId, pictureId = Model.Id }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "picture-info-container", InsertionMode = InsertionMode.ReplaceWith }))

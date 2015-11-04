@@ -697,7 +697,6 @@
             pictureModel.CanBeDeleted = PictureUtills.IsAuthor(user, picture) || this.User.IsInRole("Administrator");
             pictureModel.CanBeRemoved = pictureModel.CanBeDeleted;
             pictureModel.CanBeVoted = PictureUtills.CanVoteForPicture(user, picture, contest);
-            pictureModel.CanBeUnvoted = PictureUtills.CanUnvotePicture(user, picture, contest);
             pictureModel.ContestId = id;
             pictureModel.VotesCount = picture.Votes.Where(v => v.ContestId == id).Count();
 

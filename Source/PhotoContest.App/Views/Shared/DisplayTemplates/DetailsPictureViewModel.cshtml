@@ -14,14 +14,6 @@
                     <button class="btn btn-warning" role="button" data-toggle="modal" data-target="#confirm-remove-@Model.Id">Remove</button>
                 }
             }
-            @if (Model.CanBeUnvoted)
-            {
-                using (Ajax.BeginForm("UnVote", "Contests", new { id = Model.ContestId, pictureId = Model.Id }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "picture-info-container", InsertionMode = InsertionMode.ReplaceWith }))
-                {
-                    @Html.AntiForgeryToken()
-                    <input type="submit" class="btn btn-danger pull-right" value="Unvote" />
-                }
-            }
             @if (Model.CanBeVoted)
             {
                 using (Ajax.BeginForm("Vote", "Contests", new { id = Model.ContestId, pictureId = Model.Id }, new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "picture-info-container", InsertionMode = InsertionMode.ReplaceWith }))

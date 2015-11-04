@@ -4,7 +4,7 @@
         <h3>
             @Model.Title
         </h3>
-        
+
         <span>Author: @Html.ActionLink(@Model.AuthorUsername, "Index", "Users", new { username = Model.AuthorUsername }, null)</span><br />
         <span>Posted on: @Html.DisplayFor(m => m.PostedOn)</span><br />
         <span>Total participations: @Model.ContestsCount</span><br />
@@ -15,10 +15,21 @@
                 @Html.ActionLink("Delete", "Delete", "Pictures", new { id = Model.Id }, new { @class = "btn btn-danger" })
                 @Html.ActionLink("Remove", "Remove", "Pictures", new { id = Model.Id, contestId = Model.ContestId }, new { @class = "btn btn-warning" })
             }
-            @if (Model.CanBeVoted || Model.CanBeUnvoted)
+            @if (Model.CanBeVoted)
             {
-                @Ajax.ActionLink("Vote", "GalleryVote", "Contests", new { contestId = Model.ContestId, pictureId = Model.Id, vote = true }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "votes-container", InsertionMode = InsertionMode.Replace }, new { @class = "btn btn-success" })
-                @Ajax.ActionLink("Unvote", "GalleryVote", "Contests", new { contestId = Model.ContestId, pictureId = Model.Id, vote = false }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "votes-container", InsertionMode = InsertionMode.Replace }, new { @class = "btn btn-info" })
+                @Ajax.ActionLink(
+               "Vote",
+               "GalleryVote",
+               "Contests",
+               new { contestId = Model.ContestId, pictureId = Model.Id, vote = true },
+               new AjaxOptions
+               {
+                   HttpMethod = "POST",
+                   UpdateTargetId = "votes-container",
+                   InsertionMode = InsertionMode.Replace,
+                   OnSuccess = "removeVoteButton"
+               },
+               new { @class = "btn btn-success", id = "vote-button" })
             }
         </div>
     </div>

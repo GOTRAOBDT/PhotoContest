@@ -55,14 +55,12 @@
             if (contestId == null)
             {
                 picture.CanBeVoted = false;
-                picture.CanBeUnvoted = false;
             }
             else
             {
                 var dbContest = this.Data.Contests.Find(contestId);
                 picture.ContestId = contestId;
                 picture.CanBeVoted = PictureUtills.CanVoteForPicture(user, dbPicture, dbContest);
-                picture.CanBeUnvoted = PictureUtills.CanUnvotePicture(user, dbPicture, dbContest);
                 picture.VotesCount = dbPicture.Votes.Where(v => v.ContestId == contestId).Count();
             }
 
