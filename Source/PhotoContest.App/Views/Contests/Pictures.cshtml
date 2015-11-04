@@ -2,7 +2,9 @@
 @using PagedList.Mvc
 @using PhotoContest.App.Models.Pictures
 @model IPagedList<SummaryPictureViewModel>
-
+@{
+    ViewBag.Title = "Pictures";
+}
 <div class="col-md-7 col-md-offset-1">
     <h1>@ViewData["ContestTitle"]</h1>
     <div class="row">
