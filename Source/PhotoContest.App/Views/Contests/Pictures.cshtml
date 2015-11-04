@@ -12,8 +12,17 @@
         }
         else
         {
-            @Html.DisplayForModel()
+            for (int i = 0; i < Model.Count; i += 2)
+            {
+                <div class="row">
+                    @Html.DisplayFor(m => Model[i])
+                    @if (i <= Model.Count - 2)
+                    {
+                        @Html.DisplayFor(m => Model[i + 1])
+                    }
+                </div>
+            }
         }
     </div>
     @Html.PagedListPager(Model, page => Url.Action("Pictures", new { page, ViewBag.sortBy }))
-</div>
+    </div>

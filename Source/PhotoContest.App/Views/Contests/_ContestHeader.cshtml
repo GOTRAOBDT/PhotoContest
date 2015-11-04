@@ -80,10 +80,13 @@
                         }
                     else
                     {
+                        string prizesText = "";
                         foreach (var prize in Model.Prizes)
                         {
-                            @Html.ActionLink(prize.Name, "Prizes", new { contestId = Model.Id }) @: /
+                            prizesText += prize.Name + " / ";
                         }
+                        prizesText = prizesText.Substring(0, prizesText.Length - 2);
+                        @Html.ActionLink(prizesText, "Prizes", new { contestId = Model.Id })
                     }
                 </span>
             </div>
