@@ -57,9 +57,9 @@ namespace PhotoContest.App
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            app.UseFacebookAuthentication(
+               appId: "1690933427792561",
+               appSecret: "627352bfa1ad576dea1a25fe22233f59");
 
             app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             {
