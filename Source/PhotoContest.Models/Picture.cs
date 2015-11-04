@@ -27,8 +27,7 @@
 
         [Required]
         public string PictureData { get; set; }
-
-        [Required]
+        
         public string ThumbnailImageData { get; set; }
 
         [Required]
