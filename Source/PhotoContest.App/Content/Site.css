@@ -101,5 +101,9 @@ textarea {
 }
 
 .profile-image-container {
-    max-width:300px;
+    display: block;
+    max-width:250px;
+    max-height:250px;
+    margin-right: 15px;
+    overflow: hidden;
 }

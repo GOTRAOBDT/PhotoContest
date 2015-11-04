@@ -11,10 +11,10 @@
         </div>
         <div class="panel-body">
             <div class="media">
-                <div class="media-left profile-image-container">
+                <div class="media-left">
                     @if (Model.ProfilePicture != null)
                     {
-                        <a href="#">
+                        <a href="#" class="profile-image-container">
                             <img class="media-object img-rounded" src="@Model.ProfilePicture" alt="Picture of @Model.Name">
                         </a>
                     }
