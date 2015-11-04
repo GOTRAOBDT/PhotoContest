@@ -55,7 +55,7 @@
                         break;
                     case "ComingSoon":
                         contests = this.Data.Contests.All()
-                            .Where(c => c.Status == ContestStatus.Inactive)
+                            .Where(c => c.Status == ContestStatus.Inactive && TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now) < 0)
                             .OrderByDescending(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
                             .ProjectTo<SummaryContestViewModel>()
                             .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
