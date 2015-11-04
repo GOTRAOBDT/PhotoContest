@@ -1,23 +1,21 @@
 ﻿namespace PhotoContest.App.Controllers
 {
-    using System;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Web;
     using System.Web.Mvc;
 
+    using AutoMapper.QueryableExtensions;
+
+    using Data.Contracts;
+
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.Owin;
     using Microsoft.Owin.Security;
-
-    using AutoMapper.QueryableExtensions;
-
-    using PhotoContest.Models;
-    using PhotoContest.Data;
+    
     using PhotoContest.App.Models;
     using PhotoContest.App.Models.Account;
-    using Data.Contracts;
-    using Models.Contest;
+    using PhotoContest.Data;
 
     [Authorize]
     public class ManageController : BaseController

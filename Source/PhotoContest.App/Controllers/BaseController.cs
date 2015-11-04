@@ -22,8 +22,6 @@
             {
                 this.MaintainContests();
             }
-
-            //this.ViewData["UnreadCount"] = this.GetUnreadNotificationsCount();
         }
 
         protected IPhotoContestData Data

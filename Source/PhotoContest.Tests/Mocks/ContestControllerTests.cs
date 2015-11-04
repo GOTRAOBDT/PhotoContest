@@ -1,23 +1,28 @@
-﻿using System.Net.Http;
-using AutoMapper;
-using PagedList;
-using PhotoContest.App.CommonFunctions;
-using PhotoContest.App.Models.Account;
-
-namespace PhotoContest.Tests.Mocks
+﻿namespace PhotoContest.Tests.Mocks
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
+    using System.Net.Http;
     using System.Security.Claims;
     using System.Web;
+    using System.Web.Http;
+    using System.Web.Mvc;
+
+    using AutoMapper;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+
     using Moq;
-    using System.Collections.Generic;
+
+    using PagedList;
+
+    using PhotoContest.App.Areas.Administration.Controllers;
+    using PhotoContest.App.CommonFunctions;
+    using PhotoContest.App.Models.Account;
     using PhotoContest.App.Models.Contest;
     using PhotoContest.Models;
     using PhotoContest.Models.Enumerations;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using System.Web.Mvc;
-    using PhotoContest.App.Areas.Administration.Controllers;
 
     [TestClass]
     public class ContestControllerTests
@@ -129,7 +134,7 @@ namespace PhotoContest.Tests.Mocks
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(System.Web.Http.HttpResponseException))]
         public void ManageContest_WhichDoestNotExist_ShouldArgumentException()
         {
             LoginMock();

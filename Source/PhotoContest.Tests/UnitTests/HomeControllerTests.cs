@@ -130,7 +130,7 @@
             var viewResult = result as ViewResult;
             var actualModelList = viewResult.Model as IPagedList<SummaryContestViewModel>;
             var fakeContestsList = this.fakeContests
-                .Where(c => c.Status == ContestStatus.Inactive)
+                .Where(c => c.Status == ContestStatus.Inactive && TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now) < 0)
                 .OrderByDescending(c => TestableDbFunctions.DiffMinutes(c.StartDate, DateTime.Now))
                 .ProjectTo<SummaryContestViewModel>()
                 .ToList();

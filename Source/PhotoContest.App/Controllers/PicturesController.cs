@@ -5,14 +5,16 @@
     using System.Net.Http;
     using System.Web.Mvc;
 
-    using Microsoft.AspNet.Identity;
-
     using AutoMapper;
 
     using Common;
+
     using Data.Contracts;
+
+    using Microsoft.AspNet.Identity;
+
     using Models.Pictures;
-    
+
     using PhotoContest.Models.Enumerations;
 
     //using DropboxFileSystem;

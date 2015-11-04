@@ -1,13 +1,14 @@
 ﻿namespace PhotoContest.App.Controllers
 {
     using System.Linq;
-    using System.Net.Http;
     using System.Net;
+    using System.Net.Http;
     using System.Web.Mvc;
 
     using AutoMapper;
 
     using Data.Contracts;
+
     using Models.Users;
 
     [Authorize]

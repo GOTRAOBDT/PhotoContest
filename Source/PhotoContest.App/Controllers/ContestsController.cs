@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Data.Entity;
     using System.Linq;
     using System.Net;
     using System.Net.Http;
@@ -11,8 +12,10 @@
     using AutoMapper.QueryableExtensions;
 
     using Common;
+
     using CommonFunctions;
 
+    using Data;
     using Data.Contracts;
 
     using Microsoft.AspNet.Identity;
@@ -20,15 +23,13 @@
 
     using Models.Account;
     using Models.Contest;
-
     using Models.Pictures;
+
     using PagedList;
 
     using PhotoContest.App.Hubs;
     using PhotoContest.Models;
     using PhotoContest.Models.Enumerations;
-    using Data;
-    using System.Data.Entity;
 
     [System.Web.Mvc.Authorize]
     public class ContestsController : BaseController
