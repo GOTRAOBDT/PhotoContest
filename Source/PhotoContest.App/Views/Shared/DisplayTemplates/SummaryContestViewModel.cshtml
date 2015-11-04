@@ -2,7 +2,7 @@
 @model SummaryContestViewModel
 
 <div class="col-md-6">
-    <a href="@(Url.RouteUrl("ContestDetails", new { id = @Model.Id }))" class="contest-list">
+    <a href="@(Url.RouteUrl("ContestDetails", new { id = @Model.Id }))">
         <div class="thumbnail">
             <div class="thumbnail-image-container">
                 <img src="@Model.Thumbnail" alt="@Model.Title" class="thumbnail-image-size">
