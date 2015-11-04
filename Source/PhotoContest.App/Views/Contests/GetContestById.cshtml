@@ -1,6 +1,6 @@
 ﻿@model PhotoContest.App.Models.Contest.FullContestViewModel
 @{
-    ViewBag.Title = "GetContestById";
+    ViewBag.Title = Model.ContestSummary.Title;
 }
 <div class="col-md-7 col-md-offset-1">
     @Html.Partial("_ContestHeader", Model.ContestSummary)
