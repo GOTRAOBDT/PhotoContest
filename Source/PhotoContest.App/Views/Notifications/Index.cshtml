@@ -30,12 +30,12 @@ else
 <script>
     function changeBackgroundToAll() {
         var notifications = $('#notifications > DIV');
-
         for (var i = 0; i < notifications.length; i++) {
             if (notifications.eq(i).attr('class') !== 'pagination-container') {
                 notifications.eq(i).removeAttr("class");
                 notifications.eq(i).attr("class", "row thumbnailRead");
             }
         }
+        $('.mark-btn').remove();
     }
 </script>

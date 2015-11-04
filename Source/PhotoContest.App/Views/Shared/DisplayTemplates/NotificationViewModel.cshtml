@@ -13,7 +13,7 @@ else
     <h5>Date: @Model.CreatedOn.ToString("dd.MM.yyyy hh:mm")</h5>
     @if (!Model.IsRead)
     {
-        using (Ajax.BeginForm("MarkAsRead", "Notifications", new {Model.Id}, new AjaxOptions {HttpMethod = "POST", UpdateTargetId = "notification-" + @Model.Id, InsertionMode = InsertionMode.ReplaceWith}, new {id = "notification-" + Model.Id}))
+        using (Ajax.BeginForm("MarkAsRead", "Notifications", new {Model.Id}, new AjaxOptions {HttpMethod = "POST", UpdateTargetId = "notification-" + @Model.Id, InsertionMode = InsertionMode.ReplaceWith}, new {id = "notification-" + Model.Id, @class="mark-btn"}))
         {
             @Html.AntiForgeryToken()
             <button type="submit" onclick="changeBackground(@Model.Id)" class="btn btn-sm btn-default pull-right">Mark As Read</button>
