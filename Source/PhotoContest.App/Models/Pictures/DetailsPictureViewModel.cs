@@ -18,11 +18,13 @@
 
         public string AuthorUsername { get; set; }
 
-        public bool IsAuthor { get; set; }
+        public bool CanBeDeleted { get; set; }
 
-        public bool CanVote { get; set; }
+        public bool CanBeRemoved { get; set; }
 
-        public bool HasVoted { get; set; }
+        public bool CanBeVoted { get; set; }
+
+        public bool CanBeUnvoted { get; set; }
 
         public int? ContestId { get; set; }
 

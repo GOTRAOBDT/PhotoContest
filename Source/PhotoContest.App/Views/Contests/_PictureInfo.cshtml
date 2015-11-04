@@ -4,11 +4,11 @@
     <img src="@Model.PictureData" class="img-rounded full-image" alt="Title: @Model.Title">
     <div class="caption">
         @Model.Title
-        @if (Model.IsAuthor)
+        @if (Model.CanBeDeleted)
             {
             @Html.ActionLink("Delete", "Delete", "Pictures", new { id = Model.Id }, new { @class = "btn btn-danger" })
         }
-        @if (Model.HasVoted && !Model.IsAuthor)
+        @if (Model.CanBeUnvoted)
         {
             using (Ajax.BeginForm("UnVote", "Contests", new { id = Model.ContestId, pictureId = Model.Id }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "picture-info-container", InsertionMode = InsertionMode.ReplaceWith }))
             {
@@ -16,7 +16,7 @@
                 <button type="submit" class="btn btn-danger pull-right">Unvote</button>
             }
         }
-        @if (Model.CanVote)
+        @if (Model.CanBeVoted)
             {
                 using (Ajax.BeginForm("Vote", "Contests", new { id = Model.ContestId, pictureId = Model.Id }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "picture-info-container", InsertionMode = InsertionMode.ReplaceWith }))
                 {

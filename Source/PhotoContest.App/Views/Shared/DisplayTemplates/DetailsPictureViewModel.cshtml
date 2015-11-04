@@ -6,7 +6,7 @@
     <div class="caption">
         @Model.Title
         <div>
-            @if ((Model.IsAuthor || this.User.IsInRole("Administrator")))
+            @if (Model.CanBeDeleted)
             {
                 <button class="btn btn-danger" role="button" data-toggle="modal" data-target="#confirm-delete-@Model.Id">Delete</button>
                 if (Model.ContestId != null)
@@ -14,7 +14,7 @@
                     <button class="btn btn-warning" role="button" data-toggle="modal" data-target="#confirm-remove-@Model.Id">Remove</button>
                 }
             }
-            @if ((Model.HasVoted && Model.CanVote) && !Model.IsAuthor)
+            @if (Model.CanBeUnvoted)
             {
                 using (Ajax.BeginForm("UnVote", "Contests", new { id = Model.ContestId, pictureId = Model.Id }, new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "picture-info-container", InsertionMode = InsertionMode.ReplaceWith }))
                 {
@@ -22,7 +22,7 @@
                     <input type="submit" class="btn btn-danger pull-right" value="Unvote" />
                 }
             }
-            @if (Model.CanVote)
+            @if (Model.CanBeVoted)
             {
                 using (Ajax.BeginForm("Vote", "Contests", new { id = Model.ContestId, pictureId = Model.Id }, new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "picture-info-container", InsertionMode = InsertionMode.ReplaceWith }))
                 {

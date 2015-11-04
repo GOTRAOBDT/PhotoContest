@@ -694,9 +694,10 @@
 
             var user = this.Data.Users.Find(this.User.Identity.GetUserId());
 
-            pictureModel.IsAuthor = PictureUtills.IsAuthor(user, picture);
-            pictureModel.HasVoted = PictureUtills.HasVotedForPicture(user, picture, contest);
-            pictureModel.CanVote = PictureUtills.CanVoteForPicture(user, picture, contest);
+            pictureModel.CanBeDeleted = PictureUtills.IsAuthor(user, picture) || this.User.IsInRole("Administrator");
+            pictureModel.CanBeRemoved = pictureModel.CanBeDeleted;
+            pictureModel.CanBeVoted = PictureUtills.CanVoteForPicture(user, picture, contest);
+            pictureModel.CanBeUnvoted = PictureUtills.CanUnvotePicture(user, picture, contest);
             pictureModel.ContestId = id;
             pictureModel.VotesCount = picture.Votes.Where(v => v.ContestId == id).Count();
 
@@ -841,9 +842,12 @@
             var dbPicture = this.Data.Pictures.Find(pictureId);
             var picture = Mapper.Map<DetailsPictureViewModel>(dbPicture);
             picture.VotesCount = votesCount;
-            picture.HasVoted = true;
-            picture.CanVote = false;
+            picture.CanBeVoted = false;
+            picture.CanBeUnvoted = true;
             picture.ContestId = id;
+            picture.CanBeDeleted = PictureUtills.IsAuthor(this.Data.Users.Find(this.User.Identity.GetUserId()), dbPicture) ||
+                this.User.IsInRole("Administrator");
+            picture.CanBeRemoved = picture.CanBeDeleted;
 
             return this.PartialView("_PictureInfo", picture);
         }
@@ -863,9 +867,12 @@
             var dbPicture = this.Data.Pictures.Find(pictureId);
             var picture = Mapper.Map<DetailsPictureViewModel>(dbPicture);
             picture.VotesCount = votesCount;
-            picture.HasVoted = false;
-            picture.CanVote = true;
+            picture.CanBeVoted = true;
+            picture.CanBeUnvoted = false;
             picture.ContestId = id;
+            picture.CanBeDeleted = PictureUtills.IsAuthor(this.Data.Users.Find(this.User.Identity.GetUserId()), dbPicture) ||
+                this.User.IsInRole("Administrator");
+            picture.CanBeRemoved = picture.CanBeDeleted;
 
             return this.PartialView("_PictureInfo", picture);
         }

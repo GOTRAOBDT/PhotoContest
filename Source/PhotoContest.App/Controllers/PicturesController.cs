@@ -14,10 +14,14 @@
     using Models.Pictures;
     using AutoMapper;
     using PhotoContest.Models;
+    using Common;
+
     //using DropboxFileSystem;
 
     public class PicturesController : BaseController
     {
+        public object PictureUtils { get; private set; }
+
         public PicturesController(IPhotoContestData data)
             : base(data)
         {
@@ -40,72 +44,29 @@
 
             if (picture == null)
             {
-                return this.HttpNotFound();
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
             }
 
             var user = this.Data.Users.Find(this.User.Identity.GetUserId());
 
-            if (dbPicture.AuthorId == user.Id)
-            {
-                picture.IsAuthor = true;
-            }
+            picture.CanBeDeleted = PictureUtills.IsAuthor(user, dbPicture) || this.User.IsInRole("Administrator");
+            picture.CanBeRemoved = picture.CanBeDeleted && contestId != null;
 
             if (contestId == null)
             {
-                picture.CanVote = false;
-                picture.HasVoted = true;
+                picture.CanBeVoted = false;
+                picture.CanBeUnvoted = false;
             }
             else
             {
                 var dbContest = this.Data.Contests.Find(contestId);
                 picture.ContestId = contestId;
-                picture.CanVote = this.CanVote(user, dbPicture, dbContest);
-                picture.HasVoted = this.HasVoted(user, dbPicture, dbContest);
+                picture.CanBeVoted = PictureUtills.CanVoteForPicture(user, dbPicture, dbContest);
+                picture.CanBeUnvoted = PictureUtills.CanUnvotePicture(user, dbPicture, dbContest);
                 picture.VotesCount = dbPicture.Votes.Where(v => v.ContestId == contestId).Count();
             }
 
             return this.View(picture);
-        }
-
-        private bool HasVoted(User user, Picture dbPicture, Contest dbContest)
-        {
-            if (dbPicture.Votes.Any(v => v.VoterId == user.Id && v.ContestId == dbContest.Id))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        private bool CanVote(User user, Picture dbPicture, Contest dbContest)
-        {
-            if (dbContest.Status != PhotoContest.Models.Enumerations.ContestStatus.Active)
-            {
-                return false;
-            }
-
-            if (dbPicture.Author == user)
-            {
-                return false;
-            }
-
-            if (dbContest.OwnerId == user.Id)
-            {
-                return false;
-            }
-
-            if (dbPicture.Votes.Any(v => v.VoterId == user.Id))
-            {
-                return false;
-            }
-
-            if (dbContest.VotingType == PhotoContest.Models.Enumerations.VotingType.Closed &&
-                !dbContest.Jury.Members.Any(m => m.Id == user.Id))
-            {
-                return false;
-            }
-
-            return true;
         }
 
         [HttpGet]
