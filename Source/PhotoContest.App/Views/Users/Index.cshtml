@@ -12,9 +12,16 @@
         <div class="panel-body">
             <div class="media">
                 <div class="media-left profile-image-container">
-                    <a href="#">
-                        <img class="media-object img-rounded" src="@Model.ProfilePicture" alt="Picture of @Model.Name">
-                    </a>
+                    @if (Model.ProfilePicture != null)
+                    {
+                        <a href="#">
+                            <img class="media-object img-rounded" src="@Model.ProfilePicture" alt="Picture of @Model.Name">
+                        </a>
+                    }
+                    else
+                    {
+                        <img class="media-object img-rounded" src="~/Content/img/noavatar.jpg" alt="Picture of @Model.Name">
+                    }
                 </div>
                 <div class="media-body">
                     <strong>Username: </strong> @Model.UserName <br />
@@ -28,5 +35,5 @@
         </div>
     </div>
 
-    
+
 </div>
