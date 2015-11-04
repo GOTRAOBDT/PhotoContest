@@ -311,6 +311,8 @@
     <Content Include="Content\img\no-photo.png" />
     <Content Include="Content\img\noavatar.jpg" />
     <Content Include="Content\PagedList.css" />
+    <Content Include="Content\_bootstrap.css" />
+    <Content Include="Content\_bootstrap.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
