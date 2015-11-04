@@ -62,5 +62,9 @@ namespace PhotoContest.Common
             "Member {0} has voted for your picture titled '{1}' in contest '{2}'.";
 
         public const string NO_TITLE = "(no title)";
+
+        public const string ADMIN_CANNOT_BE_ADDED = "Admin profile can not be edited!";
+        public const string NOTIFICATION_NOT_FOUND = "Notification not found!";
+        public const string NOT_NOTIFICATION_OWNER = "You are not the owner of this notification!";
     }
 }

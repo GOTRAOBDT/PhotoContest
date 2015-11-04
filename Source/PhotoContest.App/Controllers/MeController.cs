@@ -138,7 +138,7 @@
         {
             if (this.User.IsInRole("Administrator"))
             {
-                this.TempData["message"] = "Admin profile can not be edited!";
+                this.TempData["message"] = Messages.ADMIN_CANNOT_BE_ADDED;
                 return this.RedirectToAction("Index", "Home");
             }
 

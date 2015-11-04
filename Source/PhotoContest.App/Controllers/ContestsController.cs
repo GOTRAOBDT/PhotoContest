@@ -108,7 +108,7 @@
                 {
                     RecipientId = member.Id,
                     Content = string.Format(
-                        Messages.,
+                        Messages.NEW_CONTEST_MESSAGE,
                         contest.Title,
                         contest.StartDate),
                     CreatedOn = DateTime.Now,
@@ -562,7 +562,7 @@
 
             if (contest.OwnerId != loggedUserId && !this.User.IsInRole("Administrator"))
             {
-                throw new HttpRequestException(Messages.NOTA);
+                throw new HttpRequestException(Messages.NOT_AUTHORIZED_MESSAGE);
             }
 
             contest.Candidates.Remove(user);

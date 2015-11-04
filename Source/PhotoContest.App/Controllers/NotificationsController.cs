@@ -45,7 +45,7 @@
         {
             if (!this.Request.IsAjaxRequest())
             {
-                throw new InvalidOperationException("Invalid operation!");
+                throw new InvalidOperationException(Messages.INVALID_OPEARATION_MESSAGE);
             }
 
             var notification = this.Data.Notifications.Find(id);
@@ -53,12 +53,12 @@
 
             if (notification == null)
             {
-                throw new ArgumentException("Notification not found!");
+                throw new ArgumentException(Messages.NOTIFICATION_NOT_FOUND);
             }
 
             if (loggedUserId != notification.RecipientId)
             {
-                throw new ArgumentException("You are not the owner of this notification!");
+                throw new ArgumentException(Messages.NOT_NOTIFICATION_OWNER);
             }
 
             notification.IsRead = true;
@@ -74,7 +74,7 @@
         {
             if (!this.Request.IsAjaxRequest())
             {
-                throw new InvalidOperationException("Invalid operation!");
+                throw new InvalidOperationException(Messages.INVALID_OPEARATION_MESSAGE);
             }
 
             var loggedUserId = this.User.Identity.GetUserId();
