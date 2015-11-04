@@ -15,13 +15,6 @@
         {
         }
 
-        // GET: Administration/Pictures/{id}?contestId=...
-        [HttpGet]
-        public override ActionResult Index(int id, int? contestId)
-        {
-            return base.Index(id, contestId);
-        }
-
         [HttpGet]
         public ActionResult DeletePicture(int id, int? contestId)
         {

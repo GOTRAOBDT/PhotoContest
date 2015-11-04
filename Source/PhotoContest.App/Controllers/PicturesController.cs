@@ -31,7 +31,7 @@
         
         //dropbox editions
         //public async ActionResult Index(int id, int? contestId)
-        public virtual ActionResult Index(int id, int? contestId)
+        public ActionResult Index(int id, int? contestId)
         {
             var dbPicture = this.Data.Pictures.Find(id);
 

@@ -142,7 +142,7 @@
         // Returned model type: DetailsContestViewModel
         [HttpGet]
         [AllowAnonymous]
-        public virtual ActionResult GetContestById(int id)
+        public ActionResult GetContestById(int id)
         {
             var dbContest = this.Data.Contests.Find(id);
             var contest = Mapper.Map<DetailsContestViewModel>(dbContest);
@@ -226,7 +226,7 @@
 
         // GET: Contests/{contestId}/Manage
         [HttpGet]
-        public virtual ActionResult Manage(int id)
+        public ActionResult Manage(int id)
         {
             var contest = this.Data.Contests.All()
                 .Where(c => c.Id == id).ProjectTo<EditContestBindingModel>().FirstOrDefault();
@@ -252,7 +252,7 @@
         // POST: Contests/{contestId}/Manage
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public virtual ActionResult Manage(int id, EditContestBindingModel model)
+        public ActionResult Manage(int id, EditContestBindingModel model)
         {
             if (model == null)
             {
@@ -278,7 +278,7 @@
         // GET: Contests/{contestId}/Jury
         // Returned model type: BasicUserInfoViewModel
         [HttpGet]
-        public virtual ActionResult Jury(int id)
+        public ActionResult Jury(int id)
         {
             var contest = this.Data.Contests.All()
                 .FirstOrDefault(c => c.Id == id);
@@ -464,7 +464,7 @@
         // GET: Contests/{contestId}/Candidates
         // Returned model type: BasicUserInfoViewModel
         [HttpGet]
-        public virtual ActionResult Candidates(int id, int? page)
+        public ActionResult Candidates(int id, int? page)
         {
             var contestOwnerId = this.Data.Contests.All()
                 .Where(c => c.Id == id)
@@ -573,7 +573,7 @@
 
         // GET: Contests/{contestId}/Participants
         [HttpGet]
-        public virtual ActionResult Participants(int id, int? page)
+        public ActionResult Participants(int id, int? page)
         {
             var loggedUserId = this.User.Identity.GetUserId();
             var contestOwnerId = this.Data.Contests.All()
@@ -736,7 +736,7 @@
         }
 
         [HttpGet]
-        public virtual ActionResult Pictures(int id, int? page)
+        public ActionResult Pictures(int id, int? page)
         {
             IPagedList<SummaryPictureViewModel> pictures = null;
             var contest = this.Data.Contests.Find(id);
