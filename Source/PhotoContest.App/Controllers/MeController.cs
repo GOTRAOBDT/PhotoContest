@@ -101,7 +101,7 @@
             var picture = new Picture()
             {
                 PictureData = model.PictureData,
-                ThumbnailImageData = model.PictureData,
+                ThumbnailImageData = null,
                 Title = model.Title,
                 AuthorId = userId,
                 PostedOn = DateTime.Now,

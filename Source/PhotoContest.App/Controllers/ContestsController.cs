@@ -753,7 +753,7 @@
                     Author = p.Author.Name,
                     AuthorUsername = p.Author.UserName,
                     IsAuthor = p.AuthorId == userId,
-                    ThumbnailImageData = p.ThumbnailImageData,
+                    ThumbnailImageData = p.PictureData,
                     ContestId = contest.Id,
                     AddToContest = false,
                     ContestsCount = p.Contests.Count,

@@ -7,6 +7,10 @@
         @if (Model.CanBeDeleted)
             {
             @Html.ActionLink("Delete", "Delete", "Pictures", new { id = Model.Id }, new { @class = "btn btn-danger" })
+            if (Model.ContestId != null)
+            {
+                <button class="btn btn-warning" role="button" data-toggle="modal" data-target="#confirm-remove-@Model.Id">Remove</button>
+            }
         }
         @if (Model.CanBeVoted)
             {
