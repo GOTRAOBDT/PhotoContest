@@ -5,6 +5,18 @@
     {
         <li class="list-group-item" id="container-@m.UserName">
             <div class="row">
+                <div class="col-md-offset-1">
+                    @if (ViewContext.RouteData.DataTokens["area"] == null)
+                    {
+                        <h3>@Html.ActionLink(@m.UserName, "Index", "Users", new { username = m.UserName }, null)</h3>
+                    }
+                    else
+                    {
+                        <h3>@Html.ActionLink(@m.UserName, "GetUserByUsername", "Users", new { username = m.UserName }, null)</h3>
+                    }
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-4">
                     @if (m.ProfilePicture != null)
                     {
@@ -14,9 +26,6 @@
                     {
                         <img class="thumbnail" src="~/Content/img/no-photo.png" alt="@m.UserName"/>
                     }
-                </div>
-                <div class="col-md-8">
-                    <h3>@m.UserName</h3>
                 </div>
             </div>
             <div class="row">

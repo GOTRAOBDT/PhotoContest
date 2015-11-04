@@ -27,7 +27,15 @@
         <p class="contest-description">@Model.Description</p><br />
         <div class="row">
             <div class="col-md-4">
-                <span><strong>Moderator: </strong>@Html.ActionLink(@Model.Owner, "Index", "Users", new { username = Model.OwnerUsername }, null)</span><br />
+                @if (ViewContext.RouteData.DataTokens["area"] == null)
+                {
+                    <span><strong>Moderator: </strong>@Html.ActionLink(@Model.Owner, "Index", "Users", new { username = Model.OwnerUsername }, null)</span><br />
+                }
+                else
+                {
+                    <span><strong>Moderator: </strong>@Html.ActionLink(@Model.Owner, "GetUserByUsername", "Users", new { username = Model.OwnerUsername }, null)</span><br />
+                }
+
                 <span><strong>Start Date: </strong>@Html.DisplayFor(m => m.StartDate)</span><br />
                 <span><strong>End Date: </strong>@Html.DisplayFor(m => m.EndDate)</span><br />
             </div>
