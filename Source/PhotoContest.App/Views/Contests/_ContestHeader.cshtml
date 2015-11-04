@@ -6,7 +6,7 @@
     <div class="caption">
         @if (Model.CanApply && !Model.IsOwner)
         {
-            @Html.ActionLink("Apply", "Apply", "Contests", new { contestId = Model.Id}, new { @class = "btn btn-success" })
+            @Html.ActionLink("Apply", "Apply", "Contests", new { contestId = Model.Id }, new { @class = "btn btn-success" })
         }
         @if ((Model.IsOwner || this.User.IsInRole("Administrator")) && Model.Status != ContestStatus.Finished)
         {
@@ -22,12 +22,20 @@
         {
             @Html.ActionLink("View Gallery", "Gallery", "Contests", new { id = Model.Id }, new { @class = "btn btn-primary" })
         }
-        
+
         <h2 class="contest-title">@Model.Title</h2>
         <p class="contest-description">@Model.Description</p><br />
         <div class="row">
             <div class="col-md-4">
-                <span><strong>Moderator: </strong>@Html.ActionLink(@Model.Owner, "Index", "Users", new { username = Model.OwnerUsername }, null)</span><br />
+                @if (ViewContext.RouteData.DataTokens["area"] == null)
+                {
+                    <span><strong>Moderator: </strong>@Html.ActionLink(@Model.Owner, "Index", "Users", new { username = Model.OwnerUsername }, null)</span><br />
+                }
+                else
+                {
+                    <span><strong>Moderator: </strong>@Html.ActionLink(@Model.Owner, "GetUserByUsername", "Users", new { username = Model.OwnerUsername }, null)</span><br />
+                }
+
                 <span><strong>Start Date: </strong>@Html.DisplayFor(m => m.StartDate)</span><br />
                 <span><strong>End Date: </strong>@Html.DisplayFor(m => m.EndDate)</span><br />
             </div>
@@ -74,7 +82,7 @@
                     {
                         foreach (var prize in Model.Prizes)
                         {
-                            @Html.ActionLink(prize.Name, "Prizes", new { contestId = Model.Id }) @: / 
+                            @Html.ActionLink(prize.Name, "Prizes", new { contestId = Model.Id }) @: /
                         }
                     }
                 </span>
