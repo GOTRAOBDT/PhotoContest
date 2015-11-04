@@ -108,7 +108,7 @@
                 {
                     RecipientId = member.Id,
                     Content = string.Format(
-                        "There is a new contest titled '{0}' starting on {1}'",
+                        Messages.,
                         contest.Title,
                         contest.StartDate),
                     CreatedOn = DateTime.Now,
@@ -129,7 +129,7 @@
         {
             if (!this.Request.IsAjaxRequest())
             {
-                throw new HttpRequestException("Inavlid request!");
+                throw new HttpRequestException(Messages.INVALID_REQUEST_MESSAGE);
             }
 
             var dbContest = this.Data.Contests.Find(id);
@@ -165,7 +165,7 @@
                 var notification = new Notification()
                 {
                     Content = string.Format(
-                        "Your contest titled '{0}' has finished. Please, prepare to deliver the prizes.",
+                        Messages.CONTEST_FINISH_MESSAGE,
                         contest.Title),
                     RecipientId = dbContest.Owner.Id,
                     CreatedOn = DateTime.Now,
@@ -181,7 +181,7 @@
                     var noty = new Notification()
                     {
                         Content = string.Format(
-                            "Your picture titled {0} has won a prize ({1}) in the contest '{2}'. Go get it!)",
+                            Messages.PICTURE_WON_PRIZE_MESSAGE,
                             winner.Picture.Title ?? "(not available)",
                             winner.PrizeName,
                             contest.Title),
@@ -256,7 +256,7 @@
         {
             if (model == null)
             {
-                throw new ArgumentException("Contest not found!");
+                throw new ArgumentException(Messages.CONTEST_NOT_FOUND_MESSAGE);
             }
 
             var contest = this.Data.Contests.Find(id);
@@ -285,7 +285,7 @@
 
             if (contest == null)
             {
-                throw new HttpRequestException("This contest does not exist!");
+                throw new HttpRequestException(Messages.CONTEST_NOT_FOUND_MESSAGE);
             }
 
             var juryMembers = this.Data.Contests.All()
@@ -324,7 +324,7 @@
             var contest = this.Data.Contests.Find(id);
             if (contest == null)
             {
-                throw new HttpRequestException("This contest does not exist!");
+                throw new HttpRequestException(Messages.CONTEST_NOT_FOUND_MESSAGE);
             }
 
             var loggedUserId = this.User.Identity.GetUserId();
@@ -347,7 +347,7 @@
         {
             if (this.User.Identity.GetUserName().ToLower() == model.Username.ToLower())
             {
-                throw new ArgumentException("Owner of the contest can not be jury member!");
+                throw new ArgumentException(Messages.OWNER_CANNOT_BE_JURY_MESSAGE);
             }
 
             var user = this.Data.Users.All().FirstOrDefault(u => u.UserName == model.Username);
@@ -359,18 +359,18 @@
 
             if (user == null)
             {
-                throw new ArgumentException("User not found!");
+                throw new ArgumentException(Messages.USER_NOT_FOUND_MESSAGE);
             }
 
             var contest = this.Data.Contests.Find(model.ContestId);
             if (contest == null)
             {
-                throw new ArgumentException("Contest not found!");
+                throw new ArgumentException(Messages.CONTEST_NOT_FOUND_MESSAGE);
             }
 
             if (contest.Jury.Members.Any(u => u.Id == user.Id))
             {
-                throw new ArgumentException("This user has been already added as jury member!");
+                throw new ArgumentException(Messages.USER_ALREADY_ADDED_TO_JURY_MESSAGE);
             }
 
             contest.Jury.Members.Add(user);
@@ -386,30 +386,30 @@
         {
             if (!this.Request.IsAjaxRequest())
             {
-                throw new InvalidOperationException("Invalid operation!");
+                throw new InvalidOperationException(Messages.INVALID_OPEARATION_MESSAGE);
             }
 
             var user = this.Data.Users.All().FirstOrDefault(u => u.UserName == username);
 
             if (user == null)
             {
-                throw new ArgumentException("User not found!");
+                throw new ArgumentException(Messages.USER_NOT_FOUND_MESSAGE);
             }
 
             var contest = this.Data.Contests.Find(id);
             if (contest == null)
             {
-                throw new ArgumentException("Contest not found!");
+                throw new ArgumentException(Messages.CONTEST_NOT_FOUND_MESSAGE);
             }
 
             if (this.User.Identity.GetUserId() != contest.OwnerId && !this.User.IsInRole("Administrator"))
             {
-                throw new HttpRequestException("Not authorized!");
+                throw new HttpRequestException(Messages.NOT_AUTHORIZED_MESSAGE);
             }
 
             if (!contest.Jury.Members.Any(u => u.Id == user.Id))
             {
-                throw new ArgumentException("This user is not a jury member of this contest!");
+                throw new ArgumentException(Messages.NOT_IN_JURY_MESSAGE);
             }
 
             var memberVotes = this.Data.Votes.All()
@@ -438,13 +438,13 @@
             var user = this.Data.Users.Find(this.User.Identity.GetUserId());
             if (contest.Candidates.Any(u => u.Id == user.Id))
             {
-                this.TempData["message"] = "You have already applied to participate in the contest.";
+                this.TempData["message"] = Messages.ALREADY_APPLIED_TO_CONTEST_MESSAGE;
                 return this.RedirectToAction("GetContestById", new { id = contestId });
             }
 
             if (contest.Participants.Any(u => u.Id == user.Id))
             {
-                this.TempData["message"] = "You are already approved to participate in the contest.";
+                this.TempData["message"] = Messages.ALREADY_APPROVED_TO_CONTEST_MESSAGE;
                 return this.RedirectToAction("GetContestById", new { id = contestId });
             }
 
@@ -457,7 +457,7 @@
             //        user.UserName, contest.Title)
             //};
             this.Data.SaveChanges();
-            this.TempData["message"] = string.Format("Successfully applied to contest {0}.", contest.Title);
+            this.TempData["message"] = string.Format(Messages.SUCCESSFUL_APPLIED_TO_CONTEST, contest.Title);
             return this.RedirectToAction("GetContestById", new { id = contestId });
         }
 
@@ -473,7 +473,7 @@
 
             if (this.User.Identity.GetUserId() != contestOwnerId && !this.User.IsInRole("Administrator"))
             {
-                throw new HttpRequestException("Not authorized!");
+                throw new HttpRequestException(Messages.NOT_AUTHORIZED_MESSAGE);
             }
 
             var contestCandidates = this.Data.Contests.All()
@@ -484,7 +484,7 @@
 
             if (contestCandidates == null)
             {
-                throw new HttpRequestException("This contest not exists!");
+                throw new HttpRequestException(Messages.CONTEST_NOT_FOUND_MESSAGE);
             }
 
             var candidatesView = Mapper.Map<IPagedList<User>, IPagedList<BasicUserInfoViewModel>>(contestCandidates);
@@ -505,7 +505,7 @@
         {
             if (!this.Request.IsAjaxRequest())
             {
-                throw new InvalidOperationException("Invalid operation!");
+                throw new InvalidOperationException(Messages.INVALID_OPEARATION_MESSAGE);
             }
 
             var user = this.Data.Users.All().FirstOrDefault(u => u.UserName == username);
@@ -513,19 +513,19 @@
 
             if (user == null)
             {
-                throw new ArgumentException("User not exists!");
+                throw new ArgumentException(Messages.USER_NOT_FOUND_MESSAGE);
             }
 
             var contest = this.Data.Contests.Find(id);
 
             if (contest == null)
             {
-                throw new ArgumentException("Contest not exists!");
+                throw new ArgumentException(Messages.CONTEST_NOT_FOUND_MESSAGE);
             }
 
             if (contest.OwnerId != loggedUserId && !this.User.IsInRole("Administrator"))
             {
-                throw new HttpRequestException("Not authorized!");
+                throw new HttpRequestException(Messages.NOT_AUTHORIZED_MESSAGE);
             }
 
             contest.Participants.Add(user);
@@ -542,7 +542,7 @@
         {
             if (!this.Request.IsAjaxRequest())
             {
-                throw new InvalidOperationException("Invalid operation!");
+                throw new InvalidOperationException(Messages.INVALID_OPEARATION_MESSAGE);
             }
 
             var user = this.Data.Users.All().FirstOrDefault(u => u.UserName == username);
@@ -550,19 +550,19 @@
 
             if (user == null)
             {
-                throw new ArgumentException("User not exists!");
+                throw new ArgumentException(Messages.USER_NOT_FOUND_MESSAGE);
             }
 
             var contest = this.Data.Contests.Find(id);
 
             if (contest == null)
             {
-                throw new ArgumentException("Contest not exists!");
+                throw new ArgumentException(Messages.CONTEST_NOT_FOUND_MESSAGE);
             }
 
             if (contest.OwnerId != loggedUserId && !this.User.IsInRole("Administrator"))
             {
-                throw new HttpRequestException("Not authorized!");
+                throw new HttpRequestException(Messages.NOTA);
             }
 
             contest.Candidates.Remove(user);
@@ -583,7 +583,7 @@
 
             if (contestOwnerId == null)
             {
-                throw new HttpRequestException("Not existing contest!");
+                throw new HttpRequestException(Messages.CONTEST_NOT_FOUND_MESSAGE);
             }
 
             var participants = this.Data.Contests.All()
@@ -618,7 +618,7 @@
         {
             if (!this.Request.IsAjaxRequest())
             {
-                throw new InvalidOperationException("Invalid operation!");
+                throw new InvalidOperationException(Messages.INVALID_OPEARATION_MESSAGE);
             }
 
             var loggedUserId = this.User.Identity.GetUserId();
@@ -629,25 +629,25 @@
 
             if (contestOwnerId != loggedUserId && !this.User.IsInRole("Administrator"))
             {
-                throw new HttpRequestException("Not authorized!");
+                throw new HttpRequestException(Messages.NOT_AUTHORIZED_MESSAGE);
             }
 
             var user = this.Data.Users.All().FirstOrDefault(u => u.UserName == username);
 
             if (user == null)
             {
-                throw new ArgumentException("User not found!");
+                throw new ArgumentException(Messages.USER_NOT_FOUND_MESSAGE);
             }
 
             var contest = this.Data.Contests.Find(id);
             if (contest == null)
             {
-                throw new ArgumentException("Contest not found!");
+                throw new ArgumentException(Messages.CONTEST_NOT_FOUND_MESSAGE);
             }
 
             if (!contest.Participants.Any(u => u.Id == user.Id))
             {
-                throw new ArgumentException("This user is not a participant of this contest!");
+                throw new ArgumentException(Messages.USER_NOT_PARTICIPANT_MESSAGE);
             }
 
             var votesForDeleting = this.Data.Votes.All()
@@ -810,20 +810,20 @@
 
             if (contest.Pictures.Any(p => p.Id == picture.Id))
             {
-                this.TempData["message"] = "You have already added this picture to the contest.";
+                this.TempData["message"] = Messages.EXCISINTG_PICTURE_IN_CONTEST_MESSAGE;
                 return this.RedirectToAction("GetContestById", new { id = contestId });
             }
 
             if (contest.OwnerId == userId)
             {
-                this.TempData["message"] = "Moderators are not allowed to participate in their contests.";
+                this.TempData["message"] = Messages.MODERATORS_NOT_ALLOWED_MESSAGE;
                 return this.RedirectToAction("GetContestById", new { id = contestId });
             }
 
             if (contest.ParticipationType == ParticipationType.Closed &&
                 !contest.Participants.Any(p => p.Id == userId))
             {
-                throw new InvalidOperationException("You have not applied and/or have not been approved to participate in this contest.");
+                throw new InvalidOperationException(Messages.NOT_APPROVED_OR_APPIED_TO_CONTEST_MESSAGE);
             }
 
             contest.Pictures.Add(picture);
@@ -844,7 +844,7 @@
         {
             if (!this.Request.IsAjaxRequest())
             {
-                throw new InvalidOperationException("Invalid operation!");
+                throw new InvalidOperationException(Messages.INVALID_OPEARATION_MESSAGE);
             }
 
             int votesCount = this.Vote(pictureId, id, true);
@@ -869,7 +869,7 @@
         {
             if (!this.Request.IsAjaxRequest())
             {
-                throw new InvalidOperationException("Invalid operation!");
+                throw new InvalidOperationException(Messages.INVALID_OPEARATION_MESSAGE);
             }
 
             int votesCount = this.Vote(pictureId, id, false);
@@ -919,7 +919,7 @@
 
             if (contest.Status != ContestStatus.Active)
             {
-                this.TempData["message"] = "Contest cannot be paused.";
+                this.TempData["message"] = Messages.CONTEST_CANNOT_BE_PAUSED_MESSAGE;
                 return this.RedirectToAction("GetContestById", new { id = contestId });
             }
 
@@ -928,13 +928,13 @@
             {
                 CreatedOn = DateTime.Now,
                 IsRead = false,
-                Content = string.Format("You contest, titled '{0} was paused.'", contest.Title),
+                Content = string.Format(Messages.CONTEST_WAS_PAUSED_MESSAGE, contest.Title),
                 RecipientId = contest.OwnerId,
             };
             this.Data.Notifications.Add(notification);
             this.Data.SaveChanges();
 
-            this.TempData["message"] = "Contest was paused.";
+            this.TempData["message"] = Messages.CONTEST_PAUSED;
             return this.RedirectToAction("GetContestById", new { id = contestId });
         }
 
@@ -954,13 +954,13 @@
 
             if (contest.Status != ContestStatus.Inactive)
             {
-                this.TempData["message"] = "Contest cannot be restarted.";
+                this.TempData["message"] = Messages.CANNOT_BE_RESTARTED_MESSAGE;
                 return this.RedirectToAction("GetContestById", new { id = contestId });
             }
 
             if (contest.Status == ContestStatus.Inactive && contest.StartDate > DateTime.Now)
             {
-                this.TempData["message"] = "Contest will start on its designated Start Date.";
+                this.TempData["message"] = Messages.CONTEST_WILL_START_MESSAGE;
                 return this.RedirectToAction("GetContestById", new { id = contestId });
             }
 
@@ -969,13 +969,13 @@
             {
                 CreatedOn = DateTime.Now,
                 IsRead = false,
-                Content = string.Format("You contest, titled '{0} was restarted.'", contest.Title),
+                Content = string.Format(Messages.CONTEST_WAS_RESTARTED_MESSAGE, contest.Title),
                 RecipientId = contest.OwnerId,
             };
             this.Data.Notifications.Add(notification);
             this.Data.SaveChanges();
 
-            this.TempData["message"] = "Contest was restarted.";
+            this.TempData["message"] = Messages.CONTEST_RESTARTED_MESSAGE;
             return this.RedirectToAction("GetContestById", new { id = contestId });
         }
 
@@ -995,7 +995,7 @@
 
             if (contest.Status == ContestStatus.Dismissed)
             {
-                this.TempData["message"] = "Contest is already dismissed.";
+                this.TempData["message"] = Messages.CONTEST_DISMISSED_MESSAGE;
                 return this.RedirectToAction("GetContestById", new { id = contestId });
             }
 
@@ -1004,13 +1004,13 @@
             {
                 CreatedOn = DateTime.Now,
                 IsRead = false,
-                Content = string.Format("You contest, titled '{0} was dismissed.'", contest.Title),
+                Content = string.Format(Messages.CONTEST_WAS_DISMISSED_MESSSAGE, contest.Title),
                 RecipientId = contest.OwnerId,
             };
             this.Data.Notifications.Add(notification);
             this.Data.SaveChanges();
 
-            this.TempData["message"] = "Contest was dismissed.";
+            this.TempData["message"] = Messages.CONTEST_DISMISSED;
             return this.RedirectToAction("GetContestById", new { id = contestId });
         }
 
@@ -1026,7 +1026,7 @@
             {
                 votesCount = this.Vote(pictureId, contestId, false);
             }
-            return this.Content(string.Format("Total votes: {0}", votesCount));
+            return this.Content(string.Format(Messages.TOTAL_VOTES_MESSAGE, votesCount));
         }
 
         private ICollection<ContestWinnerViewModel> GetContestWinners(Contest contest)
@@ -1130,9 +1130,9 @@
                 var notification = new Notification
                 {
                     Content = string.Format(
-                    "Member {0} has voted for your picture titled '{1}' in contest '{2}'.",
+                    Messages.PICTURE_VOTE_NOTIFICATION,
                     user.UserName,
-                    picture.Title ?? "(no title)",
+                    picture.Title ?? Messages.NO_TITLE,
                     contest.Title),
                     CreatedOn = DateTime.Now,
                     IsRead = false,
