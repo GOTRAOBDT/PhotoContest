@@ -308,6 +308,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\img\300mm_logo.png" />
     <Content Include="Content\img\300mm_logo_white.png" />
+    <Content Include="Content\img\favicon.png" />
     <Content Include="Content\img\no-photo.png" />
     <Content Include="Content\img\noavatar.jpg" />
     <Content Include="Content\PagedList.css" />
