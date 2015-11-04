@@ -20,8 +20,6 @@
 
     public class PicturesController : BaseController
     {
-        public object PictureUtils { get; private set; }
-
         public PicturesController(IPhotoContestData data)
             : base(data)
         {
@@ -84,7 +82,11 @@
                 throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
             }
 
-            picture.Votes.Clear();
+            var votes = picture.Votes.ToList();
+            foreach (var vote in votes)
+            {
+                this.Data.Votes.Delete(vote);
+            }
             this.Data.SaveChanges();
 
             var participationContests = this.Data.Contests.All()
