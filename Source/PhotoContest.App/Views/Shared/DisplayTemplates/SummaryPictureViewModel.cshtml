@@ -10,12 +10,13 @@
                 <span>Author: @Html.ActionLink(Model.AuthorUsername, "Index", "Users", new { username = Model.AuthorUsername }, null)</span><br />
                 <span>Total participations: @Model.ContestsCount</span><br />
                 <span>Total votes: @Model.VotesCount</span><br />
-                @if (this.TempData.ContainsKey("SelectPicture"))
+                @if (Model.ContestVotesCount != null)
                 {
-                    if (Model.AddToContest == true)
-                    {
-                        @Html.ActionLink("Add", "AddPicture", "Contests", new { contestId = Model.ContestId, pictureId = Model.Id }, new { @class = "btn btn-info" })
-                    }
+                    <span>Votes in contest: @Model.ContestVotesCount</span><br />
+                }
+                @if (Model.AddToContest == true)
+                {
+                    @Html.ActionLink("Add", "AddPicture", "Contests", new { contestId = Model.ContestId, pictureId = Model.Id }, new { @class = "btn btn-info" })
                 }
             </div>
         </div>

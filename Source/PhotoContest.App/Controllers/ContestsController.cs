@@ -28,6 +28,7 @@
     using PhotoContest.Models;
     using PhotoContest.Models.Enumerations;
     using Data;
+    using System.Data.Entity;
 
     [System.Web.Mvc.Authorize]
     public class ContestsController : BaseController
@@ -733,22 +734,33 @@
         {
             IPagedList<SummaryPictureViewModel> pictures = null;
             var contest = this.Data.Contests.Find(id);
-
             if (contest == null)
             {
                 throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
             }
 
+            var userId = this.User.Identity.GetUserId();
+            var contestId = contest.Id;
+
             pictures = contest.Pictures
                 .AsQueryable()
+                .Include(p => p.Votes)
                 .OrderByDescending(p => p.PostedOn)
-                .ProjectTo<SummaryPictureViewModel>()
+                .Select(p => new SummaryPictureViewModel()
+                {
+                    Id = p.Id,
+                    Title = p.Title,
+                    Author = p.Author.Name,
+                    AuthorUsername = p.Author.UserName,
+                    IsAuthor = p.AuthorId == userId,
+                    ThumbnailImageData = p.ThumbnailImageData,
+                    ContestId = contest.Id,
+                    AddToContest = false,
+                    ContestsCount = p.Contests.Count,
+                    VotesCount = p.Votes.Count,
+                    ContestVotesCount = p.Votes.Where(v => v.ContestId == contestId).Count(),
+                })
                 .ToPagedList(page ?? GlobalConstants.DefaultStartPage, GlobalConstants.DefaultPageSize);
-
-            for (int i = 0; i < pictures.Count; i++)
-            {
-                pictures[i].ContestId = id;
-            }
 
             this.ViewData["ContestTitle"] = contest.Title;
 

@@ -28,7 +28,7 @@
 
         public int VotesCount { get; set; }
 
-        public int ContestVotesCount { get; set; }
+        public int? ContestVotesCount { get; set; }
 
         public void CreateMappings(IConfiguration configuration)
         {
