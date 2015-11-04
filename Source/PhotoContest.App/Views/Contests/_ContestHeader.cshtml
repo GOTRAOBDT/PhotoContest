@@ -12,7 +12,7 @@
         {
             @Html.ActionLink("Manage", "Manage", "Contests", new { id = Model.Id }, new { @class = "btn btn-warning" })
         }
-        @if (Model.CanParticipate && !Model.IsOwner && Model.Status != ContestStatus.Finished)
+        @if (Model.CanParticipate && !Model.IsOwner && Model.Status == ContestStatus.Active)
         {
             @Html.ActionLink("Add Picture", "SelectPictures", "Contests", new { id = Model.Id }, new { @class = "btn btn-info" })
         }

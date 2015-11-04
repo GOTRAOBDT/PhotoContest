@@ -786,6 +786,11 @@
                 throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
             }
 
+            if (contest.Status != ContestStatus.Active)
+            {
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            }
+
             var picture = this.Data.Pictures.Find(pictureId);
             if (picture == null)
             {
