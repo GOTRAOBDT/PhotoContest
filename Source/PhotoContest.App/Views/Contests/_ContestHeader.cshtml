@@ -6,7 +6,7 @@
     <div class="caption">
         @if (Model.CanApply && !Model.IsOwner)
         {
-            @Html.ActionLink("Apply", "Apply", "Contests", new { contestId = Model.Id}, new { @class = "btn btn-success" })
+            @Html.ActionLink("Apply", "Apply", "Contests", new { contestId = Model.Id }, new { @class = "btn btn-success" })
         }
         @if ((Model.IsOwner || this.User.IsInRole("Administrator")) && Model.Status != ContestStatus.Finished)
         {
@@ -22,7 +22,7 @@
         {
             @Html.ActionLink("View Gallery", "Gallery", "Contests", new { id = Model.Id }, new { @class = "btn btn-primary" })
         }
-        
+
         <h2 class="contest-title">@Model.Title</h2>
         <p class="contest-description">@Model.Description</p><br />
         <div class="row">
@@ -72,10 +72,13 @@
                         }
                     else
                     {
+                        string prizesText = "";
                         foreach (var prize in Model.Prizes)
                         {
-                            @Html.ActionLink(prize.Name, "Prizes", new { contestId = Model.Id }) @: / 
+                            prizesText += prize.Name + " / ";
                         }
+                        prizesText = prizesText.Substring(0, prizesText.Length - 2);
+                        @Html.ActionLink(prizesText, "Prizes", new { contestId = Model.Id })
                     }
                 </span>
             </div>
