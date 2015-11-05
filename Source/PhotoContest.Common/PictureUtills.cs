@@ -1,6 +1,10 @@
 ﻿namespace PhotoContest.Common
 {
+    using System;
+    using System.Drawing;
+    using System.IO;
     using System.Linq;
+    using System.Text.RegularExpressions;
 
     using Microsoft.AspNet.Identity;
 
@@ -66,6 +70,40 @@
             }
 
             return true;
+        }
+
+        public static Image CreateImageFromBase64(string base64ImageData)
+        {
+            string pattern = "data:image/[^;]+;base64,";
+            Regex rgx = new Regex(pattern);
+            string formattedBase64Data = rgx.Replace(base64ImageData, "").Trim('\0');
+            byte[] bytes = Convert.FromBase64String(formattedBase64Data);
+
+            Image image;
+            using (MemoryStream ms = new MemoryStream(bytes))
+            {
+                image = Image.FromStream(ms);
+            }
+
+            return image;
+        }
+
+        public static string ConvertImageToBase64(Image imageToConvert)
+        {
+            byte[] byteData;
+            using (var ms = new MemoryStream())
+            {
+                imageToConvert.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                byteData =  ms.ToArray();
+            }
+            string result = Convert.ToBase64String(byteData);
+            return "data:image/jpeg;base64," + result;
+        }
+
+        public static Image CreateThumbnailFromImage(Image image, int width)
+        {
+            Image resizedImage = image.GetThumbnailImage(width, (width * image.Height) / image.Width, null, IntPtr.Zero);
+            return resizedImage;
         }
     }
 }

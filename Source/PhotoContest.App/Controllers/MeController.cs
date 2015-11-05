@@ -98,10 +98,22 @@
                 this.RedirectToAction("Index", "Home");
             }
 
+            string thumbnailImageData = "";
+            try
+            {
+                var image = PictureUtills.CreateImageFromBase64(model.PictureData);
+                var thumbnail = PictureUtills.CreateThumbnailFromImage(image, 316);
+                thumbnailImageData = PictureUtills.ConvertImageToBase64(thumbnail);
+            }
+            catch (Exception ex)
+            {
+                thumbnailImageData = model.PictureData;
+            }
+
             var picture = new Picture()
             {
                 PictureData = model.PictureData,
-                ThumbnailImageData = null,
+                ThumbnailImageData = thumbnailImageData,
                 Title = model.Title,
                 AuthorId = userId,
                 PostedOn = DateTime.Now,
@@ -162,7 +174,16 @@
             }
             if (model.ProfilePicture != null)
             {
-                user.ProfilePicture = model.ProfilePicture;
+                try
+                {
+                    var image = PictureUtills.CreateImageFromBase64(model.ProfilePicture);
+                    var thumbnail = PictureUtills.CreateThumbnailFromImage(image, 200);
+                    var thumbnailProfilePicture = PictureUtills.ConvertImageToBase64(thumbnail);
+                }
+                catch (Exception ex)
+                {
+                    user.ProfilePicture = model.ProfilePicture;
+                }
             }
             user.Gender = model.Gender;
             this.Data.SaveChanges();

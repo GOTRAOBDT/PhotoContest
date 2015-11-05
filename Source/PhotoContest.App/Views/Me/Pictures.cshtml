@@ -8,7 +8,23 @@
 <div class="col-md-7 col-md-offset-1">
     <h1>My Pictures</h1>
     <div class="row">
-        @Html.DisplayForModel()
+        @if (Model.Count() == 0)
+        {
+            <h3>You have not uploaded any pictures yet.</h3>
+        }
+        else
+        {
+            for (int i = 0; i < Model.Count; i += 2)
+            {
+                <div class="row">
+                    @Html.DisplayFor(m => Model[i])
+                    @if (i <= Model.Count - 2)
+                    {
+                        @Html.DisplayFor(m => Model[i + 1])
+                    }
+                </div>
+            }
+        }
     </div>
     @Html.PagedListPager(Model, page => Url.Action("Pictures", new { page, ViewBag.sortBy, contestId = Model.First().ContestId, addToContest = Model.First().AddToContest }))
 </div>
