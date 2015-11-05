@@ -506,7 +506,7 @@
             contest.Candidates.Add(user);
             var notification = new Notification()
             {
-                Recipient = contest.Owner,
+                RecipientId = contest.Owner.Id,
                 CreatedOn = DateTime.Now,
                 Content = string.Format("Member {0} applied to participate in the contest '{1}'. Please, go to contest page to process his/her application.",
                     user.UserName, contest.Title)
