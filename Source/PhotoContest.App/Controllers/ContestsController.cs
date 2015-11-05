@@ -83,6 +83,7 @@
                 VotingType = model.VotingType,
                 ParticipationType = model.ParticipationType,
                 DeadlineType = model.DeadlineType,
+                Picture = model.Thumbnail,
                 Thumbnail = thumbnailImageData,
                 Status = model.StartDate < DateTime.Now ? ContestStatus.Active : ContestStatus.Inactive,
             };

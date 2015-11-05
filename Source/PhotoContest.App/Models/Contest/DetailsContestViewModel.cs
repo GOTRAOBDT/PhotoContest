@@ -62,7 +62,7 @@
             configuration.CreateMap<Contest, DetailsContestViewModel>()
                 .ForMember(c => c.Owner, cfg => cfg.MapFrom(c => c.Owner.Name ?? c.Owner.UserName))
                 .ForMember(c => c.OwnerUsername, cfg => cfg.MapFrom(c => c.Owner.UserName))
-                .ForMember(c => c.Thumbnail, cnf => cnf.MapFrom(m => m.Thumbnail ?? GlobalConstants.DefaultContestThumbnail))
+                .ForMember(c => c.Thumbnail, cnf => cnf.MapFrom(m => m.Picture ?? (m.Thumbnail ?? GlobalConstants.DefaultContestThumbnail)))
                 .ForMember(c => c.PicturesCount, cfg => cfg.MapFrom(c => c.Pictures.Count))
                 .ForMember(c => c.VotesCount, cfg => cfg.MapFrom(c => c.Votes.Count))
                 .ForMember(c => c.Prizes, cfg => cfg.MapFrom(c => c.Prizes.AsQueryable().ProjectTo<PrizeViewModel>()))

@@ -63,6 +63,8 @@
 
         public int? ParticipationLimit { get; set; }
 
+        public string Picture { get; set; }
+
         public string Thumbnail { get; set; }
 
         public virtual List<Prize> Prizes
