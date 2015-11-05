@@ -2,6 +2,8 @@
 {
     using System;
     using System.Linq;
+    using System.Net;
+    using System.Net.Http;
     using System.Web.Mvc;
 
     using AutoMapper;
@@ -133,7 +135,9 @@
 
             if (user == null)
             {
-                return this.HttpNotFound();
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.UserNotFound);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var editProfileModel = this.Data.Users.All()
@@ -150,7 +154,7 @@
         {
             if (this.User.IsInRole("Administrator"))
             {
-                this.TempData["message"] = Messages.ADMIN_CANNOT_BE_ADDED;
+                this.TempData["message"] = Messages.AdminCannotBeEdited;
                 return this.RedirectToAction("Index", "Home");
             }
 
@@ -179,6 +183,7 @@
                     var image = PictureUtills.CreateImageFromBase64(model.ProfilePicture);
                     var thumbnail = PictureUtills.CreateThumbnailFromImage(image, 200);
                     var thumbnailProfilePicture = PictureUtills.ConvertImageToBase64(thumbnail);
+                    user.ProfilePicture = thumbnailProfilePicture;
                 }
                 catch (Exception ex)
                 {

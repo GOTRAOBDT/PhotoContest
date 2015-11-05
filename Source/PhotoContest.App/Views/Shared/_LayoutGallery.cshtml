@@ -28,7 +28,10 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Notifications", "Index", "Notifications")</li>
+                    @if (this.User.Identity.IsAuthenticated)
+                    {
+                        <li><a href="/Notifications/Index">Notifications <span class="badge">@MvcApplication.GetUnreadNotificationsCount()</span></a></li>
+                    }
                     <li>@Html.ActionLink("Rules of Engagement", "Rules", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                     @if (this.User.IsInRole("Administrator"))

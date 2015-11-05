@@ -10,6 +10,7 @@
     using Data.Contracts;
 
     using Models.Users;
+    using Common;
 
     [Authorize]
     public class UsersController : BaseController
@@ -24,12 +25,17 @@
         {
             if (username == null)
             {
-                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+                message.Content = new StringContent(Messages.InvalidOperation);
+                throw new System.Web.Http.HttpResponseException(message);
             }
+
             var dbUser = this.Data.Users.All().FirstOrDefault(u => u.UserName == username);
             if (dbUser == null)
             {
-                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.UserNotFound);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var userModel = Mapper.Map<DetailedUserInfoModel>(dbUser);

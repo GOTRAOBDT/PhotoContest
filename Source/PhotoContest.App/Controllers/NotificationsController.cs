@@ -15,6 +15,8 @@
     using Models.Notification;
 
     using PagedList;
+    using System.Net.Http;
+    using System.Net;
 
     [Authorize]
     public class NotificationsController : BaseController
@@ -45,7 +47,9 @@
         {
             if (!this.Request.IsAjaxRequest())
             {
-                throw new InvalidOperationException(Messages.INVALID_OPEARATION_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+                message.Content = new StringContent(Messages.InvalidOperation);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var notification = this.Data.Notifications.Find(id);
@@ -53,19 +57,20 @@
 
             if (notification == null)
             {
-                throw new ArgumentException(Messages.NOTIFICATION_NOT_FOUND);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.NotificationNotFound);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             if (loggedUserId != notification.RecipientId)
             {
-                throw new ArgumentException(Messages.NOT_NOTIFICATION_OWNER);
+                throw new ArgumentException(Messages.NotOwnerOfNotification);
             }
 
             notification.IsRead = true;
             this.Data.SaveChanges();
 
             return Content(string.Empty);
-
         }
 
         [HttpPost]
@@ -74,7 +79,9 @@
         {
             if (!this.Request.IsAjaxRequest())
             {
-                throw new InvalidOperationException(Messages.INVALID_OPEARATION_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+                message.Content = new StringContent(Messages.InvalidOperation);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var loggedUserId = this.User.Identity.GetUserId();

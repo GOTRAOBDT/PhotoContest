@@ -37,7 +37,9 @@
 
             if (dbPicture.IsDeleted == true)
             {
-                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.NoSuchPicture);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             ////get picture link from dropbox here:
@@ -48,7 +50,9 @@
 
             if (picture == null)
             {
-                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.NoSuchPicture);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var user = this.Data.Users.Find(this.User.Identity.GetUserId());
@@ -78,14 +82,18 @@
 
             if (picture == null)
             {
-                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.NoSuchPicture);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var user = this.Data.Users.Find(this.User.Identity.GetUserId());
 
             if (picture.Author.Id != user.Id && !this.User.IsInRole("Administrator"))
             {
-                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+                message.Content = new StringContent(Messages.NotAuthorOfPicture);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var votesInUnfinishedContests = picture.Votes
@@ -117,20 +125,26 @@
             var contest = this.Data.Contests.Find(contestId);
             if (contest == null)
             {
-                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.ContestCannotBePaused);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var picture = contest.Pictures.FirstOrDefault(p => p.Id == id);
             if (picture == null)
             {
-                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.NoSuchPicture);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var user = this.Data.Users.Find(this.User.Identity.GetUserId());
 
             if (picture.Author.Id != user.Id && !this.User.IsInRole("Administrator"))
             {
-                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.NotAuthorOfPicture);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var votesForPictureInContest = picture.Votes.Where(v => v.ContestId == contestId).ToList();

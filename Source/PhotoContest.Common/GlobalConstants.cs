@@ -14,65 +14,66 @@ namespace PhotoContest.Common
 
     public class Messages
     {
-        public const string NEW_CONTEST_MESSAGE = "There is a new contest titled '{0}' starting on {1}'";
-        public const string INVALID_REQUEST_MESSAGE = "Inavlid request!";
-        public const string CONTEST_FINISH_MESSAGE =
+        public const string NewContest = "There is a new contest titled '{0}' starting on {1}.";
+        public const string InvalidRequest = "Inavlid request.";
+        public const string ContestFinished =
             "Your contest titled '{0}' has finished. Please, prepare to deliver the prizes.";
 
-        public const string PICTURE_WON_PRIZE_MESSAGE =
-            "Your picture titled {0} has won a prize ({1}) in the contest '{2}'. Go get it!)";
+        public const string PictureWonPrize =
+            "Your picture titled '{0}' has won a prize ({1}) in the contest '{2}'. Go get it!)";
 
-        public const string CONTEST_NOT_FOUND_MESSAGE = "Contest not found!";
-        public const string OWNER_CANNOT_BE_JURY_MESSAGE = "Owner of the contest can not be jury member!";
-        public const string USER_NOT_FOUND_MESSAGE = "User not found!";
-        public const string USER_ALREADY_ADDED_TO_JURY_MESSAGE = "This user has been already added as jury member!";
-        public const string INVALID_OPEARATION_MESSAGE = "Invalid operation!";
-        public const string NOT_AUTHORIZED_MESSAGE = "Not authorized!";
-        public const string NOT_IN_JURY_MESSAGE = "This user is not a jury member of this contest!";
+        public const string ContestNotFound = "Contest not found.";
+        public const string OwnerCannotBeJurryMember = "Contest moderator cannot be a member of the jury.";
+        public const string UserNotFound = "User not found.";
+        public const string UserAlreadyAddedToJurry = "This user has already been added to jury.";
+        public const string InvalidOperation = "Invalid operation.";
+        public const string NotAuhtorized = "Not authorized.";
+        public const string UserNotInJury = "User is not a member of the jury.";
 
-        public const string ALREADY_APPLIED_TO_CONTEST_MESSAGE =
+        public const string UserAlreadyAppliedToParticipate =
             "You have already applied to participate in the contest.";
 
-        public const string ALREADY_APPROVED_TO_CONTEST_MESSAGE =
-            "You are already approved to participate in the contest.";
+        public const string UserAlreadyApprovedToParticipate =
+            "You have already been approved to participate in the contest.";
 
-        public const string SUCCESSFUL_APPLIED_TO_CONTEST = "Successfully applied to contest {0}.";
-        public const string USER_NOT_PARTICIPANT_MESSAGE = "This user is not a participant of this contest!";
-        public const string EXCISINTG_PICTURE_IN_CONTEST_MESSAGE = "You have already added this picture to the contest.";
+        public const string SuccessfulyAppliedToContest = "Successfully applied to contest {0}.";
+        public const string UserIsNotParticipantOfContest = "User is not a participant of this contest.";
+        public const string PictureAlreadyAddedToContest = "You have already added this picture to the contest.";
 
-        public const string MODERATORS_NOT_ALLOWED_MESSAGE =
+        public const string ModeratorNotAllowedToParticipate =
             "Moderators are not allowed to participate in their contests.";
 
-        public const string NOT_APPROVED_OR_APPIED_TO_CONTEST_MESSAGE =
+        public const string NotAppliedOrApprovedToParticipateInContest =
             "You have not applied and/or have not been approved to participate in this contest.";
 
-        public const string CONTEST_CANNOT_BE_PAUSED_MESSAGE = "Contest cannot be paused.";
-        public const string CONTEST_WAS_PAUSED_MESSAGE = "You contest, titled '{0} was paused.'";
-        public const string CONTEST_PAUSED = "Contest was paused.";
-        public const string CANNOT_BE_RESTARTED_MESSAGE = "Contest cannot be restarted.";
-        public const string CONTEST_WILL_START_MESSAGE = "Contest will start on its designated Start Date.";
-        public const string CONTEST_WAS_RESTARTED_MESSAGE = "You contest, titled '{0} was restarted.'";
-        public const string CONTEST_RESTARTED_MESSAGE = "Contest was restarted.";
-        public const string CONTEST_DISMISSED_MESSAGE = "Contest is already dismissed.";
-        public const string CONTEST_WAS_DISMISSED_MESSSAGE = "You contest, titled '{0} was dismissed.'";
-        public const string CONTEST_DISMISSED = "Contest was dismissed.";
-        public const string TOTAL_VOTES_MESSAGE = "Total votes: {0}";
+        public const string ContestCannotBePaused = "Contest cannot be paused.";
+        public const string ContestWasPaused = "Your contest, titled '{0}' was paused.";
+        public const string ContestPaused = "Contest was paused.";
+        public const string ContestCannotBeRestarted = "Contest cannot be restarted.";
+        public const string ContestWillStart = "Contest will start on its designated Start Date.";
+        public const string ContestWasRestarted = "You contest, titled '{0} was restarted.'";
+        public const string ContestRestarted = "Contest was restarted.";
+        public const string ContestAlreadyDismissed = "Contest is already dismissed.";
+        public const string ContestWasDismissed = "You contest, titled '{0}' was dismissed.";
+        public const string ContestDismissed = "Contest was dismissed.";
+        public const string TotalVotes = "Total votes: {0}";
 
-        public const string PICTURE_VOTE_NOTIFICATION =
+        public const string PictureVoteNotification =
             "Member {0} has voted for your picture titled '{1}' in contest '{2}'.";
 
-        public const string NO_TITLE = "(no title)";
+        public const string NoTitle = "(no title)";
 
-        public const string ADMIN_CANNOT_BE_ADDED = "Admin profile can not be edited!";
-        public const string NOTIFICATION_NOT_FOUND = "Notification not found!";
-        public const string NOT_NOTIFICATION_OWNER = "You are not the owner of this notification!";
+        public const string AdminCannotBeEdited = "Admin profile can not be edited.";
+        public const string NotificationNotFound = "Notification not found!";
+        public const string NotOwnerOfNotification = "You are not the owner of this notification!";
 
-        public static string NoSuchPictureInContest { get; set; }
-        public static string AddingPictureToInactiveContestNotAllowed { get; set; }
-        public static string PictureNotFound { get; set; }
-        public static string AddingPictureNotAuthorNotAllowed { get; set; }
-        public static string NoPrizes { get; set; }
-        public static string NotOwnerOfContest { get; set; }
-        public static string NoSuchPicture { get; set; }
+        public const string NoSuchPictureInContest = "There is no such picture in the contest.";
+        public const string AddingPictureToInactiveContestNotAllowed = "Adding pictures to inactive contests is not allowed.";
+        public const string PictureNotFound = "No such picture.";
+        public const string AddingPictureNotAuthorNotAllowed = "Adding pictures only allowed if you are their author.";
+        public const string NoPrizes = "No prizes found.";
+        public const string NotOwnerOfContest = "You are not the owner of this contest.";
+        public const string NoSuchPicture = "No such picture.";
+        public const string NotAuthorOfPicture = "You are not the author of this picture.";
     }
 }
