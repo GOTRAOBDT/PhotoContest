@@ -96,13 +96,12 @@
         }
 
         [TestMethod]
+        [ExpectedException(typeof(System.Web.Http.HttpResponseException))]
         public void ContestGetById_WithInvalidInfo_ReturnNotFound()
         {
             Assert.AreEqual(this.data.Contests.All().Count(), 0);
 
             var result = this.contestsController.GetContestById(12);
-
-            Assert.IsInstanceOfType(result, typeof(HttpNotFoundResult));
         }
 
         [TestMethod]
@@ -165,7 +164,7 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof(System.Web.Http.HttpResponseException))]
         public void ManageContest_WithNullModel_ShouldThrowArgumentException()
         {
             LoginMock();
@@ -221,7 +220,7 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(HttpRequestException))]
+        [ExpectedException(typeof(System.Web.Http.HttpResponseException))]
         public void GetContestJury_WithNotExistingJury_ShouldHttpRequestException()
         {
             LoginMock();
@@ -266,7 +265,7 @@
         }
 
         [TestMethod]
-        [ExpectedException(typeof(HttpRequestException))]
+        [ExpectedException(typeof(System.Web.Http.HttpResponseException))]
         public void GetContestJury_WithNonExistingJury_ShouldThrowHttpRequestException()
         {
             LoginMock();
