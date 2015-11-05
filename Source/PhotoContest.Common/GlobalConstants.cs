@@ -75,5 +75,7 @@ namespace PhotoContest.Common
         public const string NotOwnerOfContest = "You are not the owner of this contest.";
         public const string NoSuchPicture = "No such picture.";
         public const string NotAuthorOfPicture = "You are not the author of this picture.";
+        public const string ManagingFinishedContestNotAllowed = "Contest is either finished or dismissed and cannot be managed.";
+        public static readonly string MissingContestData = "Missing contest data.";
     }
 }
