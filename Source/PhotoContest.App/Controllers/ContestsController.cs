@@ -52,6 +52,7 @@
         // POST: Contests/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
         public ActionResult Create(CreateContestBindingModel model)
         {
             if (!this.ModelState.IsValid)
@@ -272,6 +273,7 @@
         // POST: Contests/{contestId}/Manage
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
         public ActionResult Manage(int id, EditContestBindingModel model)
         {
             if (model == null)
