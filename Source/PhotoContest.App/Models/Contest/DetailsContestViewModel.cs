@@ -60,7 +60,7 @@
         public void CreateMappings(IConfiguration configuration)
         {
             configuration.CreateMap<Contest, DetailsContestViewModel>()
-                .ForMember(c => c.Owner, cfg => cfg.MapFrom(c => c.Owner.Name))
+                .ForMember(c => c.Owner, cfg => cfg.MapFrom(c => c.Owner.Name ?? c.Owner.UserName))
                 .ForMember(c => c.OwnerUsername, cfg => cfg.MapFrom(c => c.Owner.UserName))
                 .ForMember(c => c.Thumbnail, cnf => cnf.MapFrom(m => m.Thumbnail ?? GlobalConstants.DefaultContestThumbnail))
                 .ForMember(c => c.PicturesCount, cfg => cfg.MapFrom(c => c.Pictures.Count))

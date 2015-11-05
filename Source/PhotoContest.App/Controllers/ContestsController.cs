@@ -60,6 +60,19 @@
             }
 
             var loggedUserId = this.User.Identity.GetUserId();
+
+            string thumbnailImageData = "";
+            try
+            {
+                var image = PictureUtills.CreateImageFromBase64(model.Thumbnail);
+                var thumbnail = PictureUtills.CreateThumbnailFromImage(image, 316);
+                thumbnailImageData = PictureUtills.ConvertImageToBase64(thumbnail);
+            }
+            catch (Exception ex)
+            {
+                thumbnailImageData = model.Thumbnail;
+            }
+
             var contest = new Contest()
             {
                 Title = model.Title,
@@ -70,7 +83,7 @@
                 VotingType = model.VotingType,
                 ParticipationType = model.ParticipationType,
                 DeadlineType = model.DeadlineType,
-                Thumbnail = model.Thumbnail,
+                Thumbnail = thumbnailImageData,
                 Status = model.StartDate < DateTime.Now ? ContestStatus.Active : ContestStatus.Inactive,
             };
 

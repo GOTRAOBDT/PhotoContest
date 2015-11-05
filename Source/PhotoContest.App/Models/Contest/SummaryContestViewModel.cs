@@ -44,7 +44,7 @@
         public void CreateMappings(IConfiguration configuration)
         {
             configuration.CreateMap<Contest, SummaryContestViewModel>()
-                .ForMember(c => c.Owner, cnf => cnf.MapFrom(m => m.Owner.UserName))
+                .ForMember(c => c.Owner, cnf => cnf.MapFrom(m => m.Owner.UserName == null ? m.Owner.Email : m.Owner.UserName))
                 .ForMember(c => c.Status, cnf => cnf.MapFrom(m => m.Status.ToString()))
                 .ForMember(c => c.VotingType, cnf => cnf.MapFrom(m => m.VotingType.ToString()))
                 .ForMember(c => c.ParticipationType, cnf => cnf.MapFrom(m => m.ParticipationType.ToString()))
