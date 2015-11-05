@@ -163,7 +163,7 @@
 
             if (contest == null)
             {
-                return this.HttpNotFound();
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
             }
 
             ICollection<ContestWinnerViewModel> contestWinners = null;
@@ -270,10 +270,19 @@
         {
             if (model == null)
             {
-                throw new ArgumentException(Messages.CONTEST_NOT_FOUND_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return this.View(model);
             }
 
             var contest = this.Data.Contests.Find(id);
+            if (contest == null)
+            {
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+            }
             contest.Title = model.Title;
             contest.Description = model.Description;
             contest.EndDate = model.EndDate;
@@ -299,7 +308,7 @@
 
             if (contest == null)
             {
-                throw new HttpRequestException(Messages.CONTEST_NOT_FOUND_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
             }
 
             var juryMembers = this.Data.Contests.All()
@@ -309,7 +318,7 @@
 
             if (juryMembersView == null)
             {
-                return this.HttpNotFound();
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
             }
 
             var juryViewModel = new JuryViewModel
@@ -338,7 +347,7 @@
             var contest = this.Data.Contests.Find(id);
             if (contest == null)
             {
-                throw new HttpRequestException(Messages.CONTEST_NOT_FOUND_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
             }
 
             var loggedUserId = this.User.Identity.GetUserId();
@@ -361,7 +370,9 @@
         {
             if (this.User.Identity.GetUserName().ToLower() == model.Username.ToLower())
             {
-                throw new ArgumentException(Messages.OWNER_CANNOT_BE_JURY_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+                message.Content = new StringContent(Messages.OWNER_CANNOT_BE_JURY_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var user = this.Data.Users.All().FirstOrDefault(u => u.UserName == model.Username);
@@ -373,18 +384,24 @@
 
             if (user == null)
             {
-                throw new ArgumentException(Messages.USER_NOT_FOUND_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.USER_NOT_FOUND_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var contest = this.Data.Contests.Find(model.ContestId);
             if (contest == null)
             {
-                throw new ArgumentException(Messages.CONTEST_NOT_FOUND_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.CONTEST_NOT_FOUND_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             if (contest.Jury.Members.Any(u => u.Id == user.Id))
             {
-                throw new ArgumentException(Messages.USER_ALREADY_ADDED_TO_JURY_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+                message.Content = new StringContent(Messages.USER_ALREADY_ADDED_TO_JURY_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             contest.Jury.Members.Add(user);
@@ -400,30 +417,40 @@
         {
             if (!this.Request.IsAjaxRequest())
             {
-                throw new InvalidOperationException(Messages.INVALID_OPEARATION_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+                message.Content = new StringContent(Messages.INVALID_OPEARATION_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var user = this.Data.Users.All().FirstOrDefault(u => u.UserName == username);
 
             if (user == null)
             {
-                throw new ArgumentException(Messages.USER_NOT_FOUND_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.USER_NOT_FOUND_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var contest = this.Data.Contests.Find(id);
             if (contest == null)
             {
-                throw new ArgumentException(Messages.CONTEST_NOT_FOUND_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.CONTEST_NOT_FOUND_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             if (this.User.Identity.GetUserId() != contest.OwnerId && !this.User.IsInRole("Administrator"))
             {
-                throw new HttpRequestException(Messages.NOT_AUTHORIZED_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+                message.Content = new StringContent(Messages.NOT_AUTHORIZED_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             if (!contest.Jury.Members.Any(u => u.Id == user.Id))
             {
-                throw new ArgumentException(Messages.NOT_IN_JURY_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+                message.Content = new StringContent(Messages.NOT_IN_JURY_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var memberVotes = this.Data.Votes.All()
@@ -463,14 +490,16 @@
             }
 
             contest.Candidates.Add(user);
-            //var notification = new Notification()
-            //{
-            //    Recipient = contest.Owner,
-            //    CreatedOn = DateTime.Now,
-            //    Content = string.Format("Member {0} applied to participate in the contest {1}. Please, go to contest page to process his/her application.",
-            //        user.UserName, contest.Title)
-            //};
+            var notification = new Notification()
+            {
+                Recipient = contest.Owner,
+                CreatedOn = DateTime.Now,
+                Content = string.Format("Member {0} applied to participate in the contest '{1}'. Please, go to contest page to process his/her application.",
+                    user.UserName, contest.Title)
+            };
+            this.Data.Notifications.Add(notification);
             this.Data.SaveChanges();
+
             this.TempData["message"] = string.Format(Messages.SUCCESSFUL_APPLIED_TO_CONTEST, contest.Title);
             return this.RedirectToAction("GetContestById", new { id = contestId });
         }
@@ -487,7 +516,9 @@
 
             if (this.User.Identity.GetUserId() != contestOwnerId && !this.User.IsInRole("Administrator"))
             {
-                throw new HttpRequestException(Messages.NOT_AUTHORIZED_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+                message.Content = new StringContent(Messages.NOT_AUTHORIZED_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var contestCandidates = this.Data.Contests.All()
@@ -498,7 +529,9 @@
 
             if (contestCandidates == null)
             {
-                throw new HttpRequestException(Messages.CONTEST_NOT_FOUND_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.CONTEST_NOT_FOUND_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var candidatesView = Mapper.Map<IPagedList<User>, IPagedList<BasicUserInfoViewModel>>(contestCandidates);
@@ -519,7 +552,9 @@
         {
             if (!this.Request.IsAjaxRequest())
             {
-                throw new InvalidOperationException(Messages.INVALID_OPEARATION_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+                message.Content = new StringContent(Messages.INVALID_OPEARATION_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var user = this.Data.Users.All().FirstOrDefault(u => u.UserName == username);
@@ -527,19 +562,25 @@
 
             if (user == null)
             {
-                throw new ArgumentException(Messages.USER_NOT_FOUND_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.USER_NOT_FOUND_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var contest = this.Data.Contests.Find(id);
 
             if (contest == null)
             {
-                throw new ArgumentException(Messages.CONTEST_NOT_FOUND_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.CONTEST_NOT_FOUND_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             if (contest.OwnerId != loggedUserId && !this.User.IsInRole("Administrator"))
             {
-                throw new HttpRequestException(Messages.NOT_AUTHORIZED_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+                message.Content = new StringContent(Messages.NOT_AUTHORIZED_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             contest.Participants.Add(user);
@@ -556,7 +597,9 @@
         {
             if (!this.Request.IsAjaxRequest())
             {
-                throw new InvalidOperationException(Messages.INVALID_OPEARATION_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+                message.Content = new StringContent(Messages.INVALID_OPEARATION_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var user = this.Data.Users.All().FirstOrDefault(u => u.UserName == username);
@@ -564,19 +607,25 @@
 
             if (user == null)
             {
-                throw new ArgumentException(Messages.USER_NOT_FOUND_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.USER_NOT_FOUND_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var contest = this.Data.Contests.Find(id);
 
             if (contest == null)
             {
-                throw new ArgumentException(Messages.CONTEST_NOT_FOUND_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.CONTEST_NOT_FOUND_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             if (contest.OwnerId != loggedUserId && !this.User.IsInRole("Administrator"))
             {
-                throw new HttpRequestException(Messages.NOT_AUTHORIZED_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+                message.Content = new StringContent(Messages.NOT_AUTHORIZED_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             contest.Candidates.Remove(user);
@@ -597,7 +646,9 @@
 
             if (contestOwnerId == null)
             {
-                throw new HttpRequestException(Messages.CONTEST_NOT_FOUND_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.CONTEST_NOT_FOUND_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var participants = this.Data.Contests.All()
@@ -632,7 +683,9 @@
         {
             if (!this.Request.IsAjaxRequest())
             {
-                throw new InvalidOperationException(Messages.INVALID_OPEARATION_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+                message.Content = new StringContent(Messages.INVALID_OPEARATION_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var loggedUserId = this.User.Identity.GetUserId();
@@ -643,25 +696,33 @@
 
             if (contestOwnerId != loggedUserId && !this.User.IsInRole("Administrator"))
             {
-                throw new HttpRequestException(Messages.NOT_AUTHORIZED_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+                message.Content = new StringContent(Messages.NOT_AUTHORIZED_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var user = this.Data.Users.All().FirstOrDefault(u => u.UserName == username);
 
             if (user == null)
             {
-                throw new ArgumentException(Messages.USER_NOT_FOUND_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.USER_NOT_FOUND_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var contest = this.Data.Contests.Find(id);
             if (contest == null)
             {
-                throw new ArgumentException(Messages.CONTEST_NOT_FOUND_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.CONTEST_NOT_FOUND_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             if (!contest.Participants.Any(u => u.Id == user.Id))
             {
-                throw new ArgumentException(Messages.USER_NOT_PARTICIPANT_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+                message.Content = new StringContent(Messages.USER_NOT_PARTICIPANT_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var votesForDeleting = this.Data.Votes.All()
@@ -692,7 +753,9 @@
             var contest = this.Data.Contests.Find(id);
             if (contest == null)
             {
-                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.CONTEST_NOT_FOUND_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             if (contest.Pictures.Count() == 0)
@@ -708,7 +771,9 @@
             var picture = contest.Pictures.FirstOrDefault(p => p.Id == pictureId);
             if (picture == null)
             {
-                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+                message.Content = new StringContent(Messages.NoSuchPictureInContest);
+                throw new System.Web.Http.HttpResponseException(message);
             }
             var pictureModel = Mapper.Map<DetailsPictureViewModel>(picture);
 
@@ -756,7 +821,9 @@
             var contest = this.Data.Contests.Find(id);
             if (contest == null)
             {
-                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.CONTEST_NOT_FOUND_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var userId = this.User.Identity.GetUserId();
@@ -802,24 +869,32 @@
             var contest = this.Data.Contests.Find(contestId);
             if (contest == null)
             {
-                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.CONTEST_NOT_FOUND_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             if (contest.Status != ContestStatus.Active)
             {
-                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+                message.Content = new StringContent(Messages.AddingPictureToInactiveContestNotAllowed);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var picture = this.Data.Pictures.Find(pictureId);
             if (picture == null)
             {
-                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.PictureNotFound);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var userId = this.User.Identity.GetUserId();
             if (picture.AuthorId != userId)
             {
-                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+                message.Content = new StringContent(Messages.AddingPictureNotAuthorNotAllowed);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             if (contest.Pictures.Any(p => p.Id == picture.Id))
@@ -837,7 +912,9 @@
             if (contest.ParticipationType == ParticipationType.Closed &&
                 !contest.Participants.Any(p => p.Id == userId))
             {
-                throw new InvalidOperationException(Messages.NOT_APPROVED_OR_APPIED_TO_CONTEST_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+                message.Content = new StringContent(Messages.NOT_APPROVED_OR_APPIED_TO_CONTEST_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             contest.Pictures.Add(picture);
@@ -858,7 +935,9 @@
         {
             if (!this.Request.IsAjaxRequest())
             {
-                throw new InvalidOperationException(Messages.INVALID_OPEARATION_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+                message.Content = new StringContent(Messages.INVALID_OPEARATION_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             int votesCount = this.Vote(pictureId, id, true);
@@ -883,7 +962,9 @@
         {
             if (!this.Request.IsAjaxRequest())
             {
-                throw new InvalidOperationException(Messages.INVALID_OPEARATION_MESSAGE);
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+                message.Content = new StringContent(Messages.INVALID_OPEARATION_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             int votesCount = this.Vote(pictureId, id, false);
@@ -912,7 +993,9 @@
 
             if (prizes == null)
             {
-                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.NoPrizes);
+                throw new System.Web.Http.HttpResponseException(message);
             }
             return this.View(prizes);
         }
@@ -923,12 +1006,16 @@
             var contest = this.Data.Contests.Find(contestId);
             if (contest == null)
             {
-                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.CONTEST_NOT_FOUND_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             if (contest.OwnerId != this.User.Identity.GetUserId() && !this.User.IsInRole("Administrator"))
             {
-                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+                message.Content = new StringContent(Messages.NotOwnerOfContest);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             if (contest.Status != ContestStatus.Active)
@@ -958,12 +1045,16 @@
             var contest = this.Data.Contests.Find(contestId);
             if (contest == null)
             {
-                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.CONTEST_NOT_FOUND_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             if (contest.OwnerId != this.User.Identity.GetUserId() && !this.User.IsInRole("Administrator"))
             {
-                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+                message.Content = new StringContent(Messages.NotOwnerOfContest);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             if (contest.Status != ContestStatus.Inactive)
@@ -999,12 +1090,16 @@
             var contest = this.Data.Contests.Find(contestId);
             if (contest == null)
             {
-                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.CONTEST_NOT_FOUND_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             if (contest.OwnerId != this.User.Identity.GetUserId() && !this.User.IsInRole("Administrator"))
             {
-                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.Unauthorized);
+                message.Content = new StringContent(Messages.NotOwnerOfContest);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             if (contest.Status == ContestStatus.Dismissed)
@@ -1090,13 +1185,24 @@
             var picture = this.Data.Pictures.Find(pictureId);
             if (picture == null)
             {
-                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.NoSuchPicture);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             var contest = this.Data.Contests.Find(contestId);
             if (contest == null)
             {
-                throw new System.Web.Http.HttpResponseException(new HttpResponseMessage(HttpStatusCode.NotFound));
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.CONTEST_NOT_FOUND_MESSAGE);
+                throw new System.Web.Http.HttpResponseException(message);
+            }
+
+            if (!contest.Pictures.Any(p => p.Id == pictureId))
+            {
+                HttpResponseMessage message = new HttpResponseMessage(HttpStatusCode.NotFound);
+                message.Content = new StringContent(Messages.NoSuchPictureInContest);
+                throw new System.Web.Http.HttpResponseException(message);
             }
 
             int votes = picture.Votes.Where(v => v.ContestId == contestId).Count();

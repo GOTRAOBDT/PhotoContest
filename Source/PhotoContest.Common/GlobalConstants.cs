@@ -66,5 +66,13 @@ namespace PhotoContest.Common
         public const string ADMIN_CANNOT_BE_ADDED = "Admin profile can not be edited!";
         public const string NOTIFICATION_NOT_FOUND = "Notification not found!";
         public const string NOT_NOTIFICATION_OWNER = "You are not the owner of this notification!";
+
+        public static string NoSuchPictureInContest { get; set; }
+        public static string AddingPictureToInactiveContestNotAllowed { get; set; }
+        public static string PictureNotFound { get; set; }
+        public static string AddingPictureNotAuthorNotAllowed { get; set; }
+        public static string NoPrizes { get; set; }
+        public static string NotOwnerOfContest { get; set; }
+        public static string NoSuchPicture { get; set; }
     }
 }
